@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
 
-  <title>Arslan's Blog - Tags</title>
+  <title>About</title>
 
 
   <meta name="HandheldFriendly" content="True" />
@@ -60,7 +60,7 @@
 </nav>
     <!-- Page Header -->
     <!-- Set your background image for this header on the line below. -->
-    <header id="blog-header" class="has-cover">
+    <header id="post-header" class="has-cover">
       <div class="inner">
         <nav id="navigation">
             <span id="home-button" class="nav-button">
@@ -70,7 +70,7 @@
             <a class="menu-button"><i class="ic ic-menu"></i> Menu</a>
           </span>
         </nav>
-        <h1 class="post-title">Arslan's Blog - Tags</h1>
+        <h1 class="post-title">About</h1>      
             <div class="post-cover cover" style="background-image: url('https://arslan-san.github.io/theme/images/post-bg.jpg')">
         
       </div>
@@ -78,11 +78,16 @@
 
   <section id="wrapper">
     <a class="hidden-close"></a>
-    <article class="post">
+  <!-- Post content -->
+  <main class="content" role="main">
+      <article class="post">
       <div class="inner">
-        <a href="https://arslan-san.github.io/tag/python.html">python</a> (2)
+          <section class="post-content">
+              
+          </section>
       </div>
-    </article>
+      </article>
+  </main>
       <!-- TODO : Body class -->
     <div id="body-class" style="display: none;" class=""></div>
   
