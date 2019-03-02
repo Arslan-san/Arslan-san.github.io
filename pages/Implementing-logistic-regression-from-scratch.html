@@ -1,0 +1,2875 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+
+  <title>Logistic Regression</title>
+
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="referrer" content="origin" />
+  <meta name="generator" content="Pelican" />
+  <link href="https://arslan-san.github.io" rel="canonical" />
+
+  <!-- Feed -->
+
+  <link href="https://arslan-san.github.io/theme/css/style.css" type="text/css" rel="stylesheet" />
+
+  <!-- Code highlight color scheme -->
+      <link href="https://arslan-san.github.io/theme/css/code_blocks/github.css" rel="stylesheet">
+
+
+  <!-- Custom fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Montserrat:400,300' rel='stylesheet' type='text/css' />
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css" />
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+      <meta property="og:locale" content="" />
+    <meta property="og:site_name" content="Arslan's Blog" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Arslan's Blog" />
+    <meta property="og:description" content="View the blog." />
+    <meta property="og:url" content="https://arslan-san.github.io" />
+      <meta name="og:image" content="https://arslan-san.github.io/theme/images/post-bg.jpg">
+</head>
+<!-- TODO : Body class -->
+<body class="home-template">
+
+<nav id="menu">
+  <a class="close-button">Close</a>
+  <div class="nav-wrapper">
+    <p class="nav-label">Menu</p>
+    <ul>
+          <li><a href="/pages/about.html" role="presentation">About</a></li>
+          <li><a href="/pages/useful-resources.html" role="presentation">Useful Resources</a></li>
+          <li><a href="/pages/completed-coursera-courses.html" role="presentation">Completed Coursera Courses</a></li>
+          <li><a href="/pages/useful-ipython-notebooks.html" role="presentation">Useful Ipython Notebooks</a></li>
+
+                  <li role="presentation"><a href="https://arslan-san.github.io/category/posts.html">posts</a></li>
+
+    </ul>
+  </div>
+</nav>
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    <header id="post-header" class="has-cover">
+      <div class="inner">
+        <nav id="navigation">
+            <span id="home-button" class="nav-button">
+                <a class="home-button" href = "../" href="https://arslan-san.github.io" title="Home"><i class="ic ic-arrow-left"></i> Home</a>
+            </span>
+          <span id="menu-button" class="nav-button">
+            <a class="menu-button"><i class="ic ic-menu"></i> Menu</a>
+          </span>
+        </nav>
+        <h1 class="post-title">Logistic Regression</h1>      
+            <div class="post-cover cover" style="background-image: url('https://arslan-san.github.io/theme/images/post-bg.jpg')">
+        
+      </div>
+    </header>    
+
+  <section id="wrapper">
+    <a class="hidden-close"></a>
+  <!-- Post content -->
+  <main class="content" role="main">
+      <article class="post">
+      <div class="inner">
+          <section class="post-content">
+              <style type="text/css">/*!
+*
+* IPython notebook
+*
+*/
+/* CSS font colors for translated ANSI escape sequences */
+/* The color values are a mix of
+   http://www.xcolors.net/dl/baskerville-ivorylight and
+   http://www.xcolors.net/dl/euphrasia */
+.ansi-black-fg {
+  color: #3E424D;
+}
+.ansi-black-bg {
+  background-color: #3E424D;
+}
+.ansi-black-intense-fg {
+  color: #282C36;
+}
+.ansi-black-intense-bg {
+  background-color: #282C36;
+}
+.ansi-red-fg {
+  color: #E75C58;
+}
+.ansi-red-bg {
+  background-color: #E75C58;
+}
+.ansi-red-intense-fg {
+  color: #B22B31;
+}
+.ansi-red-intense-bg {
+  background-color: #B22B31;
+}
+.ansi-green-fg {
+  color: #00A250;
+}
+.ansi-green-bg {
+  background-color: #00A250;
+}
+.ansi-green-intense-fg {
+  color: #007427;
+}
+.ansi-green-intense-bg {
+  background-color: #007427;
+}
+.ansi-yellow-fg {
+  color: #DDB62B;
+}
+.ansi-yellow-bg {
+  background-color: #DDB62B;
+}
+.ansi-yellow-intense-fg {
+  color: #B27D12;
+}
+.ansi-yellow-intense-bg {
+  background-color: #B27D12;
+}
+.ansi-blue-fg {
+  color: #208FFB;
+}
+.ansi-blue-bg {
+  background-color: #208FFB;
+}
+.ansi-blue-intense-fg {
+  color: #0065CA;
+}
+.ansi-blue-intense-bg {
+  background-color: #0065CA;
+}
+.ansi-magenta-fg {
+  color: #D160C4;
+}
+.ansi-magenta-bg {
+  background-color: #D160C4;
+}
+.ansi-magenta-intense-fg {
+  color: #A03196;
+}
+.ansi-magenta-intense-bg {
+  background-color: #A03196;
+}
+.ansi-cyan-fg {
+  color: #60C6C8;
+}
+.ansi-cyan-bg {
+  background-color: #60C6C8;
+}
+.ansi-cyan-intense-fg {
+  color: #258F8F;
+}
+.ansi-cyan-intense-bg {
+  background-color: #258F8F;
+}
+.ansi-white-fg {
+  color: #C5C1B4;
+}
+.ansi-white-bg {
+  background-color: #C5C1B4;
+}
+.ansi-white-intense-fg {
+  color: #A1A6B2;
+}
+.ansi-white-intense-bg {
+  background-color: #A1A6B2;
+}
+.ansi-default-inverse-fg {
+  color: #FFFFFF;
+}
+.ansi-default-inverse-bg {
+  background-color: #000000;
+}
+.ansi-bold {
+  font-weight: bold;
+}
+.ansi-underline {
+  text-decoration: underline;
+}
+/* The following styles are deprecated an will be removed in a future version */
+.ansibold {
+  font-weight: bold;
+}
+.ansi-inverse {
+  outline: 0.5px dotted;
+}
+/* use dark versions for foreground, to improve visibility */
+.ansiblack {
+  color: black;
+}
+.ansired {
+  color: darkred;
+}
+.ansigreen {
+  color: darkgreen;
+}
+.ansiyellow {
+  color: #c4a000;
+}
+.ansiblue {
+  color: darkblue;
+}
+.ansipurple {
+  color: darkviolet;
+}
+.ansicyan {
+  color: steelblue;
+}
+.ansigray {
+  color: gray;
+}
+/* and light for background, for the same reason */
+.ansibgblack {
+  background-color: black;
+}
+.ansibgred {
+  background-color: red;
+}
+.ansibggreen {
+  background-color: green;
+}
+.ansibgyellow {
+  background-color: yellow;
+}
+.ansibgblue {
+  background-color: blue;
+}
+.ansibgpurple {
+  background-color: magenta;
+}
+.ansibgcyan {
+  background-color: cyan;
+}
+.ansibggray {
+  background-color: gray;
+}
+div.cell {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  border-radius: 2px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border-width: 1px;
+  border-style: solid;
+  border-color: transparent;
+  width: 100%;
+  padding: 5px;
+  /* This acts as a spacer between cells, that is outside the border */
+  margin: 0px;
+  outline: none;
+  position: relative;
+  overflow: visible;
+}
+div.cell:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: transparent;
+}
+div.cell.jupyter-soft-selected {
+  border-left-color: #E3F2FD;
+  border-left-width: 1px;
+  padding-left: 5px;
+  border-right-color: #E3F2FD;
+  border-right-width: 1px;
+  background: #E3F2FD;
+}
+@media print {
+  div.cell.jupyter-soft-selected {
+    border-color: transparent;
+  }
+}
+div.cell.selected,
+div.cell.selected.jupyter-soft-selected {
+  border-color: #ababab;
+}
+div.cell.selected:before,
+div.cell.selected.jupyter-soft-selected:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: #42A5F5;
+}
+@media print {
+  div.cell.selected,
+  div.cell.selected.jupyter-soft-selected {
+    border-color: transparent;
+  }
+}
+.edit_mode div.cell.selected {
+  border-color: #66BB6A;
+}
+.edit_mode div.cell.selected:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: #66BB6A;
+}
+@media print {
+  .edit_mode div.cell.selected {
+    border-color: transparent;
+  }
+}
+.prompt {
+  /* This needs to be wide enough for 3 digit prompt numbers: In[100]: */
+  min-width: 14ex;
+  /* This padding is tuned to match the padding on the CodeMirror editor. */
+  padding: 0.4em;
+  margin: 0px;
+  font-family: monospace;
+  text-align: right;
+  /* This has to match that of the the CodeMirror class line-height below */
+  line-height: 1.21429em;
+  /* Don't highlight prompt number selection */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  /* Use default cursor */
+  cursor: default;
+}
+@media (max-width: 540px) {
+  .prompt {
+    text-align: left;
+  }
+}
+div.inner_cell {
+  min-width: 0;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  /* Old browsers */
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  box-flex: 1;
+  /* Modern browsers */
+  flex: 1;
+}
+/* input_area and input_prompt must match in top border and margin for alignment */
+div.input_area {
+  border: 1px solid #cfcfcf;
+  border-radius: 2px;
+  background: #f7f7f7;
+  line-height: 1.21429em;
+}
+/* This is needed so that empty prompt areas can collapse to zero height when there
+   is no content in the output_subarea and the prompt. The main purpose of this is
+   to make sure that empty JavaScript output_subareas have no height. */
+div.prompt:empty {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+div.unrecognized_cell {
+  padding: 5px 5px 5px 0px;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+div.unrecognized_cell .inner_cell {
+  border-radius: 2px;
+  padding: 5px;
+  font-weight: bold;
+  color: red;
+  border: 1px solid #cfcfcf;
+  background: #eaeaea;
+}
+div.unrecognized_cell .inner_cell a {
+  color: inherit;
+  text-decoration: none;
+}
+div.unrecognized_cell .inner_cell a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+@media (max-width: 540px) {
+  div.unrecognized_cell > div.prompt {
+    display: none;
+  }
+}
+div.code_cell {
+  /* avoid page breaking on code cells when printing */
+}
+@media print {
+  div.code_cell {
+    page-break-inside: avoid;
+  }
+}
+/* any special styling for code cells that are currently running goes here */
+div.input {
+  page-break-inside: avoid;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.input {
+    /* Old browsers */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-box-align: stretch;
+    display: -moz-box;
+    -moz-box-orient: vertical;
+    -moz-box-align: stretch;
+    display: box;
+    box-orient: vertical;
+    box-align: stretch;
+    /* Modern browsers */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+/* input_area and input_prompt must match in top border and margin for alignment */
+div.input_prompt {
+  color: #303F9F;
+  border-top: 1px solid transparent;
+}
+div.input_area > div.highlight {
+  margin: 0.4em;
+  border: none;
+  padding: 0px;
+  background-color: transparent;
+}
+div.input_area > div.highlight > pre {
+  margin: 0px;
+  border: none;
+  padding: 0px;
+  background-color: transparent;
+}
+/* The following gets added to the <head> if it is detected that the user has a
+ * monospace font with inconsistent normal/bold/italic height.  See
+ * notebookmain.js.  Such fonts will have keywords vertically offset with
+ * respect to the rest of the text.  The user should select a better font.
+ * See: https://github.com/ipython/ipython/issues/1503
+ *
+ * .CodeMirror span {
+ *      vertical-align: bottom;
+ * }
+ */
+.CodeMirror {
+  line-height: 1.21429em;
+  /* Changed from 1em to our global default */
+  font-size: 14px;
+  height: auto;
+  /* Changed to auto to autogrow */
+  background: none;
+  /* Changed from white to allow our bg to show through */
+}
+.CodeMirror-scroll {
+  /*  The CodeMirror docs are a bit fuzzy on if overflow-y should be hidden or visible.*/
+  /*  We have found that if it is visible, vertical scrollbars appear with font size changes.*/
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+.CodeMirror-lines {
+  /* In CM2, this used to be 0.4em, but in CM3 it went to 4px. We need the em value because */
+  /* we have set a different line-height and want this to scale with that. */
+  /* Note that this should set vertical padding only, since CodeMirror assumes
+       that horizontal padding will be set on CodeMirror pre */
+  padding: 0.4em 0;
+}
+.CodeMirror-linenumber {
+  padding: 0 8px 0 4px;
+}
+.CodeMirror-gutters {
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+}
+.CodeMirror pre {
+  /* In CM3 this went to 4px from 0 in CM2. This sets horizontal padding only,
+    use .CodeMirror-lines for vertical */
+  padding: 0 0.4em;
+  border: 0;
+  border-radius: 0;
+}
+.CodeMirror-cursor {
+  border-left: 1.4px solid black;
+}
+@media screen and (min-width: 2138px) and (max-width: 4319px) {
+  .CodeMirror-cursor {
+    border-left: 2px solid black;
+  }
+}
+@media screen and (min-width: 4320px) {
+  .CodeMirror-cursor {
+    border-left: 4px solid black;
+  }
+}
+/*
+
+Original style from softwaremaniacs.org (c) Ivan Sagalaev <Maniac@SoftwareManiacs.Org>
+Adapted from GitHub theme
+
+*/
+.highlight-base {
+  color: #000;
+}
+.highlight-variable {
+  color: #000;
+}
+.highlight-variable-2 {
+  color: #1a1a1a;
+}
+.highlight-variable-3 {
+  color: #333333;
+}
+.highlight-string {
+  color: #BA2121;
+}
+.highlight-comment {
+  color: #408080;
+  font-style: italic;
+}
+.highlight-number {
+  color: #080;
+}
+.highlight-atom {
+  color: #88F;
+}
+.highlight-keyword {
+  color: #008000;
+  font-weight: bold;
+}
+.highlight-builtin {
+  color: #008000;
+}
+.highlight-error {
+  color: #f00;
+}
+.highlight-operator {
+  color: #AA22FF;
+  font-weight: bold;
+}
+.highlight-meta {
+  color: #AA22FF;
+}
+/* previously not defined, copying from default codemirror */
+.highlight-def {
+  color: #00f;
+}
+.highlight-string-2 {
+  color: #f50;
+}
+.highlight-qualifier {
+  color: #555;
+}
+.highlight-bracket {
+  color: #997;
+}
+.highlight-tag {
+  color: #170;
+}
+.highlight-attribute {
+  color: #00c;
+}
+.highlight-header {
+  color: blue;
+}
+.highlight-quote {
+  color: #090;
+}
+.highlight-link {
+  color: #00c;
+}
+/* apply the same style to codemirror */
+.cm-s-ipython span.cm-keyword {
+  color: #008000;
+  font-weight: bold;
+}
+.cm-s-ipython span.cm-atom {
+  color: #88F;
+}
+.cm-s-ipython span.cm-number {
+  color: #080;
+}
+.cm-s-ipython span.cm-def {
+  color: #00f;
+}
+.cm-s-ipython span.cm-variable {
+  color: #000;
+}
+.cm-s-ipython span.cm-operator {
+  color: #AA22FF;
+  font-weight: bold;
+}
+.cm-s-ipython span.cm-variable-2 {
+  color: #1a1a1a;
+}
+.cm-s-ipython span.cm-variable-3 {
+  color: #333333;
+}
+.cm-s-ipython span.cm-comment {
+  color: #408080;
+  font-style: italic;
+}
+.cm-s-ipython span.cm-string {
+  color: #BA2121;
+}
+.cm-s-ipython span.cm-string-2 {
+  color: #f50;
+}
+.cm-s-ipython span.cm-meta {
+  color: #AA22FF;
+}
+.cm-s-ipython span.cm-qualifier {
+  color: #555;
+}
+.cm-s-ipython span.cm-builtin {
+  color: #008000;
+}
+.cm-s-ipython span.cm-bracket {
+  color: #997;
+}
+.cm-s-ipython span.cm-tag {
+  color: #170;
+}
+.cm-s-ipython span.cm-attribute {
+  color: #00c;
+}
+.cm-s-ipython span.cm-header {
+  color: blue;
+}
+.cm-s-ipython span.cm-quote {
+  color: #090;
+}
+.cm-s-ipython span.cm-link {
+  color: #00c;
+}
+.cm-s-ipython span.cm-error {
+  color: #f00;
+}
+.cm-s-ipython span.cm-tab {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAMCAYAAAAkuj5RAAAAAXNSR0IArs4c6QAAAGFJREFUSMft1LsRQFAQheHPowAKoACx3IgEKtaEHujDjORSgWTH/ZOdnZOcM/sgk/kFFWY0qV8foQwS4MKBCS3qR6ixBJvElOobYAtivseIE120FaowJPN75GMu8j/LfMwNjh4HUpwg4LUAAAAASUVORK5CYII=);
+  background-position: right;
+  background-repeat: no-repeat;
+}
+div.output_wrapper {
+  /* this position must be relative to enable descendents to be absolute within it */
+  position: relative;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  z-index: 1;
+}
+/* class for the output area when it should be height-limited */
+div.output_scroll {
+  /* ideally, this would be max-height, but FF barfs all over that */
+  height: 24em;
+  /* FF needs this *and the wrapper* to specify full width, or it will shrinkwrap */
+  width: 100%;
+  overflow: auto;
+  border-radius: 2px;
+  -webkit-box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+  display: block;
+}
+/* output div while it is collapsed */
+div.output_collapsed {
+  margin: 0px;
+  padding: 0px;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+div.out_prompt_overlay {
+  height: 100%;
+  padding: 0px 0.4em;
+  position: absolute;
+  border-radius: 2px;
+}
+div.out_prompt_overlay:hover {
+  /* use inner shadow to get border that is computed the same on WebKit/FF */
+  -webkit-box-shadow: inset 0 0 1px #000;
+  box-shadow: inset 0 0 1px #000;
+  background: rgba(240, 240, 240, 0.5);
+}
+div.output_prompt {
+  color: #D84315;
+}
+/* This class is the outer container of all output sections. */
+div.output_area {
+  padding: 0px;
+  page-break-inside: avoid;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+div.output_area .MathJax_Display {
+  text-align: left !important;
+}
+div.output_area 
+div.output_area 
+div.output_area img,
+div.output_area svg {
+  max-width: 100%;
+  height: auto;
+}
+div.output_area img.unconfined,
+div.output_area svg.unconfined {
+  max-width: none;
+}
+div.output_area .mglyph > img {
+  max-width: none;
+}
+/* This is needed to protect the pre formating from global settings such
+   as that of bootstrap */
+.output {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.output_area {
+    /* Old browsers */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-box-align: stretch;
+    display: -moz-box;
+    -moz-box-orient: vertical;
+    -moz-box-align: stretch;
+    display: box;
+    box-orient: vertical;
+    box-align: stretch;
+    /* Modern browsers */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+div.output_area pre {
+  margin: 0;
+  padding: 1px 0 1px 0;
+  border: 0;
+  vertical-align: baseline;
+  color: black;
+  background-color: transparent;
+  border-radius: 0;
+}
+/* This class is for the output subarea inside the output_area and after
+   the prompt div. */
+div.output_subarea {
+  overflow-x: auto;
+  padding: 0.4em;
+  /* Old browsers */
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  box-flex: 1;
+  /* Modern browsers */
+  flex: 1;
+  max-width: calc(100% - 14ex);
+}
+div.output_scroll div.output_subarea {
+  overflow-x: visible;
+}
+/* The rest of the output_* classes are for special styling of the different
+   output types */
+/* all text output has this class: */
+div.output_text {
+  text-align: left;
+  color: #000;
+  /* This has to match that of the the CodeMirror class line-height below */
+  line-height: 1.21429em;
+}
+/* stdout/stderr are 'text' as well as 'stream', but execute_result/error are *not* streams */
+div.output_stderr {
+  background: #fdd;
+  /* very light red background for stderr */
+}
+div.output_latex {
+  text-align: left;
+}
+/* Empty output_javascript divs should have no height */
+div.output_javascript:empty {
+  padding: 0;
+}
+.js-error {
+  color: darkred;
+}
+/* raw_input styles */
+div.raw_input_container {
+  line-height: 1.21429em;
+  padding-top: 5px;
+}
+pre.raw_input_prompt {
+  /* nothing needed here. */
+}
+input.raw_input {
+  font-family: monospace;
+  font-size: inherit;
+  color: inherit;
+  width: auto;
+  /* make sure input baseline aligns with prompt */
+  vertical-align: baseline;
+  /* padding + margin = 0.5em between prompt and cursor */
+  padding: 0em 0.25em;
+  margin: 0em 0.25em;
+}
+input.raw_input:focus {
+  box-shadow: none;
+}
+p.p-space {
+  margin-bottom: 10px;
+}
+div.output_unrecognized {
+  padding: 5px;
+  font-weight: bold;
+  color: red;
+}
+div.output_unrecognized a {
+  color: inherit;
+  text-decoration: none;
+}
+div.output_unrecognized a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+.rendered_html {
+  color: #000;
+  /* any extras will just be numbers: */
+}
+
+
+
+.rendered_html :link {
+  text-decoration: underline;
+}
+.rendered_html :visited {
+  text-decoration: underline;
+}
+
+
+
+
+
+
+.rendered_html h1:first-child {
+  margin-top: 0.538em;
+}
+.rendered_html h2:first-child {
+  margin-top: 0.636em;
+}
+.rendered_html h3:first-child {
+  margin-top: 0.777em;
+}
+.rendered_html h4:first-child {
+  margin-top: 1em;
+}
+.rendered_html h5:first-child {
+  margin-top: 1em;
+}
+.rendered_html h6:first-child {
+  margin-top: 1em;
+}
+.rendered_html ul:not(.list-inline),
+.rendered_html ol:not(.list-inline) {
+  padding-left: 2em;
+}
+
+
+
+
+
+
+
+
+.rendered_html * + ul {
+  margin-top: 1em;
+}
+.rendered_html * + ol {
+  margin-top: 1em;
+}
+
+
+
+
+
+.rendered_html pre,
+
+
+
+
+.rendered_html tr,
+.rendered_html th,
+
+
+.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+.rendered_html * + table {
+  margin-top: 1em;
+}
+
+.rendered_html * + p {
+  margin-top: 1em;
+}
+
+.rendered_html * + img {
+  margin-top: 1em;
+}
+.rendered_html img,
+
+.rendered_html img.unconfined,
+
+
+.rendered_html * + .alert {
+  margin-top: 1em;
+}
+[dir="rtl"] 
+div.text_cell {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.text_cell > div.prompt {
+    display: none;
+  }
+}
+div.text_cell_render {
+  /*font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;*/
+  outline: none;
+  resize: none;
+  width: inherit;
+  border-style: none;
+  padding: 0.5em 0.5em 0.5em 0.4em;
+  color: #000;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+a.anchor-link:link {
+  text-decoration: none;
+  padding: 0px 20px;
+  visibility: hidden;
+}
+h1:hover .anchor-link,
+h2:hover .anchor-link,
+h3:hover .anchor-link,
+h4:hover .anchor-link,
+h5:hover .anchor-link,
+h6:hover .anchor-link {
+  visibility: visible;
+}
+.text_cell.rendered .input_area {
+  display: none;
+}
+.text_cell.rendered 
+.text_cell.rendered .rendered_html tr,
+.text_cell.rendered .rendered_html th,
+.text_cell.rendered 
+.text_cell.unrendered .text_cell_render {
+  display: none;
+}
+.text_cell .dropzone .input_area {
+  border: 2px dashed #bababa;
+  margin: -1px;
+}
+.cm-header-1,
+.cm-header-2,
+.cm-header-3,
+.cm-header-4,
+.cm-header-5,
+.cm-header-6 {
+  font-weight: bold;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.cm-header-1 {
+  font-size: 185.7%;
+}
+.cm-header-2 {
+  font-size: 157.1%;
+}
+.cm-header-3 {
+  font-size: 128.6%;
+}
+.cm-header-4 {
+  font-size: 110%;
+}
+.cm-header-5 {
+  font-size: 100%;
+  font-style: italic;
+}
+.cm-header-6 {
+  font-size: 100%;
+  font-style: italic;
+}
+</style>
+<style type="text/css">.highlight .hll { background-color: #ffffcc }
+.highlight  { background: #f8f8f8; }
+.highlight .c { color: #408080; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #FF0000 } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666666 } /* Operator */
+.highlight .ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #BC7A00 } /* Comment.Preproc */
+.highlight .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #408080; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #408080; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #FF0000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00A000 } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #0044DD } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666666 } /* Literal.Number */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #7D9029 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.highlight .no { color: #880000 } /* Name.Constant */
+.highlight .nd { color: #AA22FF } /* Name.Decorator */
+.highlight .ni { color: #999999; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0000FF } /* Name.Function */
+.highlight .nl { color: #A0A000 } /* Name.Label */
+.highlight .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #666666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666666 } /* Literal.Number.Float */
+.highlight .mh { color: #666666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
+.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #BB6688 } /* Literal.String.Regex */
+.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0000FF } /* Name.Function.Magic */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
+.highlight .il { color: #666666 } /* Literal.Number.Integer.Long */</style>
+<style type="text/css">
+/* Temporary definitions which will become obsolete with Notebook release 5.0 */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-bold { font-weight: bold; }
+</style>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Implementing-logistic-regression-from-scratch">Implementing logistic regression from scratch<a class="anchor-link" href="#Implementing-logistic-regression-from-scratch">&#182;</a></h1><p>The goal of this notebook is to implement your own logistic regression classifier. You will:</p>
+<ul>
+<li>Extract features from Amazon product reviews.</li>
+<li>Convert an SFrame into a NumPy array.</li>
+<li>Implement the link function for logistic regression.</li>
+<li>Write a function to compute the derivative of the log likelihood function with respect to a single coefficient.</li>
+<li>Implement gradient ascent.</li>
+<li>Given a set of coefficients, predict sentiments.</li>
+<li>Compute classification accuracy for the logistic regression model.</li>
+</ul>
+<p>Let's get started!</p>
+<h2 id="Fire-up-GraphLab-Create">Fire up GraphLab Create<a class="anchor-link" href="#Fire-up-GraphLab-Create">&#182;</a></h2><p>Make sure you have the latest version of GraphLab Create. Upgrade by</p>
+
+<pre><code>   pip install graphlab-create --upgrade</code></pre>
+<p>See <a href="https://dato.com/download/">this page</a> for detailed instructions on upgrading.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">graphlab</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Load-review-dataset">Load review dataset<a class="anchor-link" href="#Load-review-dataset">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>For this assignment, we will use a subset of the Amazon product review dataset. The subset was chosen to contain similar numbers of positive and negative reviews, as the original dataset consisted primarily of positive reviews.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">products</span> <span class="o">=</span> <span class="n">graphlab</span><span class="o">.</span><span class="n">SFrame</span><span class="p">(</span><span class="s1">&#39;amazon_baby_subset.gl/&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>This non-commercial license of GraphLab Create for academic use is assigned to arslanahmadid@gmail.com and will expire on October 28, 2019.
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>[INFO] graphlab.cython.cy_server: GraphLab Create v2.0.1 started. Logging: C:\Users\arslan\AppData\Local\Temp\graphlab_server_1551522976.log.0
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>One column of this dataset is 'sentiment', corresponding to the class label with +1 indicating a review with positive sentiment and -1 indicating one with negative sentiment.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">products</span><span class="p">[</span><span class="s1">&#39;sentiment&#39;</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[6]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>dtype: int
+Rows: 53072
+[1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, ... ]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let us quickly explore more of this dataset.  The 'name' column indicates the name of the product.  Here we list the first 10 products in the dataset.  We then count the number of positive and negative reviews.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">products</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[7]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>dtype: str
+Rows: 10
+[&#34;Stop Pacifier Sucking without tears with Thumbuddy To Love&#39;s Binky Fairy Puppet and Adorable Book&#34;, &#34;Nature&#39;s Lullabies Second Year Sticker Calendar&#34;, &#34;Nature&#39;s Lullabies Second Year Sticker Calendar&#34;, &#39;Lamaze Peekaboo, I Love You&#39;, &#34;SoftPlay Peek-A-Boo Where&#39;s Elmo A Children&#39;s Book&#34;, &#39;Our Baby Girl Memory Book&#39;, &#39;Hunnt&amp;reg; Falling Flowers and Birds Kids Nursery Home Decor Vinyl Mural Art Wall Paper Stickers&#39;, &#39;Blessed By Pope Benedict XVI Divine Mercy Full Color Medal&#39;, &#39;Cloth Diaper Pins Stainless Steel Traditional Safety Pin (Black)&#39;, &#39;Cloth Diaper Pins Stainless Steel Traditional Safety Pin (Black)&#39;]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="s1">&#39;# of positive reviews =&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">products</span><span class="p">[</span><span class="n">products</span><span class="p">[</span><span class="s1">&#39;sentiment&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">])</span>
+<span class="k">print</span> <span class="s1">&#39;# of negative reviews =&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">products</span><span class="p">[</span><span class="n">products</span><span class="p">[</span><span class="s1">&#39;sentiment&#39;</span><span class="p">]</span><span class="o">==-</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre># of positive reviews = 26579
+# of negative reviews = 26493
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Note:</strong> For this assignment, we eliminated class imbalance by choosing 
+a subset of the data with a similar number of positive and negative reviews.</p>
+<h2 id="Apply-text-cleaning-on-the-review-data">Apply text cleaning on the review data<a class="anchor-link" href="#Apply-text-cleaning-on-the-review-data">&#182;</a></h2><p>In this section, we will perform some simple feature cleaning using <strong>SFrames</strong>. The last assignment used all words in building bag-of-words features, but here we limit ourselves to 193 words (for simplicity). We compiled a list of 193 most frequent words into a JSON file.</p>
+<p>Now, we will load these words from this JSON file:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;important_words.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span> <span class="c1"># Reads the list of most frequent words</span>
+    <span class="n">important_words</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="n">important_words</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">important_words</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="n">important_words</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[&#39;baby&#39;, &#39;one&#39;, &#39;great&#39;, &#39;love&#39;, &#39;use&#39;, &#39;would&#39;, &#39;like&#39;, &#39;easy&#39;, &#39;little&#39;, &#39;seat&#39;, &#39;old&#39;, &#39;well&#39;, &#39;get&#39;, &#39;also&#39;, &#39;really&#39;, &#39;son&#39;, &#39;time&#39;, &#39;bought&#39;, &#39;product&#39;, &#39;good&#39;, &#39;daughter&#39;, &#39;much&#39;, &#39;loves&#39;, &#39;stroller&#39;, &#39;put&#39;, &#39;months&#39;, &#39;car&#39;, &#39;still&#39;, &#39;back&#39;, &#39;used&#39;, &#39;recommend&#39;, &#39;first&#39;, &#39;even&#39;, &#39;perfect&#39;, &#39;nice&#39;, &#39;bag&#39;, &#39;two&#39;, &#39;using&#39;, &#39;got&#39;, &#39;fit&#39;, &#39;around&#39;, &#39;diaper&#39;, &#39;enough&#39;, &#39;month&#39;, &#39;price&#39;, &#39;go&#39;, &#39;could&#39;, &#39;soft&#39;, &#39;since&#39;, &#39;buy&#39;, &#39;room&#39;, &#39;works&#39;, &#39;made&#39;, &#39;child&#39;, &#39;keep&#39;, &#39;size&#39;, &#39;small&#39;, &#39;need&#39;, &#39;year&#39;, &#39;big&#39;, &#39;make&#39;, &#39;take&#39;, &#39;easily&#39;, &#39;think&#39;, &#39;crib&#39;, &#39;clean&#39;, &#39;way&#39;, &#39;quality&#39;, &#39;thing&#39;, &#39;better&#39;, &#39;without&#39;, &#39;set&#39;, &#39;new&#39;, &#39;every&#39;, &#39;cute&#39;, &#39;best&#39;, &#39;bottles&#39;, &#39;work&#39;, &#39;purchased&#39;, &#39;right&#39;, &#39;lot&#39;, &#39;side&#39;, &#39;happy&#39;, &#39;comfortable&#39;, &#39;toy&#39;, &#39;able&#39;, &#39;kids&#39;, &#39;bit&#39;, &#39;night&#39;, &#39;long&#39;, &#39;fits&#39;, &#39;see&#39;, &#39;us&#39;, &#39;another&#39;, &#39;play&#39;, &#39;day&#39;, &#39;money&#39;, &#39;monitor&#39;, &#39;tried&#39;, &#39;thought&#39;, &#39;never&#39;, &#39;item&#39;, &#39;hard&#39;, &#39;plastic&#39;, &#39;however&#39;, &#39;disappointed&#39;, &#39;reviews&#39;, &#39;something&#39;, &#39;going&#39;, &#39;pump&#39;, &#39;bottle&#39;, &#39;cup&#39;, &#39;waste&#39;, &#39;return&#39;, &#39;amazon&#39;, &#39;different&#39;, &#39;top&#39;, &#39;want&#39;, &#39;problem&#39;, &#39;know&#39;, &#39;water&#39;, &#39;try&#39;, &#39;received&#39;, &#39;sure&#39;, &#39;times&#39;, &#39;chair&#39;, &#39;find&#39;, &#39;hold&#39;, &#39;gate&#39;, &#39;open&#39;, &#39;bottom&#39;, &#39;away&#39;, &#39;actually&#39;, &#39;cheap&#39;, &#39;worked&#39;, &#39;getting&#39;, &#39;ordered&#39;, &#39;came&#39;, &#39;milk&#39;, &#39;bad&#39;, &#39;part&#39;, &#39;worth&#39;, &#39;found&#39;, &#39;cover&#39;, &#39;many&#39;, &#39;design&#39;, &#39;looking&#39;, &#39;weeks&#39;, &#39;say&#39;, &#39;wanted&#39;, &#39;look&#39;, &#39;place&#39;, &#39;purchase&#39;, &#39;looks&#39;, &#39;second&#39;, &#39;piece&#39;, &#39;box&#39;, &#39;pretty&#39;, &#39;trying&#39;, &#39;difficult&#39;, &#39;together&#39;, &#39;though&#39;, &#39;give&#39;, &#39;started&#39;, &#39;anything&#39;, &#39;last&#39;, &#39;company&#39;, &#39;come&#39;, &#39;returned&#39;, &#39;maybe&#39;, &#39;took&#39;, &#39;broke&#39;, &#39;makes&#39;, &#39;stay&#39;, &#39;instead&#39;, &#39;idea&#39;, &#39;head&#39;, &#39;said&#39;, &#39;less&#39;, &#39;went&#39;, &#39;working&#39;, &#39;high&#39;, &#39;unit&#39;, &#39;seems&#39;, &#39;picture&#39;, &#39;completely&#39;, &#39;wish&#39;, &#39;buying&#39;, &#39;babies&#39;, &#39;won&#39;, &#39;tub&#39;, &#39;almost&#39;, &#39;either&#39;]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now, we will perform 2 simple data transformations:</p>
+<ol>
+<li>Remove punctuation using <a href="https://docs.python.org/2/library/string.html">Python's built-in</a> string functionality.</li>
+<li>Compute word counts (only for <strong>important_words</strong>)</li>
+</ol>
+<p>We start with <em>Step 1</em> which can be done as follows:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">remove_punctuation</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">string</span>
+    <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">string</span><span class="o">.</span><span class="n">punctuation</span><span class="p">)</span> 
+
+<span class="n">products</span><span class="p">[</span><span class="s1">&#39;review_clean&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">products</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">remove_punctuation</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now we proceed with <em>Step 2</em>. For each word in <strong>important_words</strong>, we compute a count for the number of times the word occurs in the review. We will store this count in a separate column (one for each word). The result of this feature processing is a single column for each word in <strong>important_words</strong> which keeps a count of the number of times the respective word occurs in the review text.</p>
+<p><strong>Note:</strong> There are several ways of doing this. In this assignment, we use the built-in <em>count</em> function for Python lists. Each review string is first split into individual words and the number of occurances of a given word is counted.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">important_words</span><span class="p">:</span>
+    <span class="n">products</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">=</span> <span class="n">products</span><span class="p">[</span><span class="s1">&#39;review_clean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">s</span> <span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">word</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="p">(</span><span class="n">products</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>+-------------------------------+-------------------------------+--------+-----------+
+|              name             |             review            | rating | sentiment |
++-------------------------------+-------------------------------+--------+-----------+
+| Stop Pacifier Sucking with... | All of my kids have cried ... |  5.0   |     1     |
+| Nature&#39;s Lullabies Second ... | We wanted to get something... |  5.0   |     1     |
+| Nature&#39;s Lullabies Second ... | My daughter had her 1st ba... |  5.0   |     1     |
+|  Lamaze Peekaboo, I Love You  | One of baby&#39;s first and fa... |  4.0   |     1     |
+| SoftPlay Peek-A-Boo Where&#39;... | Very cute interactive book... |  5.0   |     1     |
+|   Our Baby Girl Memory Book   | Beautiful book, I love it ... |  5.0   |     1     |
+| Hunnt&amp;reg; Falling Flowers... | Try this out for a spring ... |  5.0   |     1     |
+| Blessed By Pope Benedict X... | very nice Divine Mercy Pen... |  5.0   |     1     |
+| Cloth Diaper Pins Stainles... | We bought the pins as my 6... |  4.0   |     1     |
+| Cloth Diaper Pins Stainles... | It has been many years sin... |  5.0   |     1     |
++-------------------------------+-------------------------------+--------+-----------+
++-------------------------------+------+-----+-------+------+-----+-------+------+
+|          review_clean         | baby | one | great | love | use | would | like |
++-------------------------------+------+-----+-------+------+-----+-------+------+
+| All of my kids have cried ... |  0   |  0  |   1   |  0   |  0  |   0   |  0   |
+| We wanted to get something... |  0   |  0  |   0   |  0   |  0  |   0   |  0   |
+| My daughter had her 1st ba... |  1   |  0  |   0   |  0   |  0  |   0   |  0   |
+| One of babys first and fav... |  0   |  0  |   0   |  0   |  0  |   0   |  1   |
+| Very cute interactive book... |  0   |  0  |   1   |  0   |  0  |   0   |  0   |
+| Beautiful book I love it t... |  0   |  0  |   1   |  1   |  0  |   0   |  0   |
+| Try this out for a spring ... |  0   |  0  |   0   |  0   |  0  |   0   |  0   |
+| very nice Divine Mercy Pen... |  0   |  0  |   0   |  0   |  0  |   0   |  0   |
+| We bought the pins as my 6... |  0   |  1  |   0   |  0   |  1  |   0   |  0   |
+| It has been many years sin... |  0   |  1  |   0   |  0   |  0  |   0   |  1   |
++-------------------------------+------+-----+-------+------+-----+-------+------+
++------+--------+------+-----+------+-----+------+--------+-----+
+| easy | little | seat | old | well | get | also | really | ... |
++------+--------+------+-----+------+-----+------+--------+-----+
+|  1   |   0    |  0   |  0  |  0   |  0  |  0   |   0    | ... |
+|  0   |   0    |  0   |  0  |  0   |  1  |  0   |   0    | ... |
+|  0   |   0    |  0   |  1  |  0   |  1  |  0   |   0    | ... |
+|  0   |   0    |  0   |  0  |  0   |  0  |  0   |   0    | ... |
+|  0   |   0    |  0   |  0  |  0   |  0  |  0   |   0    | ... |
+|  0   |   0    |  0   |  0  |  0   |  0  |  0   |   0    | ... |
+|  0   |   0    |  0   |  0  |  0   |  0  |  0   |   0    | ... |
+|  0   |   0    |  0   |  0  |  0   |  0  |  0   |   0    | ... |
+|  0   |   0    |  0   |  1  |  0   |  0  |  0   |   0    | ... |
+|  0   |   1    |  0   |  0  |  0   |  1  |  0   |   0    | ... |
++------+--------+------+-----+------+-----+------+--------+-----+
+[53072 rows x 198 columns]
+Note: Only the head of the SFrame is printed.
+You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns.
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The SFrame <strong>products</strong> now contains one column for each of the 193 <strong>important_words</strong>. As an example, the column <strong>perfect</strong> contains a count of the number of times the word <strong>perfect</strong> occurs in each of the reviews.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="n">products</span><span class="p">[</span><span class="s1">&#39;perfect&#39;</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[0L, 0L, 0L, 1L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 1L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 1L, 0L, 1L, 0L, 0L, 1L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, ... ]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now, write some code to compute the number of product reviews that contain the word <strong>perfect</strong>.</p>
+<p><strong>Hint</strong>:</p>
+<ul>
+<li>First create a column called <code>contains_perfect</code> which is set to 1 if the count of the word <strong>perfect</strong> (stored in column <strong>perfect</strong>) is &gt;= 1.</li>
+<li>Sum the number of 1s in the column <code>contains_perfect</code>.</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">products</span><span class="p">[</span><span class="s1">&#39;contains_perfect&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">products</span><span class="p">[</span><span class="s1">&#39;perfect&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;=</span><span class="mi">1</span> <span class="k">else</span> <span class="mi">0</span> <span class="p">)</span>
+<span class="n">products</span><span class="p">[</span><span class="s1">&#39;contains_perfect&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[15]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>2955L</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Quiz Question</strong>. How many reviews contain the word <strong>perfect</strong>?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Convert-SFrame-to-NumPy-array">Convert SFrame to NumPy array<a class="anchor-link" href="#Convert-SFrame-to-NumPy-array">&#182;</a></h2><p>As you have seen previously, NumPy is a powerful library for doing matrix manipulation. Let us convert our data to matrices and then implement our algorithms with matrices.</p>
+<p>First, make sure you can perform the following import.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We now provide you with a function that extracts columns from an SFrame and converts them into a NumPy array. Two arrays are returned: one representing features and another representing class labels. Note that the feature matrix includes an additional column 'intercept' to take account of the intercept term.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">get_numpy_data</span><span class="p">(</span><span class="n">data_sframe</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+    <span class="n">data_sframe</span><span class="p">[</span><span class="s1">&#39;intercept&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;intercept&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">features</span>
+    <span class="n">features_sframe</span> <span class="o">=</span> <span class="n">data_sframe</span><span class="p">[</span><span class="n">features</span><span class="p">]</span>
+    <span class="n">feature_matrix</span> <span class="o">=</span> <span class="n">features_sframe</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">label_sarray</span> <span class="o">=</span> <span class="n">data_sframe</span><span class="p">[</span><span class="n">label</span><span class="p">]</span>
+    <span class="n">label_array</span> <span class="o">=</span> <span class="n">label_sarray</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="k">return</span><span class="p">(</span><span class="n">feature_matrix</span><span class="p">,</span> <span class="n">label_array</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let us convert the data into NumPy arrays.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Warning: This may take a few minutes...</span>
+<span class="n">feature_matrix</span><span class="p">,</span> <span class="n">sentiment</span> <span class="o">=</span> <span class="n">get_numpy_data</span><span class="p">(</span><span class="n">products</span><span class="p">,</span> <span class="n">important_words</span><span class="p">,</span> <span class="s1">&#39;sentiment&#39;</span><span class="p">)</span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="n">feature_matrix</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[[1 0 0 ... 0 0 0]
+ [1 0 0 ... 0 0 0]
+ [1 1 0 ... 0 0 0]
+ ...
+ [1 0 0 ... 0 0 0]
+ [1 0 1 ... 0 0 0]
+ [1 0 0 ... 0 0 0]]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Are you running this notebook on an Amazon EC2 t2.micro instance?</strong> (If you are using your own machine, please skip this section)</p>
+<p>It has been reported that t2.micro instances do not provide sufficient power to complete the conversion in acceptable amount of time. For interest of time, please refrain from running <code>get_numpy_data</code> function. Instead, download the <a href="https://s3.amazonaws.com/static.dato.com/files/coursera/course-3/numpy-arrays/module-3-assignment-numpy-arrays.npz">binary file</a> containing the four NumPy arrays you'll need for the assignment. To load the arrays, run the following commands:</p>
+
+<pre><code>arrays = np.load('module-3-assignment-numpy-arrays.npz')
+feature_matrix, sentiment = arrays['feature_matrix'], arrays['sentiment']</code></pre>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">feature_matrix</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[20]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(53072L, 194L)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong> Quiz Question:</strong> How many features are there in the <strong>feature_matrix</strong>?</p>
+<p><strong> Quiz Question:</strong> Assuming that the intercept is present, how does the number of features in <strong>feature_matrix</strong> relate to the number of features in the logistic regression model?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now, let us see what the <strong>sentiment</strong> column looks like:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">sentiment</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[21]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([ 1,  1,  1, ..., -1, -1, -1], dtype=int64)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Estimating-conditional-probability-with-link-function">Estimating conditional probability with link function<a class="anchor-link" href="#Estimating-conditional-probability-with-link-function">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Recall from lecture that the link function is given by:
+$$
+P(y_i = +1 | \mathbf{x}_i,\mathbf{w}) = \frac{1}{1 + \exp(-\mathbf{w}^T h(\mathbf{x}_i))},
+$$</p>
+<p>where the feature vector $h(\mathbf{x}_i)$ represents the word counts of <strong>important_words</strong> in the review  $\mathbf{x}_i$. Complete the following function that implements the link function:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">produces probablistic estimate for P(y_i = +1 | x_i, w).</span>
+<span class="sd">estimate ranges between 0 and 1.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="k">def</span> <span class="nf">predict_probability</span><span class="p">(</span><span class="n">feature_matrix</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">):</span>
+    <span class="c1"># Take dot product of feature_matrix and coefficients  </span>
+    <span class="c1"># YOUR CODE HERE</span>
+    
+    <span class="n">scores</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">feature_matrix</span><span class="p">,</span><span class="n">coefficients</span><span class="p">)</span>
+    
+    
+    <span class="c1"># Compute P(y_i = +1 | x_i, w) using the link function</span>
+    <span class="c1"># YOUR CODE HERE</span>
+    <span class="n">predictions</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">scores</span><span class="p">))</span>
+    <span class="c1"># return predictions</span>
+    <span class="k">return</span> <span class="n">predictions</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Aside</strong>. How the link function works with matrix algebra</p>
+<p>Since the word counts are stored as columns in <strong>feature_matrix</strong>, each $i$-th row of the matrix corresponds to the feature vector $h(\mathbf{x}_i)$:
+$$
+[\text{feature_matrix}] =
+\left[
+\begin{array}{c}
+h(\mathbf{x}_1)^T \\
+h(\mathbf{x}_2)^T \\
+\vdots \\
+h(\mathbf{x}_N)^T
+\end{array}
+\right] =
+\left[
+\begin{array}{cccc}
+h_0(\mathbf{x}_1) &amp; h_1(\mathbf{x}_1) &amp; \cdots &amp; h_D(\mathbf{x}_1) \\
+h_0(\mathbf{x}_2) &amp; h_1(\mathbf{x}_2) &amp; \cdots &amp; h_D(\mathbf{x}_2) \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+h_0(\mathbf{x}_N) &amp; h_1(\mathbf{x}_N) &amp; \cdots &amp; h_D(\mathbf{x}_N)
+\end{array}
+\right]
+$$</p>
+<p>By the rules of matrix multiplication, the score vector containing elements $\mathbf{w}^T h(\mathbf{x}_i)$ is obtained by multiplying <strong>feature_matrix</strong> and the coefficient vector $\mathbf{w}$.
+$$
+[\text{score}] =
+[\text{feature_matrix}]\mathbf{w} =
+\left[
+\begin{array}{c}
+h(\mathbf{x}_1)^T \\
+h(\mathbf{x}_2)^T \\
+\vdots \\
+h(\mathbf{x}_N)^T
+\end{array}
+\right]
+\mathbf{w}
+= \left[
+\begin{array}{c}
+h(\mathbf{x}_1)^T\mathbf{w} \\
+h(\mathbf{x}_2)^T\mathbf{w} \\
+\vdots \\
+h(\mathbf{x}_N)^T\mathbf{w}
+\end{array}
+\right]
+= \left[
+\begin{array}{c}
+\mathbf{w}^T h(\mathbf{x}_1) \\
+\mathbf{w}^T h(\mathbf{x}_2) \\
+\vdots \\
+\mathbf{w}^T h(\mathbf{x}_N)
+\end{array}
+\right]
+$$</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Checkpoint</strong></p>
+<p>Just to make sure you are on the right track, we have provided a few examples. If your <code>predict_probability</code> function is implemented correctly, then the outputs will match:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">dummy_feature_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">,</span><span class="mf">2.</span><span class="p">,</span><span class="mf">3.</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.</span><span class="p">,</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+<span class="n">dummy_coefficients</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">])</span>
+
+<span class="n">correct_scores</span>      <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span> <span class="p">[</span> <span class="mf">1.</span><span class="o">*</span><span class="mf">1.</span> <span class="o">+</span> <span class="mf">2.</span><span class="o">*</span><span class="mf">3.</span> <span class="o">+</span> <span class="mf">3.</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="p">),</span>          <span class="mf">1.</span><span class="o">*</span><span class="mf">1.</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="p">)</span><span class="o">*</span><span class="mf">3.</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="p">)</span> <span class="p">]</span> <span class="p">)</span>
+<span class="n">correct_predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span> <span class="p">[</span> <span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">correct_scores</span><span class="p">[</span><span class="mi">0</span><span class="p">])),</span> <span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">correct_scores</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="p">]</span> <span class="p">)</span>
+
+<span class="k">print</span> <span class="s1">&#39;The following outputs must match &#39;</span>
+<span class="k">print</span> <span class="s1">&#39;------------------------------------------------&#39;</span>
+<span class="k">print</span> <span class="s1">&#39;correct_predictions           =&#39;</span><span class="p">,</span> <span class="n">correct_predictions</span>
+<span class="k">print</span> <span class="s1">&#39;output of predict_probability =&#39;</span><span class="p">,</span> <span class="n">predict_probability</span><span class="p">(</span><span class="n">dummy_feature_matrix</span><span class="p">,</span> <span class="n">dummy_coefficients</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>The following outputs must match 
+------------------------------------------------
+correct_predictions           = [0.98201379 0.26894142]
+output of predict_probability = [0.98201379 0.26894142]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Compute-derivative-of-log-likelihood-with-respect-to-a-single-coefficient">Compute derivative of log likelihood with respect to a single coefficient<a class="anchor-link" href="#Compute-derivative-of-log-likelihood-with-respect-to-a-single-coefficient">&#182;</a></h2><p>Recall from lecture:
+$$
+\frac{\partial\ell}{\partial w_j} = \sum_{i=1}^N h_j(\mathbf{x}_i)\left(\mathbf{1}[y_i = +1] - P(y_i = +1 | \mathbf{x}_i, \mathbf{w})\right)
+$$</p>
+<p>We will now write a function that computes the derivative of log likelihood with respect to a single coefficient $w_j$. The function accepts two arguments:</p>
+<ul>
+<li><code>errors</code> vector containing $\mathbf{1}[y_i = +1] - P(y_i = +1 | \mathbf{x}_i, \mathbf{w})$ for all $i$.</li>
+<li><code>feature</code> vector containing $h_j(\mathbf{x}_i)$  for all $i$. </li>
+</ul>
+<p>Complete the following code block:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">feature_derivative</span><span class="p">(</span><span class="n">errors</span><span class="p">,</span> <span class="n">feature</span><span class="p">):</span>     
+    <span class="c1"># Compute the dot product of errors and feature</span>
+    <span class="n">derivative</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">errors</span><span class="p">,</span> <span class="n">feature</span><span class="p">)</span>
+    
+    <span class="c1"># Return the derivative</span>
+    <span class="k">return</span> <span class="n">derivative</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In the main lecture, our focus was on the likelihood.  In the advanced optional video, however, we introduced a transformation of this likelihood---called the log likelihood---that simplifies the derivation of the gradient and is more numerically stable.  Due to its numerical stability, we will use the log likelihood instead of the likelihood to assess the algorithm.</p>
+<p>The log likelihood is computed using the following formula (see the advanced optional video if you are curious about the derivation of this equation):</p>
+$$\ell\ell(\mathbf{w}) = \sum_{i=1}^N \Big( (\mathbf{1}[y_i = +1] - 1)\mathbf{w}^T h(\mathbf{x}_i) - \ln\left(1 + \exp(-\mathbf{w}^T h(\mathbf{x}_i))\right) \Big) $$<p>We provide a function to compute the log likelihood for the entire dataset.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">compute_log_likelihood</span><span class="p">(</span><span class="n">feature_matrix</span><span class="p">,</span> <span class="n">sentiment</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">):</span>
+    <span class="n">indicator</span> <span class="o">=</span> <span class="p">(</span><span class="n">sentiment</span><span class="o">==+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">scores</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">feature_matrix</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">)</span>
+    <span class="n">logexp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">1.</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">scores</span><span class="p">))</span>
+    
+    <span class="c1"># Simple check to prevent overflow</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">logexp</span><span class="p">)</span>
+    <span class="n">logexp</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">scores</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+    
+    <span class="n">lp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">indicator</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">scores</span> <span class="o">-</span> <span class="n">logexp</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">lp</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Checkpoint</strong></p>
+<p>Just to make sure we are on the same page, run the following code block and check that the outputs match.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">dummy_feature_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.</span><span class="p">,</span><span class="mf">2.</span><span class="p">,</span><span class="mf">3.</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.</span><span class="p">,</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+<span class="n">dummy_coefficients</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.</span><span class="p">])</span>
+<span class="n">dummy_sentiment</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+<span class="n">correct_indicators</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span> <span class="p">[</span> <span class="o">-</span><span class="mi">1</span><span class="o">==+</span><span class="mi">1</span><span class="p">,</span>                                       <span class="mi">1</span><span class="o">==+</span><span class="mi">1</span> <span class="p">]</span> <span class="p">)</span>
+<span class="n">correct_scores</span>      <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span> <span class="p">[</span> <span class="mf">1.</span><span class="o">*</span><span class="mf">1.</span> <span class="o">+</span> <span class="mf">2.</span><span class="o">*</span><span class="mf">3.</span> <span class="o">+</span> <span class="mf">3.</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="p">),</span>                     <span class="mf">1.</span><span class="o">*</span><span class="mf">1.</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="p">)</span><span class="o">*</span><span class="mf">3.</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="p">)</span> <span class="p">]</span> <span class="p">)</span>
+<span class="n">correct_first_term</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span> <span class="p">[</span> <span class="p">(</span><span class="n">correct_indicators</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">correct_scores</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>  <span class="p">(</span><span class="n">correct_indicators</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">correct_scores</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">]</span> <span class="p">)</span>
+<span class="n">correct_second_term</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span> <span class="p">[</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">1.</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">correct_scores</span><span class="p">[</span><span class="mi">0</span><span class="p">])),</span>      <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">1.</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">correct_scores</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="p">]</span> <span class="p">)</span>
+
+<span class="n">correct_ll</span>          <span class="o">=</span>      <span class="nb">sum</span><span class="p">(</span> <span class="p">[</span> <span class="n">correct_first_term</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">correct_second_term</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">correct_first_term</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">correct_second_term</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">]</span> <span class="p">)</span> 
+
+<span class="k">print</span> <span class="s1">&#39;The following outputs must match &#39;</span>
+<span class="k">print</span> <span class="s1">&#39;------------------------------------------------&#39;</span>
+<span class="k">print</span> <span class="s1">&#39;correct_log_likelihood           =&#39;</span><span class="p">,</span> <span class="n">correct_ll</span>
+<span class="k">print</span> <span class="s1">&#39;output of compute_log_likelihood =&#39;</span><span class="p">,</span> <span class="n">compute_log_likelihood</span><span class="p">(</span><span class="n">dummy_feature_matrix</span><span class="p">,</span> <span class="n">dummy_sentiment</span><span class="p">,</span> <span class="n">dummy_coefficients</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>The following outputs must match 
+------------------------------------------------
+correct_log_likelihood           = -5.331411615436032
+output of compute_log_likelihood = -5.331411615436032
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Taking-gradient-steps">Taking gradient steps<a class="anchor-link" href="#Taking-gradient-steps">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now we are ready to implement our own logistic regression. All we have to do is to write a gradient ascent function that takes gradient steps towards the optimum.</p>
+<p>Complete the following function to solve the logistic regression model using gradient ascent:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[32]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sqrt</span>
+
+<span class="k">def</span> <span class="nf">logistic_regression</span><span class="p">(</span><span class="n">feature_matrix</span><span class="p">,</span> <span class="n">sentiment</span><span class="p">,</span> <span class="n">initial_coefficients</span><span class="p">,</span> <span class="n">step_size</span><span class="p">,</span> <span class="n">max_iter</span><span class="p">):</span>
+    <span class="n">coefficients</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">initial_coefficients</span><span class="p">)</span> <span class="c1"># make sure it&#39;s a numpy array</span>
+    <span class="k">for</span> <span class="n">itr</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">max_iter</span><span class="p">):</span>
+
+        <span class="c1"># Predict P(y_i = +1|x_i,w) using your predict_probability() function</span>
+        <span class="c1"># YOUR CODE HERE</span>
+        <span class="n">predictions</span> <span class="o">=</span> <span class="n">predict_probability</span><span class="p">(</span><span class="n">feature_matrix</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">)</span>
+        
+        <span class="c1"># Compute indicator value for (y_i = +1)</span>
+        <span class="n">indicator</span> <span class="o">=</span> <span class="p">(</span><span class="n">sentiment</span><span class="o">==+</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="c1"># Compute the errors as indicator - predictions</span>
+        <span class="n">errors</span> <span class="o">=</span> <span class="n">indicator</span> <span class="o">-</span> <span class="n">predictions</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coefficients</span><span class="p">)):</span> <span class="c1"># loop over each coefficient</span>
+            
+            <span class="c1"># Recall that feature_matrix[:,j] is the feature column associated with coefficients[j].</span>
+            <span class="c1"># Compute the derivative for coefficients[j]. Save it in a variable called derivative</span>
+            <span class="c1"># YOUR CODE HERE</span>
+            
+            <span class="c1">#print errors.shape,&#39;--&#39;, (feature_matrix[:, j]).shape</span>
+            
+            <span class="n">derivative</span> <span class="o">=</span> <span class="n">feature_derivative</span><span class="p">(</span><span class="n">errors</span><span class="p">,</span> <span class="n">feature_matrix</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span>
+            
+            <span class="c1"># add the step size times the derivative to the current coefficient</span>
+            <span class="c1">## YOUR CODE HERE</span>
+            <span class="n">coefficients</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">step_size</span> <span class="o">*</span> <span class="n">derivative</span>
+        
+        <span class="c1"># Checking whether log likelihood is increasing</span>
+        <span class="k">if</span> <span class="n">itr</span> <span class="o">&lt;=</span> <span class="mi">15</span> <span class="ow">or</span> <span class="p">(</span><span class="n">itr</span> <span class="o">&lt;=</span> <span class="mi">100</span> <span class="ow">and</span> <span class="n">itr</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">itr</span> <span class="o">&lt;=</span> <span class="mi">1000</span> <span class="ow">and</span> <span class="n">itr</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> \
+        <span class="ow">or</span> <span class="p">(</span><span class="n">itr</span> <span class="o">&lt;=</span> <span class="mi">10000</span> <span class="ow">and</span> <span class="n">itr</span> <span class="o">%</span> <span class="mi">1000</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">itr</span> <span class="o">%</span> <span class="mi">10000</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">lp</span> <span class="o">=</span> <span class="n">compute_log_likelihood</span><span class="p">(</span><span class="n">feature_matrix</span><span class="p">,</span> <span class="n">sentiment</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">)</span>
+            <span class="k">print</span> <span class="s1">&#39;iteration </span><span class="si">%*d</span><span class="s1">: log likelihood of observed labels = </span><span class="si">%.8f</span><span class="s1">&#39;</span> <span class="o">%</span> \
+                <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">max_iter</span><span class="p">))),</span> <span class="n">itr</span><span class="p">,</span> <span class="n">lp</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">coefficients</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now, let us run the logistic regression solver.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[33]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">coefficients</span> <span class="o">=</span> <span class="n">logistic_regression</span><span class="p">(</span><span class="n">feature_matrix</span><span class="p">,</span> <span class="n">sentiment</span><span class="p">,</span> <span class="n">initial_coefficients</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">194</span><span class="p">),</span>
+                                   <span class="n">step_size</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>iteration   0: log likelihood of observed labels = -36780.91768478
+iteration   1: log likelihood of observed labels = -36775.13434712
+iteration   2: log likelihood of observed labels = -36769.35713564
+iteration   3: log likelihood of observed labels = -36763.58603240
+iteration   4: log likelihood of observed labels = -36757.82101962
+iteration   5: log likelihood of observed labels = -36752.06207964
+iteration   6: log likelihood of observed labels = -36746.30919497
+iteration   7: log likelihood of observed labels = -36740.56234821
+iteration   8: log likelihood of observed labels = -36734.82152213
+iteration   9: log likelihood of observed labels = -36729.08669961
+iteration  10: log likelihood of observed labels = -36723.35786366
+iteration  11: log likelihood of observed labels = -36717.63499744
+iteration  12: log likelihood of observed labels = -36711.91808422
+iteration  13: log likelihood of observed labels = -36706.20710739
+iteration  14: log likelihood of observed labels = -36700.50205049
+iteration  15: log likelihood of observed labels = -36694.80289716
+iteration  20: log likelihood of observed labels = -36666.39512033
+iteration  30: log likelihood of observed labels = -36610.01327118
+iteration  40: log likelihood of observed labels = -36554.19728365
+iteration  50: log likelihood of observed labels = -36498.93316099
+iteration  60: log likelihood of observed labels = -36444.20783914
+iteration  70: log likelihood of observed labels = -36390.00909449
+iteration  80: log likelihood of observed labels = -36336.32546144
+iteration  90: log likelihood of observed labels = -36283.14615871
+iteration 100: log likelihood of observed labels = -36230.46102347
+iteration 200: log likelihood of observed labels = -35728.89418769
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Quiz Question:</strong> As each iteration of gradient ascent passes, does the log likelihood increase or decrease?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Predicting-sentiments">Predicting sentiments<a class="anchor-link" href="#Predicting-sentiments">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Recall from lecture that class predictions for a data point $\mathbf{x}$ can be computed from the coefficients $\mathbf{w}$ using the following formula:
+$$
+\hat{y}_i = 
+\left\{
+\begin{array}{ll}
+      +1 &amp; \mathbf{x}_i^T\mathbf{w} &gt; 0 \\
+      -1 &amp; \mathbf{x}_i^T\mathbf{w} \leq 0 \\
+\end{array} 
+\right.
+$$</p>
+<p>Now, we will write some code to compute class predictions. We will do this in two steps:</p>
+<ul>
+<li><strong>Step 1</strong>: First compute the <strong>scores</strong> using <strong>feature_matrix</strong> and <strong>coefficients</strong> using a dot product.</li>
+<li><strong>Step 2</strong>: Using the formula above, compute the class predictions from the scores.</li>
+</ul>
+<p>Step 1 can be implemented as follows:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[34]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Compute the scores as a dot product between feature_matrix and coefficients.</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">feature_matrix</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now, complete the following code block for <strong>Step 2</strong> to compute the class predictions using the <strong>scores</strong> obtained above:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[35]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">class_predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">graphlab</span><span class="o">.</span><span class="n">SArray</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">x</span><span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<span class="k">print</span> <span class="n">class_predictions</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[ 1 -1  1 ... -1  1 -1]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong> Quiz Question: </strong> How many reviews were predicted to have positive sentiment?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[36]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">unique</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">class_predictions</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">unique</span><span class="p">,</span> <span class="n">counts</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[-1  1] [27951 25121]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Measuring-accuracy">Measuring accuracy<a class="anchor-link" href="#Measuring-accuracy">&#182;</a></h2><p>We will now measure the classification accuracy of the model. Recall from the lecture that the classification accuracy can be computed as follows:</p>
+$$
+\mbox{accuracy} = \frac{\mbox{# correctly classified data points}}{\mbox{# total data points}}
+$$<p>Complete the following code block to compute the accuracy of the model.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[37]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">num_mistakes</span> <span class="o">=</span> <span class="p">(</span><span class="n">class_predictions</span> <span class="o">!=</span> <span class="n">sentiment</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="c1"># YOUR CODE HERE</span>
+<span class="n">num_correct</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sentiment</span><span class="p">)</span> <span class="o">-</span> <span class="n">num_mistakes</span>
+<span class="n">accuracy</span> <span class="o">=</span> <span class="n">num_correct</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sentiment</span><span class="p">))</span> <span class="c1"># YOUR CODE HERE</span>
+<span class="k">print</span> <span class="s2">&quot;-----------------------------------------------------&quot;</span>
+<span class="k">print</span> <span class="s1">&#39;# Reviews   correctly classified =&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">products</span><span class="p">)</span> <span class="o">-</span> <span class="n">num_mistakes</span>
+<span class="k">print</span> <span class="s1">&#39;# Reviews incorrectly classified =&#39;</span><span class="p">,</span> <span class="n">num_mistakes</span>
+<span class="k">print</span> <span class="s1">&#39;# Reviews total                  =&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">products</span><span class="p">)</span>
+<span class="k">print</span> <span class="s2">&quot;-----------------------------------------------------&quot;</span>
+<span class="k">print</span> <span class="s1">&#39;Accuracy = </span><span class="si">%.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">accuracy</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>-----------------------------------------------------
+# Reviews   correctly classified = 39902
+# Reviews incorrectly classified = 13170
+# Reviews total                  = 53072
+-----------------------------------------------------
+Accuracy = 0.75
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Quiz Question</strong>: What is the accuracy of the model on predictions made above? (round to 2 digits of accuracy)</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Which-words-contribute-most-to-positive-&amp;-negative-sentiments?">Which words contribute most to positive &amp; negative sentiments?<a class="anchor-link" href="#Which-words-contribute-most-to-positive-&amp;-negative-sentiments?">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Recall that in Module 2 assignment, we were able to compute the "<strong>most positive words</strong>". These are words that correspond most strongly with positive reviews. In order to do this, we will first do the following:</p>
+<ul>
+<li>Treat each coefficient as a tuple, i.e. (<strong>word</strong>, <strong>coefficient_value</strong>).</li>
+<li>Sort all the (<strong>word</strong>, <strong>coefficient_value</strong>) tuples by <strong>coefficient_value</strong> in descending order.</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[38]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">coefficients</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">coefficients</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="c1"># exclude intercept</span>
+<span class="n">word_coefficient_tuples</span> <span class="o">=</span> <span class="p">[(</span><span class="n">word</span><span class="p">,</span> <span class="n">coefficient</span><span class="p">)</span> <span class="k">for</span> <span class="n">word</span><span class="p">,</span> <span class="n">coefficient</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">important_words</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">)]</span>
+<span class="n">word_coefficient_tuples</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">word_coefficient_tuples</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now, <strong>word_coefficient_tuples</strong> contains a sorted list of (<strong>word</strong>, <strong>coefficient_value</strong>) tuples. The first 10 elements in this list correspond to the words that are most positive.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Ten-&quot;most-positive&quot;-words">Ten "most positive" words<a class="anchor-link" href="#Ten-&quot;most-positive&quot;-words">&#182;</a></h3><p>Now, we compute the 10 words that have the most positive coefficient values. These words are associated with positive sentiment.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[39]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">word_coefficient_tuples</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[39]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[(&#39;great&#39;, 0.06633598917934186),
+ (&#39;love&#39;, 0.06568279853660984),
+ (&#39;easy&#39;, 0.06458955296332462),
+ (&#39;little&#39;, 0.045291256750744864),
+ (&#39;loves&#39;, 0.04483218846833014),
+ (&#39;well&#39;, 0.03003754657598455),
+ (&#39;perfect&#39;, 0.02964368432949029),
+ (&#39;old&#39;, 0.020013563454313443),
+ (&#39;nice&#39;, 0.018348716789008002),
+ (&#39;daughter&#39;, 0.01764568309955315)]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong> Quiz Question:</strong> Which word is <strong>not</strong> present in the top 10 "most positive" words?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Ten-&quot;most-negative&quot;-words">Ten "most negative" words<a class="anchor-link" href="#Ten-&quot;most-negative&quot;-words">&#182;</a></h3><p>Next, we repeat this exercise on the 10 most negative words.  That is, we compute the 10 words that have the most negative coefficient values. These words are associated with negative sentiment.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[40]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">word_coefficient_tuples</span><span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">:]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[40]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[(&#39;monitor&#39;, -0.02441125731264415),
+ (&#39;return&#39;, -0.026508384331720904),
+ (&#39;back&#39;, -0.02766018246465597),
+ (&#39;get&#39;, -0.02862915183430003),
+ (&#39;disappointed&#39;, -0.028885710380806538),
+ (&#39;even&#39;, -0.029960141547729652),
+ (&#39;work&#39;, -0.03296805695916496),
+ (&#39;money&#39;, -0.03885937539114074),
+ (&#39;product&#39;, -0.041389300790860534),
+ (&#39;would&#39;, -0.053707181300618474)]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong> Quiz Question:</strong> Which word is <strong>not</strong> present in the top 10 "most negative" words?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+ 
+
+
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: 'center'," +
+        "    displayIndent: '0em'," +
+        "    showMathMenu: true," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['$','$'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        " linebreaks: { automatic: true, width: '95% container' }, " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+        "    } " +
+        "}); ";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+
+          </section>
+      </div>
+      </article>
+  </main>
+      <!-- TODO : Body class -->
+    <div id="body-class" style="display: none;" class=""></div>
+  
+    <footer id="footer">
+      <div class="inner">
+        <section class="credits">
+          <span class="credits-theme">Theme <a href="https://github.com/arulrajnet/attila" rel="nofollow">Attila</a></span>
+          <span class="credits-software">Published with <a href="https://github.com/getpelican/pelican" rel="nofollow">Pelican</a></span>
+        </section>
+      </div>
+    </footer>
+  </section>
+
+  <script type="text/javascript" src="https://arslan-san.github.io/theme/js/script.js"></script>
+  
+<script type="text/javascript">
+    var disqus_shortname = 'arslanblog';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+</body>
+</html>

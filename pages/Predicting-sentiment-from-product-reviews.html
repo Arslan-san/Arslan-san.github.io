@@ -1,0 +1,4408 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+
+  <title>Linear Classifier</title>
+
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="referrer" content="origin" />
+  <meta name="generator" content="Pelican" />
+  <link href="https://arslan-san.github.io" rel="canonical" />
+
+  <!-- Feed -->
+
+  <link href="https://arslan-san.github.io/theme/css/style.css" type="text/css" rel="stylesheet" />
+
+  <!-- Code highlight color scheme -->
+      <link href="https://arslan-san.github.io/theme/css/code_blocks/github.css" rel="stylesheet">
+
+
+  <!-- Custom fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Montserrat:400,300' rel='stylesheet' type='text/css' />
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css" />
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+      <meta property="og:locale" content="" />
+    <meta property="og:site_name" content="Arslan's Blog" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Arslan's Blog" />
+    <meta property="og:description" content="View the blog." />
+    <meta property="og:url" content="https://arslan-san.github.io" />
+      <meta name="og:image" content="https://arslan-san.github.io/theme/images/post-bg.jpg">
+</head>
+<!-- TODO : Body class -->
+<body class="home-template">
+
+<nav id="menu">
+  <a class="close-button">Close</a>
+  <div class="nav-wrapper">
+    <p class="nav-label">Menu</p>
+    <ul>
+          <li><a href="/pages/about.html" role="presentation">About</a></li>
+          <li><a href="/pages/useful-resources.html" role="presentation">Useful Resources</a></li>
+          <li><a href="/pages/completed-coursera-courses.html" role="presentation">Completed Coursera Courses</a></li>
+          <li><a href="/pages/useful-ipython-notebooks.html" role="presentation">Useful Ipython Notebooks</a></li>
+
+                  <li role="presentation"><a href="https://arslan-san.github.io/category/posts.html">posts</a></li>
+
+    </ul>
+  </div>
+</nav>
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    <header id="post-header" class="has-cover">
+      <div class="inner">
+        <nav id="navigation">
+            <span id="home-button" class="nav-button">
+                <a class="home-button" href = "../" href="https://arslan-san.github.io" title="Home"><i class="ic ic-arrow-left"></i> Home</a>
+            </span>
+          <span id="menu-button" class="nav-button">
+            <a class="menu-button"><i class="ic ic-menu"></i> Menu</a>
+          </span>
+        </nav>
+        <h1 class="post-title">Linear Classifier</h1>      
+            <div class="post-cover cover" style="background-image: url('https://arslan-san.github.io/theme/images/post-bg.jpg')">
+        
+      </div>
+    </header>    
+
+  <section id="wrapper">
+    <a class="hidden-close"></a>
+  <!-- Post content -->
+  <main class="content" role="main">
+      <article class="post">
+      <div class="inner">
+          <section class="post-content">
+              <style type="text/css">/*!
+*
+* IPython notebook
+*
+*/
+/* CSS font colors for translated ANSI escape sequences */
+/* The color values are a mix of
+   http://www.xcolors.net/dl/baskerville-ivorylight and
+   http://www.xcolors.net/dl/euphrasia */
+.ansi-black-fg {
+  color: #3E424D;
+}
+.ansi-black-bg {
+  background-color: #3E424D;
+}
+.ansi-black-intense-fg {
+  color: #282C36;
+}
+.ansi-black-intense-bg {
+  background-color: #282C36;
+}
+.ansi-red-fg {
+  color: #E75C58;
+}
+.ansi-red-bg {
+  background-color: #E75C58;
+}
+.ansi-red-intense-fg {
+  color: #B22B31;
+}
+.ansi-red-intense-bg {
+  background-color: #B22B31;
+}
+.ansi-green-fg {
+  color: #00A250;
+}
+.ansi-green-bg {
+  background-color: #00A250;
+}
+.ansi-green-intense-fg {
+  color: #007427;
+}
+.ansi-green-intense-bg {
+  background-color: #007427;
+}
+.ansi-yellow-fg {
+  color: #DDB62B;
+}
+.ansi-yellow-bg {
+  background-color: #DDB62B;
+}
+.ansi-yellow-intense-fg {
+  color: #B27D12;
+}
+.ansi-yellow-intense-bg {
+  background-color: #B27D12;
+}
+.ansi-blue-fg {
+  color: #208FFB;
+}
+.ansi-blue-bg {
+  background-color: #208FFB;
+}
+.ansi-blue-intense-fg {
+  color: #0065CA;
+}
+.ansi-blue-intense-bg {
+  background-color: #0065CA;
+}
+.ansi-magenta-fg {
+  color: #D160C4;
+}
+.ansi-magenta-bg {
+  background-color: #D160C4;
+}
+.ansi-magenta-intense-fg {
+  color: #A03196;
+}
+.ansi-magenta-intense-bg {
+  background-color: #A03196;
+}
+.ansi-cyan-fg {
+  color: #60C6C8;
+}
+.ansi-cyan-bg {
+  background-color: #60C6C8;
+}
+.ansi-cyan-intense-fg {
+  color: #258F8F;
+}
+.ansi-cyan-intense-bg {
+  background-color: #258F8F;
+}
+.ansi-white-fg {
+  color: #C5C1B4;
+}
+.ansi-white-bg {
+  background-color: #C5C1B4;
+}
+.ansi-white-intense-fg {
+  color: #A1A6B2;
+}
+.ansi-white-intense-bg {
+  background-color: #A1A6B2;
+}
+.ansi-default-inverse-fg {
+  color: #FFFFFF;
+}
+.ansi-default-inverse-bg {
+  background-color: #000000;
+}
+.ansi-bold {
+  font-weight: bold;
+}
+.ansi-underline {
+  text-decoration: underline;
+}
+/* The following styles are deprecated an will be removed in a future version */
+.ansibold {
+  font-weight: bold;
+}
+.ansi-inverse {
+  outline: 0.5px dotted;
+}
+/* use dark versions for foreground, to improve visibility */
+.ansiblack {
+  color: black;
+}
+.ansired {
+  color: darkred;
+}
+.ansigreen {
+  color: darkgreen;
+}
+.ansiyellow {
+  color: #c4a000;
+}
+.ansiblue {
+  color: darkblue;
+}
+.ansipurple {
+  color: darkviolet;
+}
+.ansicyan {
+  color: steelblue;
+}
+.ansigray {
+  color: gray;
+}
+/* and light for background, for the same reason */
+.ansibgblack {
+  background-color: black;
+}
+.ansibgred {
+  background-color: red;
+}
+.ansibggreen {
+  background-color: green;
+}
+.ansibgyellow {
+  background-color: yellow;
+}
+.ansibgblue {
+  background-color: blue;
+}
+.ansibgpurple {
+  background-color: magenta;
+}
+.ansibgcyan {
+  background-color: cyan;
+}
+.ansibggray {
+  background-color: gray;
+}
+div.cell {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  border-radius: 2px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border-width: 1px;
+  border-style: solid;
+  border-color: transparent;
+  width: 100%;
+  padding: 5px;
+  /* This acts as a spacer between cells, that is outside the border */
+  margin: 0px;
+  outline: none;
+  position: relative;
+  overflow: visible;
+}
+div.cell:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: transparent;
+}
+div.cell.jupyter-soft-selected {
+  border-left-color: #E3F2FD;
+  border-left-width: 1px;
+  padding-left: 5px;
+  border-right-color: #E3F2FD;
+  border-right-width: 1px;
+  background: #E3F2FD;
+}
+@media print {
+  div.cell.jupyter-soft-selected {
+    border-color: transparent;
+  }
+}
+div.cell.selected,
+div.cell.selected.jupyter-soft-selected {
+  border-color: #ababab;
+}
+div.cell.selected:before,
+div.cell.selected.jupyter-soft-selected:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: #42A5F5;
+}
+@media print {
+  div.cell.selected,
+  div.cell.selected.jupyter-soft-selected {
+    border-color: transparent;
+  }
+}
+.edit_mode div.cell.selected {
+  border-color: #66BB6A;
+}
+.edit_mode div.cell.selected:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: #66BB6A;
+}
+@media print {
+  .edit_mode div.cell.selected {
+    border-color: transparent;
+  }
+}
+.prompt {
+  /* This needs to be wide enough for 3 digit prompt numbers: In[100]: */
+  min-width: 14ex;
+  /* This padding is tuned to match the padding on the CodeMirror editor. */
+  padding: 0.4em;
+  margin: 0px;
+  font-family: monospace;
+  text-align: right;
+  /* This has to match that of the the CodeMirror class line-height below */
+  line-height: 1.21429em;
+  /* Don't highlight prompt number selection */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  /* Use default cursor */
+  cursor: default;
+}
+@media (max-width: 540px) {
+  .prompt {
+    text-align: left;
+  }
+}
+div.inner_cell {
+  min-width: 0;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  /* Old browsers */
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  box-flex: 1;
+  /* Modern browsers */
+  flex: 1;
+}
+/* input_area and input_prompt must match in top border and margin for alignment */
+div.input_area {
+  border: 1px solid #cfcfcf;
+  border-radius: 2px;
+  background: #f7f7f7;
+  line-height: 1.21429em;
+}
+/* This is needed so that empty prompt areas can collapse to zero height when there
+   is no content in the output_subarea and the prompt. The main purpose of this is
+   to make sure that empty JavaScript output_subareas have no height. */
+div.prompt:empty {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+div.unrecognized_cell {
+  padding: 5px 5px 5px 0px;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+div.unrecognized_cell .inner_cell {
+  border-radius: 2px;
+  padding: 5px;
+  font-weight: bold;
+  color: red;
+  border: 1px solid #cfcfcf;
+  background: #eaeaea;
+}
+div.unrecognized_cell .inner_cell a {
+  color: inherit;
+  text-decoration: none;
+}
+div.unrecognized_cell .inner_cell a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+@media (max-width: 540px) {
+  div.unrecognized_cell > div.prompt {
+    display: none;
+  }
+}
+div.code_cell {
+  /* avoid page breaking on code cells when printing */
+}
+@media print {
+  div.code_cell {
+    page-break-inside: avoid;
+  }
+}
+/* any special styling for code cells that are currently running goes here */
+div.input {
+  page-break-inside: avoid;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.input {
+    /* Old browsers */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-box-align: stretch;
+    display: -moz-box;
+    -moz-box-orient: vertical;
+    -moz-box-align: stretch;
+    display: box;
+    box-orient: vertical;
+    box-align: stretch;
+    /* Modern browsers */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+/* input_area and input_prompt must match in top border and margin for alignment */
+div.input_prompt {
+  color: #303F9F;
+  border-top: 1px solid transparent;
+}
+div.input_area > div.highlight {
+  margin: 0.4em;
+  border: none;
+  padding: 0px;
+  background-color: transparent;
+}
+div.input_area > div.highlight > pre {
+  margin: 0px;
+  border: none;
+  padding: 0px;
+  background-color: transparent;
+}
+/* The following gets added to the <head> if it is detected that the user has a
+ * monospace font with inconsistent normal/bold/italic height.  See
+ * notebookmain.js.  Such fonts will have keywords vertically offset with
+ * respect to the rest of the text.  The user should select a better font.
+ * See: https://github.com/ipython/ipython/issues/1503
+ *
+ * .CodeMirror span {
+ *      vertical-align: bottom;
+ * }
+ */
+.CodeMirror {
+  line-height: 1.21429em;
+  /* Changed from 1em to our global default */
+  font-size: 14px;
+  height: auto;
+  /* Changed to auto to autogrow */
+  background: none;
+  /* Changed from white to allow our bg to show through */
+}
+.CodeMirror-scroll {
+  /*  The CodeMirror docs are a bit fuzzy on if overflow-y should be hidden or visible.*/
+  /*  We have found that if it is visible, vertical scrollbars appear with font size changes.*/
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+.CodeMirror-lines {
+  /* In CM2, this used to be 0.4em, but in CM3 it went to 4px. We need the em value because */
+  /* we have set a different line-height and want this to scale with that. */
+  /* Note that this should set vertical padding only, since CodeMirror assumes
+       that horizontal padding will be set on CodeMirror pre */
+  padding: 0.4em 0;
+}
+.CodeMirror-linenumber {
+  padding: 0 8px 0 4px;
+}
+.CodeMirror-gutters {
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+}
+.CodeMirror pre {
+  /* In CM3 this went to 4px from 0 in CM2. This sets horizontal padding only,
+    use .CodeMirror-lines for vertical */
+  padding: 0 0.4em;
+  border: 0;
+  border-radius: 0;
+}
+.CodeMirror-cursor {
+  border-left: 1.4px solid black;
+}
+@media screen and (min-width: 2138px) and (max-width: 4319px) {
+  .CodeMirror-cursor {
+    border-left: 2px solid black;
+  }
+}
+@media screen and (min-width: 4320px) {
+  .CodeMirror-cursor {
+    border-left: 4px solid black;
+  }
+}
+/*
+
+Original style from softwaremaniacs.org (c) Ivan Sagalaev <Maniac@SoftwareManiacs.Org>
+Adapted from GitHub theme
+
+*/
+.highlight-base {
+  color: #000;
+}
+.highlight-variable {
+  color: #000;
+}
+.highlight-variable-2 {
+  color: #1a1a1a;
+}
+.highlight-variable-3 {
+  color: #333333;
+}
+.highlight-string {
+  color: #BA2121;
+}
+.highlight-comment {
+  color: #408080;
+  font-style: italic;
+}
+.highlight-number {
+  color: #080;
+}
+.highlight-atom {
+  color: #88F;
+}
+.highlight-keyword {
+  color: #008000;
+  font-weight: bold;
+}
+.highlight-builtin {
+  color: #008000;
+}
+.highlight-error {
+  color: #f00;
+}
+.highlight-operator {
+  color: #AA22FF;
+  font-weight: bold;
+}
+.highlight-meta {
+  color: #AA22FF;
+}
+/* previously not defined, copying from default codemirror */
+.highlight-def {
+  color: #00f;
+}
+.highlight-string-2 {
+  color: #f50;
+}
+.highlight-qualifier {
+  color: #555;
+}
+.highlight-bracket {
+  color: #997;
+}
+.highlight-tag {
+  color: #170;
+}
+.highlight-attribute {
+  color: #00c;
+}
+.highlight-header {
+  color: blue;
+}
+.highlight-quote {
+  color: #090;
+}
+.highlight-link {
+  color: #00c;
+}
+/* apply the same style to codemirror */
+.cm-s-ipython span.cm-keyword {
+  color: #008000;
+  font-weight: bold;
+}
+.cm-s-ipython span.cm-atom {
+  color: #88F;
+}
+.cm-s-ipython span.cm-number {
+  color: #080;
+}
+.cm-s-ipython span.cm-def {
+  color: #00f;
+}
+.cm-s-ipython span.cm-variable {
+  color: #000;
+}
+.cm-s-ipython span.cm-operator {
+  color: #AA22FF;
+  font-weight: bold;
+}
+.cm-s-ipython span.cm-variable-2 {
+  color: #1a1a1a;
+}
+.cm-s-ipython span.cm-variable-3 {
+  color: #333333;
+}
+.cm-s-ipython span.cm-comment {
+  color: #408080;
+  font-style: italic;
+}
+.cm-s-ipython span.cm-string {
+  color: #BA2121;
+}
+.cm-s-ipython span.cm-string-2 {
+  color: #f50;
+}
+.cm-s-ipython span.cm-meta {
+  color: #AA22FF;
+}
+.cm-s-ipython span.cm-qualifier {
+  color: #555;
+}
+.cm-s-ipython span.cm-builtin {
+  color: #008000;
+}
+.cm-s-ipython span.cm-bracket {
+  color: #997;
+}
+.cm-s-ipython span.cm-tag {
+  color: #170;
+}
+.cm-s-ipython span.cm-attribute {
+  color: #00c;
+}
+.cm-s-ipython span.cm-header {
+  color: blue;
+}
+.cm-s-ipython span.cm-quote {
+  color: #090;
+}
+.cm-s-ipython span.cm-link {
+  color: #00c;
+}
+.cm-s-ipython span.cm-error {
+  color: #f00;
+}
+.cm-s-ipython span.cm-tab {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAMCAYAAAAkuj5RAAAAAXNSR0IArs4c6QAAAGFJREFUSMft1LsRQFAQheHPowAKoACx3IgEKtaEHujDjORSgWTH/ZOdnZOcM/sgk/kFFWY0qV8foQwS4MKBCS3qR6ixBJvElOobYAtivseIE120FaowJPN75GMu8j/LfMwNjh4HUpwg4LUAAAAASUVORK5CYII=);
+  background-position: right;
+  background-repeat: no-repeat;
+}
+div.output_wrapper {
+  /* this position must be relative to enable descendents to be absolute within it */
+  position: relative;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  z-index: 1;
+}
+/* class for the output area when it should be height-limited */
+div.output_scroll {
+  /* ideally, this would be max-height, but FF barfs all over that */
+  height: 24em;
+  /* FF needs this *and the wrapper* to specify full width, or it will shrinkwrap */
+  width: 100%;
+  overflow: auto;
+  border-radius: 2px;
+  -webkit-box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+  display: block;
+}
+/* output div while it is collapsed */
+div.output_collapsed {
+  margin: 0px;
+  padding: 0px;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+div.out_prompt_overlay {
+  height: 100%;
+  padding: 0px 0.4em;
+  position: absolute;
+  border-radius: 2px;
+}
+div.out_prompt_overlay:hover {
+  /* use inner shadow to get border that is computed the same on WebKit/FF */
+  -webkit-box-shadow: inset 0 0 1px #000;
+  box-shadow: inset 0 0 1px #000;
+  background: rgba(240, 240, 240, 0.5);
+}
+div.output_prompt {
+  color: #D84315;
+}
+/* This class is the outer container of all output sections. */
+div.output_area {
+  padding: 0px;
+  page-break-inside: avoid;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+div.output_area .MathJax_Display {
+  text-align: left !important;
+}
+div.output_area 
+div.output_area 
+div.output_area img,
+div.output_area svg {
+  max-width: 100%;
+  height: auto;
+}
+div.output_area img.unconfined,
+div.output_area svg.unconfined {
+  max-width: none;
+}
+div.output_area .mglyph > img {
+  max-width: none;
+}
+/* This is needed to protect the pre formating from global settings such
+   as that of bootstrap */
+.output {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.output_area {
+    /* Old browsers */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-box-align: stretch;
+    display: -moz-box;
+    -moz-box-orient: vertical;
+    -moz-box-align: stretch;
+    display: box;
+    box-orient: vertical;
+    box-align: stretch;
+    /* Modern browsers */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+div.output_area pre {
+  margin: 0;
+  padding: 1px 0 1px 0;
+  border: 0;
+  vertical-align: baseline;
+  color: black;
+  background-color: transparent;
+  border-radius: 0;
+}
+/* This class is for the output subarea inside the output_area and after
+   the prompt div. */
+div.output_subarea {
+  overflow-x: auto;
+  padding: 0.4em;
+  /* Old browsers */
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  box-flex: 1;
+  /* Modern browsers */
+  flex: 1;
+  max-width: calc(100% - 14ex);
+}
+div.output_scroll div.output_subarea {
+  overflow-x: visible;
+}
+/* The rest of the output_* classes are for special styling of the different
+   output types */
+/* all text output has this class: */
+div.output_text {
+  text-align: left;
+  color: #000;
+  /* This has to match that of the the CodeMirror class line-height below */
+  line-height: 1.21429em;
+}
+/* stdout/stderr are 'text' as well as 'stream', but execute_result/error are *not* streams */
+div.output_stderr {
+  background: #fdd;
+  /* very light red background for stderr */
+}
+div.output_latex {
+  text-align: left;
+}
+/* Empty output_javascript divs should have no height */
+div.output_javascript:empty {
+  padding: 0;
+}
+.js-error {
+  color: darkred;
+}
+/* raw_input styles */
+div.raw_input_container {
+  line-height: 1.21429em;
+  padding-top: 5px;
+}
+pre.raw_input_prompt {
+  /* nothing needed here. */
+}
+input.raw_input {
+  font-family: monospace;
+  font-size: inherit;
+  color: inherit;
+  width: auto;
+  /* make sure input baseline aligns with prompt */
+  vertical-align: baseline;
+  /* padding + margin = 0.5em between prompt and cursor */
+  padding: 0em 0.25em;
+  margin: 0em 0.25em;
+}
+input.raw_input:focus {
+  box-shadow: none;
+}
+p.p-space {
+  margin-bottom: 10px;
+}
+div.output_unrecognized {
+  padding: 5px;
+  font-weight: bold;
+  color: red;
+}
+div.output_unrecognized a {
+  color: inherit;
+  text-decoration: none;
+}
+div.output_unrecognized a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+.rendered_html {
+  color: #000;
+  /* any extras will just be numbers: */
+}
+
+
+
+.rendered_html :link {
+  text-decoration: underline;
+}
+.rendered_html :visited {
+  text-decoration: underline;
+}
+
+
+
+
+
+
+.rendered_html h1:first-child {
+  margin-top: 0.538em;
+}
+.rendered_html h2:first-child {
+  margin-top: 0.636em;
+}
+.rendered_html h3:first-child {
+  margin-top: 0.777em;
+}
+.rendered_html h4:first-child {
+  margin-top: 1em;
+}
+.rendered_html h5:first-child {
+  margin-top: 1em;
+}
+.rendered_html h6:first-child {
+  margin-top: 1em;
+}
+.rendered_html ul:not(.list-inline),
+.rendered_html ol:not(.list-inline) {
+  padding-left: 2em;
+}
+
+
+
+
+
+
+
+
+.rendered_html * + ul {
+  margin-top: 1em;
+}
+.rendered_html * + ol {
+  margin-top: 1em;
+}
+
+
+
+
+
+.rendered_html pre,
+
+
+
+
+.rendered_html tr,
+.rendered_html th,
+
+
+.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+.rendered_html * + table {
+  margin-top: 1em;
+}
+
+.rendered_html * + p {
+  margin-top: 1em;
+}
+
+.rendered_html * + img {
+  margin-top: 1em;
+}
+.rendered_html img,
+
+.rendered_html img.unconfined,
+
+
+.rendered_html * + .alert {
+  margin-top: 1em;
+}
+[dir="rtl"] 
+div.text_cell {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.text_cell > div.prompt {
+    display: none;
+  }
+}
+div.text_cell_render {
+  /*font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;*/
+  outline: none;
+  resize: none;
+  width: inherit;
+  border-style: none;
+  padding: 0.5em 0.5em 0.5em 0.4em;
+  color: #000;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+a.anchor-link:link {
+  text-decoration: none;
+  padding: 0px 20px;
+  visibility: hidden;
+}
+h1:hover .anchor-link,
+h2:hover .anchor-link,
+h3:hover .anchor-link,
+h4:hover .anchor-link,
+h5:hover .anchor-link,
+h6:hover .anchor-link {
+  visibility: visible;
+}
+.text_cell.rendered .input_area {
+  display: none;
+}
+.text_cell.rendered 
+.text_cell.rendered .rendered_html tr,
+.text_cell.rendered .rendered_html th,
+.text_cell.rendered 
+.text_cell.unrendered .text_cell_render {
+  display: none;
+}
+.text_cell .dropzone .input_area {
+  border: 2px dashed #bababa;
+  margin: -1px;
+}
+.cm-header-1,
+.cm-header-2,
+.cm-header-3,
+.cm-header-4,
+.cm-header-5,
+.cm-header-6 {
+  font-weight: bold;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.cm-header-1 {
+  font-size: 185.7%;
+}
+.cm-header-2 {
+  font-size: 157.1%;
+}
+.cm-header-3 {
+  font-size: 128.6%;
+}
+.cm-header-4 {
+  font-size: 110%;
+}
+.cm-header-5 {
+  font-size: 100%;
+  font-style: italic;
+}
+.cm-header-6 {
+  font-size: 100%;
+  font-style: italic;
+}
+</style>
+<style type="text/css">.highlight .hll { background-color: #ffffcc }
+.highlight  { background: #f8f8f8; }
+.highlight .c { color: #408080; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #FF0000 } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666666 } /* Operator */
+.highlight .ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #BC7A00 } /* Comment.Preproc */
+.highlight .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #408080; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #408080; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #FF0000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00A000 } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #0044DD } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666666 } /* Literal.Number */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #7D9029 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.highlight .no { color: #880000 } /* Name.Constant */
+.highlight .nd { color: #AA22FF } /* Name.Decorator */
+.highlight .ni { color: #999999; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0000FF } /* Name.Function */
+.highlight .nl { color: #A0A000 } /* Name.Label */
+.highlight .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #666666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666666 } /* Literal.Number.Float */
+.highlight .mh { color: #666666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
+.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #BB6688 } /* Literal.String.Regex */
+.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0000FF } /* Name.Function.Magic */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
+.highlight .il { color: #666666 } /* Literal.Number.Integer.Long */</style>
+<style type="text/css">
+/* Temporary definitions which will become obsolete with Notebook release 5.0 */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-bold { font-weight: bold; }
+</style>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Predicting-sentiment-from-product-reviews">Predicting sentiment from product reviews<a class="anchor-link" href="#Predicting-sentiment-from-product-reviews">&#182;</a></h1><p>The goal of this first notebook is to explore logistic regression and feature engineering with existing GraphLab functions.</p>
+<p>In this notebook you will use product review data from Amazon.com to predict whether the sentiments about a product (from its reviews) are positive or negative.</p>
+<ul>
+<li>Use SFrames to do some feature engineering</li>
+<li>Train a logistic regression model to predict the sentiment of product reviews.</li>
+<li>Inspect the weights (coefficients) of a trained logistic regression model.</li>
+<li>Make a prediction (both class and probability) of sentiment for a new product review.</li>
+<li>Given the logistic regression weights, predictors and ground truth labels, write a function to compute the <strong>accuracy</strong> of the model.</li>
+<li>Inspect the coefficients of the logistic regression model and interpret their meanings.</li>
+<li>Compare multiple logistic regression models.</li>
+</ul>
+<p>Let's get started!</p>
+<h2 id="Fire-up-GraphLab-Create">Fire up GraphLab Create<a class="anchor-link" href="#Fire-up-GraphLab-Create">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Make sure you have the latest version of GraphLab Create.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
+<span class="kn">import</span> <span class="nn">graphlab</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">string</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Data-preparation">Data preparation<a class="anchor-link" href="#Data-preparation">&#182;</a></h1><p>We will use a dataset consisting of baby product reviews on Amazon.com.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">products</span> <span class="o">=</span> <span class="n">graphlab</span><span class="o">.</span><span class="n">SFrame</span><span class="p">(</span><span class="s1">&#39;amazon_baby.gl/&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>This non-commercial license of GraphLab Create for academic use is assigned to arslanahmadid@gmail.com and will expire on October 28, 2019.
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>[INFO] graphlab.cython.cy_server: GraphLab Create v2.0.1 started. Logging: C:\Users\arslan\AppData\Local\Temp\graphlab_server_1551519673.log.0
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now, let us see a preview of what the dataset looks like.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="n">products</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>+-------------------------------+-------------------------------+--------+
+|              name             |             review            | rating |
++-------------------------------+-------------------------------+--------+
+|    Planetwise Flannel Wipes   | These flannel wipes are OK... |  3.0   |
+|     Planetwise Wipe Pouch     | it came early and was not ... |  5.0   |
+| Annas Dream Full Quilt wit... | Very soft and comfortable ... |  5.0   |
+| Stop Pacifier Sucking with... | This is a product well wor... |  5.0   |
+| Stop Pacifier Sucking with... | All of my kids have cried ... |  5.0   |
+| Stop Pacifier Sucking with... | When the Binky Fairy came ... |  5.0   |
+| A Tale of Baby&#39;s Days with... | Lovely book, it&#39;s bound ti... |  4.0   |
+| Baby Tracker&amp;reg; - Daily ... | Perfect for new parents. W... |  5.0   |
+| Baby Tracker&amp;reg; - Daily ... | A friend of mine pinned th... |  5.0   |
+| Baby Tracker&amp;reg; - Daily ... | This has been an easy way ... |  4.0   |
++-------------------------------+-------------------------------+--------+
+[183531 rows x 3 columns]
+Note: Only the head of the SFrame is printed.
+You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns.
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Build-the-word-count-vector-for-each-review">Build the word count vector for each review<a class="anchor-link" href="#Build-the-word-count-vector-for-each-review">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let us explore a specific example of a baby product.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">products</span><span class="p">[</span><span class="mi">269</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[4]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;name&#39;: &#39;The First Years Massaging Action Teether&#39;,
+ &#39;rating&#39;: 5.0,
+ &#39;review&#39;: &#39;A favorite in our house!&#39;}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now, we will perform 2 simple data transformations:</p>
+<ol>
+<li>Remove punctuation using <a href="https://docs.python.org/2/library/string.html">Python's built-in</a> string functionality.</li>
+<li>Transform the reviews into word-counts.</li>
+</ol>
+<p><strong>Aside</strong>. In this notebook, we remove all punctuations for the sake of simplicity. A smarter approach to punctuations would preserve phrases such as "I'd", "would've", "hadn't" and so forth. See <a href="https://www.cis.upenn.edu/~treebank/tokenization.html">this page</a> for an example of smart handling of punctuations.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">remove_punctuation</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">string</span>
+    <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">string</span><span class="o">.</span><span class="n">punctuation</span><span class="p">)</span> 
+
+<span class="n">review_without_punctuation</span> <span class="o">=</span> <span class="n">products</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">remove_punctuation</span><span class="p">)</span>
+<span class="n">products</span><span class="p">[</span><span class="s1">&#39;word_count&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">graphlab</span><span class="o">.</span><span class="n">text_analytics</span><span class="o">.</span><span class="n">count_words</span><span class="p">(</span><span class="n">review_without_punctuation</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">products</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[6]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&#39;These flannel wipes are OK, but in my opinion not worth keeping.  I also ordered someImse Vimse Cloth Wipes-Ocean Blue-12 countwhich are larger, had a nicer, softer texture and just seemed higher quality.  I use cloth wipes for hands and faces and have been usingThirsties 6 Pack Fab Wipes, Boyfor about 8 months now and need to replace them because they are starting to get rough and have had stink issues for a while that stripping no longer handles.&#39;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">review_without_punctuation</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[7]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&#39;These flannel wipes are OK but in my opinion not worth keeping  I also ordered someImse Vimse Cloth WipesOcean Blue12 countwhich are larger had a nicer softer texture and just seemed higher quality  I use cloth wipes for hands and faces and have been usingThirsties 6 Pack Fab Wipes Boyfor about 8 months now and need to replace them because they are starting to get rough and have had stink issues for a while that stripping no longer handles&#39;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now, let us explore what the sample example above looks like after these 2 transformations. Here, each entry in the <strong>word_count</strong> column is a dictionary where the key is the word and the value is a count of the number of times the word occurs.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">products</span><span class="p">[</span><span class="mi">269</span><span class="p">][</span><span class="s1">&#39;word_count&#39;</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[8]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;a&#39;: 1L, &#39;favorite&#39;: 1L, &#39;house&#39;: 1L, &#39;in&#39;: 1L, &#39;our&#39;: 1L}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Extract-sentiments">Extract sentiments<a class="anchor-link" href="#Extract-sentiments">&#182;</a></h2><p>We will <strong>ignore</strong> all reviews with <em>rating = 3</em>, since they tend to have a neutral sentiment.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">products</span> <span class="o">=</span> <span class="n">products</span><span class="p">[</span><span class="n">products</span><span class="p">[</span><span class="s1">&#39;rating&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">]</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">products</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[9]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>166752</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now, we will assign reviews with a rating of 4 or higher to be <em>positive</em> reviews, while the ones with rating of 2 or lower are <em>negative</em>. For the sentiment column, we use +1 for the positive class label and -1 for the negative class label.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">products</span><span class="p">[</span><span class="s1">&#39;sentiment&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">products</span><span class="p">[</span><span class="s1">&#39;rating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">rating</span> <span class="p">:</span> <span class="o">+</span><span class="mi">1</span> <span class="k">if</span> <span class="n">rating</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">products</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>+-------------------------------+-------------------------------+--------+
+|              name             |             review            | rating |
++-------------------------------+-------------------------------+--------+
+|     Planetwise Wipe Pouch     | it came early and was not ... |  5.0   |
+| Annas Dream Full Quilt wit... | Very soft and comfortable ... |  5.0   |
+| Stop Pacifier Sucking with... | This is a product well wor... |  5.0   |
+| Stop Pacifier Sucking with... | All of my kids have cried ... |  5.0   |
+| Stop Pacifier Sucking with... | When the Binky Fairy came ... |  5.0   |
+| A Tale of Baby&#39;s Days with... | Lovely book, it&#39;s bound ti... |  4.0   |
+| Baby Tracker&amp;reg; - Daily ... | Perfect for new parents. W... |  5.0   |
+| Baby Tracker&amp;reg; - Daily ... | A friend of mine pinned th... |  5.0   |
+| Baby Tracker&amp;reg; - Daily ... | This has been an easy way ... |  4.0   |
+| Baby Tracker&amp;reg; - Daily ... | I love this journal and ou... |  4.0   |
++-------------------------------+-------------------------------+--------+
++-------------------------------+-----------+
+|           word_count          | sentiment |
++-------------------------------+-----------+
+| {&#39;and&#39;: 3L, &#39;love&#39;: 1L, &#39;i... |     1     |
+| {&#39;and&#39;: 2L, &#39;quilt&#39;: 1L, &#39;... |     1     |
+| {&#39;and&#39;: 3L, &#39;ingenious&#39;: 1... |     1     |
+| {&#39;and&#39;: 2L, &#39;all&#39;: 2L, &#39;he... |     1     |
+| {&#39;and&#39;: 2L, &#39;cute&#39;: 1L, &#39;h... |     1     |
+| {&#39;shop&#39;: 1L, &#39;be&#39;: 1L, &#39;is... |     1     |
+| {&#39;and&#39;: 2L, &#39;all&#39;: 1L, &#39;ri... |     1     |
+| {&#39;and&#39;: 1L, &#39;fantastic&#39;: 1... |     1     |
+| {&#39;all&#39;: 1L, &#39;standarad&#39;: 1... |     1     |
+| {&#39;all&#39;: 2L, &#39;nannys&#39;: 1L, ... |     1     |
++-------------------------------+-----------+
+[166752 rows x 5 columns]
+Note: Only the head of the SFrame is printed.
+You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns.
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now, we can see that the dataset contains an extra column called <strong>sentiment</strong> which is either positive (+1) or negative (-1).</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Split-data-into-training-and-test-sets">Split data into training and test sets<a class="anchor-link" href="#Split-data-into-training-and-test-sets">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's perform a train/test split with 80% of the data in the training set and 20% of the data in the test set. We use <code>seed=1</code> so that everyone gets the same result.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">train_data</span><span class="p">,</span> <span class="n">test_data</span> <span class="o">=</span> <span class="n">products</span><span class="o">.</span><span class="n">random_split</span><span class="p">(</span><span class="o">.</span><span class="mi">8</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_data</span><span class="p">)</span>
+<span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">test_data</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>133416
+33336
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Train-a-sentiment-classifier-with-logistic-regression">Train a sentiment classifier with logistic regression<a class="anchor-link" href="#Train-a-sentiment-classifier-with-logistic-regression">&#182;</a></h1><p>We will now use logistic regression to create a sentiment classifier on the training data. This model will use the column <strong>word_count</strong> as a feature and the column <strong>sentiment</strong> as the target. We will use <code>validation_set=None</code> to obtain same results as everyone else.</p>
+<p><strong>Note:</strong> This line may take 1-2 minutes.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">sentiment_model</span> <span class="o">=</span> <span class="n">graphlab</span><span class="o">.</span><span class="n">logistic_classifier</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span>
+                                                      <span class="n">target</span> <span class="o">=</span> <span class="s1">&#39;sentiment&#39;</span><span class="p">,</span>
+                                                      <span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;word_count&#39;</span><span class="p">],</span>
+                                                      <span class="n">validation_set</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>Logistic regression:</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>--------------------------------------------------------</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>Number of examples          : 133416</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>Number of classes           : 2</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>Number of feature columns   : 1</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>Number of unpacked features : 121712</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>Number of coefficients    : 121713</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>Starting L-BFGS</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>--------------------------------------------------------</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>+-----------+----------+-----------+--------------+-------------------+</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>| Iteration | Passes   | Step size | Elapsed Time | Training-accuracy |</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>+-----------+----------+-----------+--------------+-------------------+</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>| 1         | 5        | 0.000002  | 2.760496     | 0.840754          |</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>| 2         | 9        | 3.000000  | 4.320156     | 0.931350          |</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>| 3         | 10       | 3.000000  | 4.951796     | 0.882046          |</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>| 4         | 11       | 3.000000  | 5.757350     | 0.954076          |</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>| 5         | 12       | 3.000000  | 6.415571     | 0.960964          |</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>| 6         | 13       | 3.000000  | 6.993271     | 0.975033          |</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>+-----------+----------+-----------+--------------+-------------------+</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>TERMINATED: Terminated due to numerical difficulties.</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>This model may not be ideal. To improve it, consider doing one of the following:
+(a) Increasing the regularization.
+(b) Standardizing the input data.
+(c) Removing highly correlated features.
+(d) Removing `inf` and `NaN` values in the training data.</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">sentiment_model</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[13]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>Class                          : LogisticClassifier
+
+Schema
+------
+Number of coefficients         : 121713
+Number of examples             : 133416
+Number of classes              : 2
+Number of feature columns      : 1
+Number of unpacked features    : 121712
+
+Hyperparameters
+---------------
+L1 penalty                     : 0.0
+L2 penalty                     : 0.01
+
+Training Summary
+----------------
+Solver                         : lbfgs
+Solver iterations              : 6
+Solver status                  : TERMINATED: Terminated due to numerical difficulties.
+Training time (sec)            : 7.553
+
+Settings
+--------
+Log-likelihood                 : inf
+
+Highest Positive Coefficients
+-----------------------------
+word_count[mobileupdate]       : 41.9847
+word_count[placeid]            : 41.7354
+word_count[labelbox]           : 41.151
+word_count[httpwwwamazoncomreviewrhgg6qp7tdnhbrefcmcrprcmtieutf8asinb00318cla0nodeid] : 40.0454
+word_count[knobskeeping]       : 36.2091
+
+Lowest Negative Coefficients
+----------------------------
+word_count[probelm]            : -44.9283
+word_count[impulsejeep]        : -43.081
+word_count[infantsyoung]       : -39.5945
+word_count[cutereditafter]     : -35.6875
+word_count[avacado]            : -35.0542</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Aside</strong>. You may get a warning to the effect of "Terminated due to numerical difficulties --- this model may not be ideal". It means that the quality metric (to be covered in Module 3) failed to improve in the last iteration of the run. The difficulty arises as the sentiment model puts too much weight on extremely rare words. A way to rectify this is to apply regularization, to be covered in Module 4. Regularization lessens the effect of extremely rare words. For the purpose of this assignment, however, please proceed with the model above.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now that we have fitted the model, we can extract the weights (coefficients) as an SFrame as follows:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">weights</span> <span class="o">=</span> <span class="n">sentiment_model</span><span class="o">.</span><span class="n">coefficients</span>
+<span class="k">print</span> <span class="n">weights</span>
+<span class="k">print</span> <span class="n">weights</span><span class="o">.</span><span class="n">column_names</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>+-------------+--------------+-------+------------------+--------+
+|     name    |    index     | class |      value       | stderr |
++-------------+--------------+-------+------------------+--------+
+| (intercept) |     None     |   1   |  1.30337080544   |  None  |
+|  word_count |  recommend   |   1   |  0.303815600015  |  None  |
+|  word_count |    highly    |   1   |  1.49183015276   |  None  |
+|  word_count | disappointed |   1   |  -3.95748618393  |  None  |
+|  word_count |     love     |   1   |  1.43301685439   |  None  |
+|  word_count |      it      |   1   | 0.00986646490307 |  None  |
+|  word_count |    planet    |   1   | -0.797764553926  |  None  |
+|  word_count |     and      |   1   |  0.048449573172  |  None  |
+|  word_count |     bags     |   1   |  0.165541436615  |  None  |
+|  word_count |    wipes     |   1   | -0.0949937947268 |  None  |
++-------------+--------------+-------+------------------+--------+
+[121713 rows x 5 columns]
+Note: Only the head of the SFrame is printed.
+You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns.
+[&#39;name&#39;, &#39;index&#39;, &#39;class&#39;, &#39;value&#39;, &#39;stderr&#39;]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>There are a total of <code>121713</code> coefficients in the model. Recall from the lecture that positive weights $w_j$ correspond to weights that cause positive sentiment, while negative weights correspond to negative sentiment.</p>
+<p>Fill in the following block of code to calculate how many <em>weights</em> are positive ( &gt;= 0). (<strong>Hint</strong>: The <code>'value'</code> column in SFrame <em>weights</em> must be positive ( &gt;= 0)).</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+<span class="n">sperate_positive_weights</span> <span class="o">=</span> <span class="n">weights</span><span class="p">[</span><span class="n">weights</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">sperate_negative_weights</span> <span class="o">=</span> <span class="n">weights</span><span class="p">[</span><span class="n">weights</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">num_positive_weights</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sperate_positive_weights</span><span class="p">)</span>
+<span class="n">num_negative_weights</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sperate_negative_weights</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="s2">&quot;Number of positive weights: </span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">num_positive_weights</span>
+<span class="k">print</span> <span class="s2">&quot;Number of negative weights: </span><span class="si">%s</span><span class="s2"> &quot;</span> <span class="o">%</span> <span class="n">num_negative_weights</span>
+<span class="k">print</span> <span class="n">num_positive_weights</span> <span class="o">+</span> <span class="n">num_negative_weights</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>121713
+Number of positive weights: 68419 
+Number of negative weights: 53294 
+121713
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Quiz Question:</strong> How many weights are &gt;= 0?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Making-predictions-with-logistic-regression">Making predictions with logistic regression<a class="anchor-link" href="#Making-predictions-with-logistic-regression">&#182;</a></h2><p>Now that a model is trained, we can make predictions on the <strong>test data</strong>. In this section, we will explore this in the context of 3 examples in the test dataset.  We refer to this set of 3 examples as the <strong>sample_test_data</strong>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">sample_test_data</span> <span class="o">=</span> <span class="n">test_data</span><span class="p">[</span><span class="mi">10</span><span class="p">:</span><span class="mi">13</span><span class="p">]</span>
+<span class="k">print</span> <span class="n">sample_test_data</span><span class="p">[</span><span class="s1">&#39;rating&#39;</span><span class="p">]</span>
+<span class="k">print</span> <span class="n">sample_test_data</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[5.0, 2.0, 1.0]
++-------------------------------+-------------------------------+--------+
+|              name             |             review            | rating |
++-------------------------------+-------------------------------+--------+
+|   Our Baby Girl Memory Book   | Absolutely love it and all... |  5.0   |
+| Wall Decor Removable Decal... | Would not purchase again o... |  2.0   |
+| New Style Trailing Cherry ... | Was so excited to get this... |  1.0   |
++-------------------------------+-------------------------------+--------+
++-------------------------------+-----------+
+|           word_count          | sentiment |
++-------------------------------+-----------+
+| {&#39;and&#39;: 2L, &#39;all&#39;: 1L, &#39;lo... |     1     |
+| {&#39;and&#39;: 1L, &#39;wall&#39;: 1L, &#39;t... |     -1    |
+| {&#39;all&#39;: 1L, &#39;money&#39;: 1L, &#39;... |     -1    |
++-------------------------------+-----------+
+[3 rows x 5 columns]
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's dig deeper into the first row of the <strong>sample_test_data</strong>. Here's the full review:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">sample_test_data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;review&#39;</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[17]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&#39;Absolutely love it and all of the Scripture in it.  I purchased the Baby Boy version for my grandson when he was born and my daughter-in-law was thrilled to receive the same book again.&#39;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>That review seems pretty positive.</p>
+<p>Now, let's see what the next row of the <strong>sample_test_data</strong> looks like. As we could guess from the sentiment (-1), the review is quite negative.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">sample_test_data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;review&#39;</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[18]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&#39;Would not purchase again or recommend. The decals were thick almost plastic like and were coming off the wall as I was applying them! The would NOT stick! Literally stayed stuck for about 5 minutes then started peeling off.&#39;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We will now make a <strong>class</strong> prediction for the <strong>sample_test_data</strong>. The <code>sentiment_model</code> should predict <strong>+1</strong> if the sentiment is positive and <strong>-1</strong> if the sentiment is negative. Recall from the lecture that the <strong>score</strong> (sometimes called <strong>margin</strong>) for the logistic regression model  is defined as:</p>
+$$
+\mbox{score}_i = \mathbf{w}^T h(\mathbf{x}_i)
+$$<p></p>
+<p>where $h(\mathbf{x}_i)$ represents the features for example $i$.  We will write some code to obtain the <strong>scores</strong> using GraphLab Create. For each row, the <strong>score</strong> (or margin) is a number in the range <strong>[-inf, inf]</strong>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">scores</span> <span class="o">=</span> <span class="n">sentiment_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">sample_test_data</span><span class="p">,</span> <span class="n">output_type</span><span class="o">=</span><span class="s1">&#39;margin&#39;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">scores</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[6.734619727058284, -5.734130996759765, -14.668460404467742]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Predicting-sentiment">Predicting sentiment<a class="anchor-link" href="#Predicting-sentiment">&#182;</a></h3><p>These scores can be used to make class predictions as follows:</p>
+$$
+\hat{y} = 
+\left\{
+\begin{array}{ll}
+      +1 &amp; \mathbf{w}^T h(\mathbf{x}_i) &gt; 0 \\
+      -1 &amp; \mathbf{w}^T h(\mathbf{x}_i) \leq 0 \\
+\end{array} 
+\right.
+$$<p>Using scores, write code to calculate $\hat{y}$, the class predictions:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s2">&quot;1&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s2">&quot;-1&quot;</span>
+            
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>1
+-1
+-1
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Run the following code to verify that the class predictions obtained by your calculations are the same as that obtained from GraphLab Create.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="s2">&quot;Class predictions according to GraphLab Create:&quot;</span> 
+<span class="k">print</span> <span class="n">sentiment_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">sample_test_data</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Class predictions according to GraphLab Create:
+[1L, -1L, -1L]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Checkpoint</strong>: Make sure your class predictions match with the one obtained from GraphLab Create.</p>
+<h3 id="Probability-predictions">Probability predictions<a class="anchor-link" href="#Probability-predictions">&#182;</a></h3><p>Recall from the lectures that we can also calculate the probability predictions from the scores using:
+$$
+P(y_i = +1 | \mathbf{x}_i,\mathbf{w}) = \frac{1}{1 + \exp(-\mathbf{w}^T h(\mathbf{x}_i))}.
+$$</p>
+<p>Using the variable <strong>scores</strong> calculated previously, write code to calculate the probability that a sentiment is positive using the above formula. For each row, the probabilities should be a number in the range <strong>[0, 1]</strong>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
+
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">scores</span><span class="p">:</span>
+    <span class="n">exp</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span> <span class="o">-</span><span class="n">x</span> <span class="p">)</span>
+    <span class="n">prob</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">exp</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">prob</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>0.998812384838
+0.0032232681818
+4.26155799666e-07
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Checkpoint</strong>: Make sure your probability predictions match the ones obtained from GraphLab Create.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="s2">&quot;Class predictions according to GraphLab Create:&quot;</span> 
+<span class="k">print</span> <span class="n">sentiment_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">sample_test_data</span><span class="p">,</span> <span class="n">output_type</span><span class="o">=</span><span class="s1">&#39;probability&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Class predictions according to GraphLab Create:
+[0.9988123848377186, 0.003223268181802263, 4.261557996658726e-07]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong> Quiz Question:</strong> Of the three data points in <strong>sample_test_data</strong>, which one (first, second, or third) has the <strong>lowest probability</strong> of being classified as a positive review?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Find-the-most-positive-(and-negative)-review">Find the most positive (and negative) review<a class="anchor-link" href="#Find-the-most-positive-(and-negative)-review">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We now turn to examining the full test dataset, <strong>test_data</strong>, and use GraphLab Create to form predictions on all of the test data points for faster performance.</p>
+<p>Using the <code>sentiment_model</code>, find the 20 reviews in the entire <strong>test_data</strong> with the <strong>highest probability</strong> of being classified as a <strong>positive review</strong>. We refer to these as the "most positive reviews."</p>
+<p>To calculate these top-20 reviews, use the following steps:</p>
+<ol>
+<li>Make probability predictions on <strong>test_data</strong> using the <code>sentiment_model</code>. (<strong>Hint:</strong> When you call <code>.predict</code> to make predictions on the test data, use option <code>output_type='probability'</code> to output the probability rather than just the most likely class.)</li>
+<li>Sort the data according to those predictions and pick the top 20. (<strong>Hint:</strong> You can use the <code>.topk</code> method on an SFrame to find the top k rows sorted according to the value of a specified column.)</li>
+</ol>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="n">test_data</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>+-------------------------------+-------------------------------+--------+
+|              name             |             review            | rating |
++-------------------------------+-------------------------------+--------+
+| Baby Tracker&amp;reg; - Daily ... | This has been an easy way ... |  4.0   |
+| Baby Tracker&amp;reg; - Daily ... | I love this journal and ou... |  4.0   |
+| Nature&#39;s Lullabies First Y... | I love this little calende... |  5.0   |
+| Nature&#39;s Lullabies Second ... | I had a hard time finding ... |  5.0   |
+|  Lamaze Peekaboo, I Love You  | One of baby&#39;s first and fa... |  4.0   |
+|  Lamaze Peekaboo, I Love You  | My son loved this book as ... |  5.0   |
+|  Lamaze Peekaboo, I Love You  | Our baby loves this book &amp;... |  5.0   |
+| SoftPlay Giggle Jiggle Fun... | This bear is absolutely ad... |  2.0   |
+| SoftPlay Peek-A-Boo Where&#39;... | I bought two for recent ba... |  5.0   |
+| Baby&#39;s First Year Undated ... | I searched high and low fo... |  5.0   |
++-------------------------------+-------------------------------+--------+
++-------------------------------+-----------+
+|           word_count          | sentiment |
++-------------------------------+-----------+
+| {&#39;all&#39;: 1L, &#39;standarad&#39;: 1... |     1     |
+| {&#39;all&#39;: 2L, &#39;nannys&#39;: 1L, ... |     1     |
+| {&#39;and&#39;: 1L, &#39;babys&#39;: 1L, &#39;... |     1     |
+| {&#39;and&#39;: 3L, &#39;all&#39;: 1L, &#39;mo... |     1     |
+| {&#39;and&#39;: 2L, &#39;because&#39;: 1L,... |     1     |
+| {&#39;all&#39;: 1L, &#39;being&#39;: 1L, &#39;... |     1     |
+| {&#39;and&#39;: 1L, &#39;own&#39;: 1L, &#39;it... |     1     |
+| {&#39;and&#39;: 3L, &#39;cute&#39;: 1L, &#39;r... |     -1    |
+| {&#39;beautiful&#39;: 1L, &#39;and&#39;: 2... |     1     |
+| {&#39;remembering&#39;: 1L, &#39;and&#39;:... |     1     |
++-------------------------------+-----------+
+[33336 rows x 5 columns]
+Note: Only the head of the SFrame is printed.
+You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns.
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">test_data</span><span class="p">[</span><span class="s1">&#39;probability&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sentiment_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">output_type</span><span class="o">=</span><span class="s1">&#39;probability&#39;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">test_data</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>+-------------------------------+-------------------------------+--------+
+|              name             |             review            | rating |
++-------------------------------+-------------------------------+--------+
+| Baby Tracker&amp;reg; - Daily ... | This has been an easy way ... |  4.0   |
+| Baby Tracker&amp;reg; - Daily ... | I love this journal and ou... |  4.0   |
+| Nature&#39;s Lullabies First Y... | I love this little calende... |  5.0   |
+| Nature&#39;s Lullabies Second ... | I had a hard time finding ... |  5.0   |
+|  Lamaze Peekaboo, I Love You  | One of baby&#39;s first and fa... |  4.0   |
+|  Lamaze Peekaboo, I Love You  | My son loved this book as ... |  5.0   |
+|  Lamaze Peekaboo, I Love You  | Our baby loves this book &amp;... |  5.0   |
+| SoftPlay Giggle Jiggle Fun... | This bear is absolutely ad... |  2.0   |
+| SoftPlay Peek-A-Boo Where&#39;... | I bought two for recent ba... |  5.0   |
+| Baby&#39;s First Year Undated ... | I searched high and low fo... |  5.0   |
++-------------------------------+-------------------------------+--------+
++-------------------------------+-----------+----------------+
+|           word_count          | sentiment |  probability   |
++-------------------------------+-----------+----------------+
+| {&#39;all&#39;: 1L, &#39;standarad&#39;: 1... |     1     | 0.758399887752 |
+| {&#39;all&#39;: 2L, &#39;nannys&#39;: 1L, ... |     1     | 0.999999999966 |
+| {&#39;and&#39;: 1L, &#39;babys&#39;: 1L, &#39;... |     1     | 0.22895097808  |
+| {&#39;and&#39;: 3L, &#39;all&#39;: 1L, &#39;mo... |     1     | 0.999999558063 |
+| {&#39;and&#39;: 2L, &#39;because&#39;: 1L,... |     1     | 0.990542169248 |
+| {&#39;all&#39;: 1L, &#39;being&#39;: 1L, &#39;... |     1     | 0.999999295968 |
+| {&#39;and&#39;: 1L, &#39;own&#39;: 1L, &#39;it... |     1     | 0.99976447628  |
+| {&#39;and&#39;: 3L, &#39;cute&#39;: 1L, &#39;r... |     -1    | 0.722834466283 |
+| {&#39;beautiful&#39;: 1L, &#39;and&#39;: 2... |     1     | 0.999266840896 |
+| {&#39;remembering&#39;: 1L, &#39;and&#39;:... |     1     | 0.999786830048 |
++-------------------------------+-----------+----------------+
+[33336 rows x 6 columns]
+Note: Only the head of the SFrame is printed.
+You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns.
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Top-20-rows-that-has-positive-reviews-based-on-probabilities">Top 20 rows that has positive reviews based on probabilities<a class="anchor-link" href="#Top-20-rows-that-has-positive-reviews-based-on-probabilities">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="c1">#print test_data[-1]</span>
+<span class="n">twenty_rows</span> <span class="o">=</span> <span class="n">test_data</span><span class="o">.</span><span class="n">topk</span><span class="p">(</span><span class="s1">&#39;probability&#39;</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="nb">len</span><span class="p">(</span><span class="n">twenty_rows</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">twenty_rows</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">i</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span><span class="s1">&#39;==&#39;</span><span class="p">,</span><span class="n">i</span><span class="p">[</span><span class="s1">&#39;sentiment&#39;</span><span class="p">],</span><span class="s1">&#39;==&#39;</span><span class="p">,</span><span class="n">i</span><span class="p">[</span><span class="s2">&quot;probability&quot;</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Britax Decathlon Convertible Car Seat, Tiffany == 1 == 1.0
+Ameda Purely Yours Breast Pump - Carry All == 1 == 1.0
+Traveling Toddler Car Seat Travel Accessory == -1 == 1.0
+Shermag Glider Rocker Combo, Pecan with Oatmeal == 1 == 1.0
+Cloud b Sound Machine Soother, Sleep Sheep == 1 == 1.0
+JP Lizzy Chocolate Ice Classic Tote Set == 1 == 1.0
+Fisher-Price Rainforest Melodies and Lights Deluxe Gym == 1 == 1.0
+Lilly Gold Sit &#39;n&#39; Stroll 5 in 1 Car Seat and Stroller Combination, Tuxedo Black (sunshade is not included in the offering) == 1 == 1.0
+Fisher-Price Deluxe Jumperoo == 1 == 1.0
+North States Supergate Pressure Mount Clear Choice Wood Gate == 1 == 1.0
+Munchkin Mozart Magic Cube == 1 == 1.0
+Britax Marathon Convertible Car Seat, Granite == 1 == 1.0
+Wizard Convertible Car Seat with LATCH in Midnight Print == 1 == 1.0
+Capri Stroller - Red Tech == 1 == 1.0
+Peg Perego Primo Viaggio Car Seat / Infant Carrier with LATCH Base - Black Sable == 1 == 1.0
+HALO SleepSack Micro-Fleece Wearable Blanket, Soft Pink, Small == 1 == 1.0
+Leachco Snoogle Total Body Pillow == 1 == 1.0
+Summer Infant Complete Nursery Care Kit == 1 == 1.0
+Safety 1st Tot-Lok Four Lock Assembly == 1 == 1.0
+BABYBJORN Potty Chair - Red == 1 == 1.0
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[27]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="n">twenty_rows</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>I researched a few different seats to put in our new Odyssey van in September (07). Our daughter just turned two and we wanted to get a new car seat for her so her Evenflo Triumph could go in my husbands car. She had been using the Triumph since she was about 9 months (rear-facing), and then forward facing from about 14 months. We really loved the Triumph, but I wanted something she could grow into. Meaning - getting the most out of a car seat height and weight wise for the longest period of time.Britax was one of the only ones I found, that actually makes a heavy-duty quality seat that I knew would last. Sure, I looked at a few others that ranked up there with height and weight (i.e. Eddie Bauer, Cosco, and Graco), but none of these compared in quality and durability! We made the trip to Babies r Us so we could &#34;test&#34; the few different seats I had chosen from Consumer Reports ratings. The Eddie Bauer deluxe booster was out because the first time I snapped the metal part into the crotch strap I pinched my daughters skin and she screamed like crazy! I felt so bad, and my husband immediately said, &#34;That&#39;s it for this one!&#34; and put it back on the shelf.The Eddie Bauer would have been the only other one we would have considered because it was more durable and sturdy than the Cosco and Graco. We did try the Britax Boulevard, but found it rather cumbersome to adjust the head rest and my daughter&#39;s head seemed to lean too far forward with the pillow being there. Overall, she looked uncomfortable in the Boulevard. We also tried the Britax Regent. Talk about a monstrosity of a car seat, but we both loved it, especially my hubby! It held my daughter in snug and secure and was easy to install into the test seat they have at the Babies r Us store. My taller than average daughter looked dinky in the Regent! The only reason we decided not to get the Regent was because our daughter still sleeps in her car seat on longer trips and the Regent just wasn&#39;t going to give her the head support and comfort level I wanted her to have while snoozing. By not buying the Regent as opposed to the Decathlon, we only gave up a 15 pound weight and 4&#34; height ability and we knew our daughter was going to outgrow the height limit WAY before she outgrew the weight limit. When that happens we&#39;ll probably just go to a standard backless booster that she&#39;ll use with the seatbelt from the car.Well, BrU didn&#39;t have the Decathlon at the store, and it wasn&#39;t one I was considering. I had researched the Marathon on Amazon and liked the reviews, but after comparing numerous reviews of the two seats. I decided on the Decathlon for three reasons: 1) It had the infant padding for rear-facing which will be good for our next child that comes along; 2) It had the toddler pillow; and 3) It had the adjustable crotch strap which I knew I would need for my daughter (she&#39;s in the 97th percentile for height, being 36&#34; tall at 24 months!). Essentially, the Decathlon and Marathon have the same seat structure and height and weight capacities, but the Decathlon has the &#34;extras&#34; I mentioned. Also, the Decathlon has a push-button strap release and tightener. The Marathon has a clasp crimper to hold the straps tight. Knowing the seat structures were basically the same, I toted my daughter over to Target and tried her in the Marathon, and I liked it, so I bought the Decathlon on Ebay.It is so easy to install once you&#39;ve looked over the directions. Of course, at first it took some time, but now it&#39;s a breeze. The thing is rock solid in the captain&#39;s chair of our Odyssey. With the anchor belt and the tether anchor attached this baby isn&#39;t going anywhere unless the whole captain&#39;s chair comes off! Even without the tether anchor it still didn&#39;t move. The material is nice and heavy and the seat is adequately padded. It sits up high so my daughter can see everything outside. I love the &#34;hugs&#34; system the straps have because it makes my daughter fit snuggly into the seat.I only have two complaints about this seat, which really aren&#39;t that bad, just annoyances - 1) Sometimes the straps do twist a bit and I have to untwist them, especially with an independent toddler who wants to push their own arms through the straps and 2) It does take a little bit of strength to tighten down the straps with the push-button strap holder. I usually pull it as tight as I can and then if it still has too much slack I push the button with my left thumb and pull the strap with my right hand until it&#39;s tightened to my satisfaction.Overall, I&#39;ve been very happy with the Britax Decathlon car seat. It was a good investment and as many of the reveiwers have stated - the price is worth every penny knowing that your child is protected very well. One bit of advise I&#39;d give to anyone considering ANY car seat - GO TO A STORE WHERE YOU CAN TEST THE SEATS OUT ON YOUR CHILD! All children are different shapes and sizes and the seats are different. We are so glad we took our daughter to BrU and put her in each seat we were considering - and look, we didn&#39;t even buy any of the seats we were originally considering based on the Consumer Reports ratings I looked at! You just never know!Update - November 11, 2008Still loving this carseat. I had to take everything apart to clean it a couple weeks ago. It was a time consuming task, but not hard. The seat cover cleaned up beautifully and it looks brand new! Unfortunately, my daughter is now three and just about to outgrow the top slots (she&#39;s 41&#34; now!). She probably has another couple months in it. I&#39;d really like to keep her in a harness for a lot longer, so I&#39;m now checking out the new Graco Nautilus 3-in-1 carseat that&#39;s on the market. It&#39;s getting awesome reviews and it&#39;s a fraction of the cost of this seat or any of the other Britax&#39;s. Baby #2 will be here in December, so this one will be put away for when he/she is out of the infant carrier and this seat is big enough to keep the new little one rear-facing for a longer time!
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Quiz Question</strong>: Which of the following products are represented in the 20 most positive reviews? [multiple choice]</p>
+<p>Now, let us repeat this exercise to find the "most negative reviews." Use the prediction probabilities to find the  20 reviews in the <strong>test_data</strong> with the <strong>lowest probability</strong> of being classified as a <strong>positive review</strong>. Repeat the same steps above but make sure you <strong>sort in the opposite order</strong>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Top-20-rows-that-has-negative-reviews-based-on-probabilities">Top 20 rows that has negative reviews based on probabilities<a class="anchor-link" href="#Top-20-rows-that-has-negative-reviews-based-on-probabilities">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="c1">#print test_data[-1]</span>
+<span class="n">twenty_rows</span> <span class="o">=</span> <span class="n">test_data</span><span class="o">.</span><span class="n">topk</span><span class="p">(</span><span class="s1">&#39;probability&#39;</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">reverse</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+
+<span class="nb">len</span><span class="p">(</span><span class="n">twenty_rows</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">twenty_rows</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">i</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span><span class="s1">&#39;==&#39;</span><span class="p">,</span><span class="n">i</span><span class="p">[</span><span class="s1">&#39;sentiment&#39;</span><span class="p">],</span><span class="s1">&#39;==&#39;</span><span class="p">,</span><span class="n">i</span><span class="p">[</span><span class="s2">&quot;probability&quot;</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Jolly Jumper Arctic Sneak A Peek Infant Car Seat Cover Black == 1 == 7.80415068215e-100
+Levana Safe N&#39;See Digital Video Baby Monitor with Talk-to-Baby Intercom and Lullaby Control (LV-TW501) == -1 == 6.83650885517e-25
+Snuza Portable Baby Movement Monitor == -1 == 2.12654510825e-24
+Fisher-Price Ocean Wonders Aquarium Bouncer == -1 == 2.2458208078e-23
+VTech Communications Safe &amp;amp; Sounds Full Color Video and Audio Monitor == -1 == 1.32962966147e-22
+Safety 1st High-Def Digital Monitor == -1 == 2.0687209747e-20
+Chicco Cortina KeyFit 30 Travel System in Adventure == -1 == 5.93881994674e-20
+Prince Lionheart Warmies Wipes Warmer == -1 == 6.28510016543e-20
+Valco Baby Tri-mode Twin Stroller EX- Hot Chocolate == -1 == 8.05528712696e-20
+Adiri BPA Free Natural Nurser Ultimate Bottle Stage 1 White, Slow Flow (0-3 months) == -1 == 8.4652172495e-20
+Munchkin Nursery Projector and Sound System, White == -1 == 1.52853945171e-19
+The First Years True Choice P400 Premium Digital Monitor, 2 Parent Unit == -1 == 1.77901889374e-19
+Nuby Natural Touch Silicone Travel Infa Feeder, Colors May Vary, 3 Ounce == -1 == 1.15227353848e-18
+Peg-Perego Tatamia High Chair, White Latte == -1 == 1.26175666136e-18
+Fisher-Price Royal Potty == -1 == 1.60282966316e-18
+Safety 1st Exchangeable Tip 3 in 1 Thermometer == -1 == 7.04887411711e-18
+Safety 1st Lift Lock and Swing Gate == -1 == 9.84839237568e-18
+Evenflo Take Me Too Premiere Tandem Stroller - Castlebay == -1 == 1.00120730395e-17
+Cloth Diaper Sprayer--styles may vary == -1 == 1.16906355601e-17
+The First Years 3 Pack Breastflow Bottle, 9 Ounce == -1 == 1.22003532002e-17
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[29]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="n">twenty_rows</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>I am a &#34;research-aholic&#34; in general and have researched many different baby products over the past 5 years due to being a mother of 3 and wanting to get the best for the price and not wanting to settle for less...  I live in the Northeast US, so it gets really cold and the weather changes frequently and in extremes on a daily, if not hourly basis.  Anyway, here are the brands I&#39;ve used/owed and/or researched extensively and the comparisons:Jolly Jumper Arctic Sneak A Peek Infant Car Seat Cover (JJA)Jolly Jumper Sneak A Peek Infant Car Seat Cover (JJ)Summer Infant Poshpouch (SP)Cozy Car Seat Microfiber and Fleece Cover (CC)Baby&#39;s Cozy World Microfiber &amp; Fleece Carrier Cover (BC) (yes the CC and the BC are different many people do not know this....)JJ Cole infant/original bundle me (JJC)JJ Cole toddler bundle me  (JJT)OK...Jolly Jumper Artic (JJA) is awesome, I would rate it the best one out of all.  It is a &#34;shower cap&#34; cover for the infant car seat, it has an attached blanket inside and a peek-a-boo flap that you can velcro closed to keep the baby&#39;s face covered and warm and you can also velcro it &#34;up&#34; to stay open when when you put the baby in the car.  It has two zippers which allow the cover to be fully opened without removal of the cover and easy access to baby.  And lastly, it keeps the baby from over heating.  When opening the two zippers it enable the ability to &#34;flip&#34; the middle piece down keeping it completely off the baby.  The blanket is a nice feature of this cover.  You can use it alone with the two zippers open on a warmer day and you can also flip the blanket down away from the baby as well when not in use.  Another nice thing about the blanket is you can wrap it around baby to keep them warm (it does not go behind the baby but can be placed on the sides of the baby), there is enough material on both sides to do this..  Some reviewers of this carrier cover and other &#34;shower cap&#34; cover styles stated that there were gaps around the handle, this is true of mostly all the shower cap covers except you can adjust this one on the sides to cover these gaps.  Also you can take the wrap around blanket and cover the baby as well as feed it through the gaps on the sides to close them if the cover cannot be adjusted on your carrier to fit around the bottom to close that area.  The outer portion is nylon, like a jacket material and it is waterproof, the fleece is substantial and it keeps the infant very, warm. This is an expensive carrier but well worth the money!  This is top notch!Jolly Jumper (JJ) is the same carrier cover as above minus the attached blanket.  Again, overall an excellent cover.  It is not much less money than the JJA and no matter what climate I would personally pay the extra money for the JJA just because you can use the blanket when opening the cover by the zippers and then you still have the option of zippering the carrier for more protection if it is raining or it gets colder.  You can also fold down the blanket and not use it as all on the JJA and use it like a JJ.Summer Infant Poshpouch (SP) is another &#34;shower cap&#34; cover for the infant carseat but it has an opening in the top with no flap to velcro over baby&#39;s face.  I owned this before the JJA and here are some major differences.  It is a much thinner material, the fleece isn&#39;t as substantial and the outer portion is not waterproof or nylon but a fleece polyester material.  The opening is rather large and I felt as though breezes/wind would go right through the hole and it is definitely not as effective in making the baby warm, esp. in colder conditions.  To remedy this problem I put a blanket on underside of the cover and the baby warmer, esp on 30 degree days.  I also had to put a hat and make sure the blanket was high on baby to cover the baby&#39;s neck or use something to make sure baby&#39;s neck was covered due to the hole being so big.  It also gaps much more on the sides then the JJA and the JJ.  The SP only has one zipper to unzip the baby when inside.  And when you want to keep the baby inside the carrier, you really have to take the whole thing off to leave the baby in in order to not be covered.  And it is hard to get the baby out without pushing it aside.AND MOST IMPORTANTLY ******* PLEASE SEE*****  it was very scary when I discovered that when you place it on correctly and put it over the infant carseat, I would put my infant carseat into the holster and it WOULD NOT, I repeat WOULD NOT lATCH INTO THE BASE!!!!  There was no way of knowing this unless you checked, (I check my baby each time to make sure the carseat is latched in, just by habit), but it would not even be partially latched just completely unlatched....  I felt this was unacceptable....  Even when I tried to adjust it by pulling the bottom portion up, where the baby&#39;s feet would be, the cover b/c of the elastic would just come up, bunch and be partially off with a gap under the baby&#39;s feet so I feel this carrier is a COMPLETE WASTE OF MONEY.  I paid 2/3 the cost of the JJA and it is more then the CC and BC.Cozy Car Seat Microfiber and Fleece Cover (CC) A lot of people think this is the BC and it is the same price but it is not.  It is a cheap spin off of the BC even though it is the same price.  The fabric is less substantial, it is honestly more like the SP.  Not worth the money and don&#39;t make the mistake of getting it.Baby&#39;s Cozy World Microfiber &amp; Fleece Carrier Cover (BC) uses a type of microfiber called microsuede, which is a soft fabric made from synthetic fibers that are an imitation to suede.  It seems like it is a good bang for your buck coming in around twenty dollars which is half of the JJA.  The only thing is if you live in a really rainy climate I don&#39;t think it would be as waterproof being microsuede as the JJ or the JJA material.  Another reviewer stated that the BABY&#39;S COZY WORLD is reversible (which I am not sure how it can be reversible deeming that it does have a flap that goes over the infants face like the CC, JJA and JJ but maybe??)The reviewer also stated that the BC has pacifier clips, which would be a nice feature for toys as well and that is is very thick for all weather and it is the same price as the CC.  ONE THING that many reviews said about the CC and the BC is that the zippers can be dangerous b/c they line up in the same place as a newborns eyes and have the potential for scratching the cornea.  With the JJ and the JJA the zippers do not seem as though they would reach this far.  Maybe the CC and the BC have larger zippers that might spin around in opposite directions esp if it is &#34;reversible&#34;.  It does have the zippers on both sides (like the JJ and JJA) to unzip and expose the infant nicely when inside.  For the price this seems like it would be a good carrier as well and I would rate the the BC a close second and very comparable to the JJ but does not have a blanket feature like the JJA.JJ Cole infant/original bundle me (JJC)is what I owned with my first child who was a premature infant and I only got about 7 months of use out of this cover due to the fact that infants tend to grow out of it very fast, usually before they are out of their infant carseat.  That is why I got the toddler JJ cole toddler size after.  It is a different type of carrier than all the others that are reviewed above being that it is not a shower cap style it has an underside fabric to the carrier that is placed under the harness straps and then a layer goes over the baby and is zippered down and around the bottom.  FIRST OF ALL THIS IS DANGEROUS, which I never knew as a new mom, and why they even CAN SELL them as carseat covers is beyond me because if you get into an accident it compresses under the infant because of the added bulk between the seat and the child, (it is like the infant is wearing a jacket) so there is more room in between the harness and the infant deeming it unsafe.  Also, JJ cole now has the lite JJ cole and says that it passed crash tests but The Bundle me Lite&#39;s openings do not come anywhere near the hip straps of the harness... meaning they would be improperly routed, thus creating slack.  Here is a picture: [...]  No certified carseat technicians recommend this aftermarket product for the carseat.  Any many if not all carseat companies state if an aftermarket product is used &#34;inside&#34; the carseat between the harness and baby it will void all guarantees for safety.  NOT GOOD.JJ Cole toddler (JJT)  Had this mostly with my first child (after she was 7 months) and second child and would not use now d/t the same reason above with the JJ.  But it could be nice with a stroller.  The only thing is you do need a hat and something to cover the baby&#39;s neck as well.In summary:#1The Jolly Jumper Artic (JJA) wins the race, I am very very please with this product, esp the blanket aspect that I think is well worth it!The JJ is basically the same product as the JJA but without the blanket....#2The Baby&#39;s Cozy World Microfiber &amp; Fleece Carrier Cover (BC) (but make sure it is the BC and not the CC when you purchase it) comes in a close second esp for the price!Hope this review is helpful to you and you now won&#39;t have to go through the countless hours of research and will be getting a great product while not wasting any of your time or money on another worthless baby item, instead ONLY getting the BEST for your baby!!!!
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Quiz Question</strong>: Which of the following products are represented in the 20 most negative reviews?  [multiple choice]</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Compute-accuracy-of-the-classifier">Compute accuracy of the classifier<a class="anchor-link" href="#Compute-accuracy-of-the-classifier">&#182;</a></h2><p>We will now evaluate the accuracy of the trained classifier. Recall that the accuracy is given by</p>
+$$
+\mbox{accuracy} = \frac{\mbox{# correctly classified examples}}{\mbox{# total examples}}
+$$<p>This can be computed as follows:</p>
+<ul>
+<li><strong>Step 1:</strong> Use the trained model to compute class predictions (<strong>Hint:</strong> Use the <code>predict</code> method)</li>
+<li><strong>Step 2:</strong> Count the number of data points when the predicted class labels match the ground truth labels (called <code>true_labels</code> below).</li>
+<li><strong>Step 3:</strong> Divide the total number of correct predictions by the total number of data points in the dataset.</li>
+</ul>
+<p>Complete the function below to compute the classification accuracy:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">get_classification_accuracy</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">true_labels</span><span class="p">):</span>
+    <span class="c1"># First get the predictions</span>
+    <span class="c1">## YOUR CODE HERE</span>
+    
+    <span class="n">model_predictions</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    
+    
+    
+    <span class="c1"># Compute the number of correctly classified examples</span>
+    <span class="c1">## YOUR CODE HERE</span>
+    <span class="n">num_correct</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">true_labels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">model_predictions</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="n">num_correct</span> <span class="o">=</span> <span class="n">num_correct</span> <span class="o">+</span> <span class="mi">1</span>
+    
+    
+
+    <span class="c1"># Then compute accuracy by dividing num_correct by total number of examples</span>
+    <span class="c1">## YOUR CODE HERE</span>
+    
+    <span class="n">accuracy</span> <span class="o">=</span> <span class="n">num_correct</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    
+    
+    <span class="k">return</span> <span class="n">accuracy</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[31]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">test_data</span><span class="p">[</span><span class="s1">&#39;model_prediction&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sentiment_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">test_data</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">test_data</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>+-------------------------------+-------------------------------+--------+
+|              name             |             review            | rating |
++-------------------------------+-------------------------------+--------+
+| Baby Tracker&amp;reg; - Daily ... | This has been an easy way ... |  4.0   |
+| Baby Tracker&amp;reg; - Daily ... | I love this journal and ou... |  4.0   |
+| Nature&#39;s Lullabies First Y... | I love this little calende... |  5.0   |
+| Nature&#39;s Lullabies Second ... | I had a hard time finding ... |  5.0   |
+|  Lamaze Peekaboo, I Love You  | One of baby&#39;s first and fa... |  4.0   |
+|  Lamaze Peekaboo, I Love You  | My son loved this book as ... |  5.0   |
+|  Lamaze Peekaboo, I Love You  | Our baby loves this book &amp;... |  5.0   |
+| SoftPlay Giggle Jiggle Fun... | This bear is absolutely ad... |  2.0   |
+| SoftPlay Peek-A-Boo Where&#39;... | I bought two for recent ba... |  5.0   |
+| Baby&#39;s First Year Undated ... | I searched high and low fo... |  5.0   |
++-------------------------------+-------------------------------+--------+
++-------------------------------+-----------+----------------+------------------+
+|           word_count          | sentiment |  probability   | model_prediction |
++-------------------------------+-----------+----------------+------------------+
+| {&#39;all&#39;: 1L, &#39;standarad&#39;: 1... |     1     | 0.758399887752 |        1         |
+| {&#39;all&#39;: 2L, &#39;nannys&#39;: 1L, ... |     1     | 0.999999999966 |        1         |
+| {&#39;and&#39;: 1L, &#39;babys&#39;: 1L, &#39;... |     1     | 0.22895097808  |        -1        |
+| {&#39;and&#39;: 3L, &#39;all&#39;: 1L, &#39;mo... |     1     | 0.999999558063 |        1         |
+| {&#39;and&#39;: 2L, &#39;because&#39;: 1L,... |     1     | 0.990542169248 |        1         |
+| {&#39;all&#39;: 1L, &#39;being&#39;: 1L, &#39;... |     1     | 0.999999295968 |        1         |
+| {&#39;and&#39;: 1L, &#39;own&#39;: 1L, &#39;it... |     1     | 0.99976447628  |        1         |
+| {&#39;and&#39;: 3L, &#39;cute&#39;: 1L, &#39;r... |     -1    | 0.722834466283 |        1         |
+| {&#39;beautiful&#39;: 1L, &#39;and&#39;: 2... |     1     | 0.999266840896 |        1         |
+| {&#39;remembering&#39;: 1L, &#39;and&#39;:... |     1     | 0.999786830048 |        1         |
++-------------------------------+-----------+----------------+------------------+
+[33336 rows x 7 columns]
+Note: Only the head of the SFrame is printed.
+You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns.
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now, let's compute the classification accuracy of the <strong>sentiment_model</strong> on the <strong>test_data</strong>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[32]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">get_classification_accuracy</span><span class="p">(</span><span class="n">sentiment_model</span><span class="p">,</span> <span class="n">test_data</span><span class="p">,</span> <span class="n">test_data</span><span class="p">[</span><span class="s1">&#39;sentiment&#39;</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[32]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0.9145368370530358</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[33]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">sentiment_model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">test_data</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[33]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;accuracy&#39;: 0.9145368370530358,
+ &#39;auc&#39;: 0.9250003098558346,
+ &#39;confusion_matrix&#39;: Columns:
+ 	target_label	int
+ 	predicted_label	int
+ 	count	int
+ 
+ Rows: 4
+ 
+ Data:
+ +--------------+-----------------+-------+
+ | target_label | predicted_label | count |
+ +--------------+-----------------+-------+
+ |      -1      |        -1       |  3798 |
+ |      -1      |        1        |  1443 |
+ |      1       |        -1       |  1406 |
+ |      1       |        1        | 26689 |
+ +--------------+-----------------+-------+
+ [4 rows x 3 columns],
+ &#39;f1_score&#39;: 0.9493303928717519,
+ &#39;log_loss&#39;: 0.3707618266205636,
+ &#39;precision&#39;: 0.9487060998151571,
+ &#39;recall&#39;: 0.9499555080975263,
+ &#39;roc_curve&#39;: Columns:
+ 	threshold	float
+ 	fpr	float
+ 	tpr	float
+ 	p	int
+ 	n	int
+ 
+ Rows: 100001
+ 
+ Data:
+ +-----------+----------------+----------------+-------+------+
+ | threshold |      fpr       |      tpr       |   p   |  n   |
+ +-----------+----------------+----------------+-------+------+
+ |    0.0    |      1.0       |      1.0       | 28095 | 5241 |
+ |   1e-05   | 0.849647013929 | 0.996689802456 | 28095 | 5241 |
+ |   2e-05   | 0.829994275902 | 0.996262680192 | 28095 | 5241 |
+ |   3e-05   | 0.820072505247 | 0.996013525538 | 28095 | 5241 |
+ |   4e-05   | 0.811486357565 | 0.995799964406 | 28095 | 5241 |
+ |   5e-05   | 0.805189849265 | 0.995657590319 | 28095 | 5241 |
+ |   6e-05   | 0.799656554093 | 0.995515216231 | 28095 | 5241 |
+ |   7e-05   | 0.794314062202 | 0.995372842143 | 28095 | 5241 |
+ |   8e-05   | 0.789543980156 | 0.995230468055 | 28095 | 5241 |
+ |   9e-05   | 0.786681930929 | 0.995123687489 | 28095 | 5241 |
+ +-----------+----------------+----------------+-------+------+
+ [100001 rows x 5 columns]
+ Note: Only the head of the SFrame is printed.
+ You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns.}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Quiz Question</strong>: What is the accuracy of the <strong>sentiment_model</strong> on the <strong>test_data</strong>? Round your answer to 2 decimal places (e.g. 0.76).</p>
+<p><strong>Quiz Question</strong>: Does a higher accuracy value on the <strong>training_data</strong> always imply that the classifier is better?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Learn-another-classifier-with-fewer-words">Learn another classifier with fewer words<a class="anchor-link" href="#Learn-another-classifier-with-fewer-words">&#182;</a></h2><p>There were a lot of words in the model we trained above. We will now train a simpler logistic regression model using only a subset of words that occur in the reviews. For this assignment, we selected a 20 words to work with. These are:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[34]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">significant_words</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;love&#39;</span><span class="p">,</span> <span class="s1">&#39;great&#39;</span><span class="p">,</span> <span class="s1">&#39;easy&#39;</span><span class="p">,</span> <span class="s1">&#39;old&#39;</span><span class="p">,</span> <span class="s1">&#39;little&#39;</span><span class="p">,</span> <span class="s1">&#39;perfect&#39;</span><span class="p">,</span> <span class="s1">&#39;loves&#39;</span><span class="p">,</span> 
+      <span class="s1">&#39;well&#39;</span><span class="p">,</span> <span class="s1">&#39;able&#39;</span><span class="p">,</span> <span class="s1">&#39;car&#39;</span><span class="p">,</span> <span class="s1">&#39;broke&#39;</span><span class="p">,</span> <span class="s1">&#39;less&#39;</span><span class="p">,</span> <span class="s1">&#39;even&#39;</span><span class="p">,</span> <span class="s1">&#39;waste&#39;</span><span class="p">,</span> <span class="s1">&#39;disappointed&#39;</span><span class="p">,</span> 
+      <span class="s1">&#39;work&#39;</span><span class="p">,</span> <span class="s1">&#39;product&#39;</span><span class="p">,</span> <span class="s1">&#39;money&#39;</span><span class="p">,</span> <span class="s1">&#39;would&#39;</span><span class="p">,</span> <span class="s1">&#39;return&#39;</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[35]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">significant_words</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[35]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>20</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>For each review, we will use the <strong>word_count</strong> column and trim out all words that are <strong>not</strong> in the <strong>significant_words</strong> list above. We will use the <a href="https://dato.com/products/create/docs/generated/graphlab.SArray.dict_trim_by_keys.html">SArray dictionary trim by keys functionality</a>. Note that we are performing this on both the training and test set.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[36]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">train_data</span><span class="p">[</span><span class="s1">&#39;word_count_subset&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_data</span><span class="p">[</span><span class="s1">&#39;word_count&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dict_trim_by_keys</span><span class="p">(</span><span class="n">significant_words</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">test_data</span><span class="p">[</span><span class="s1">&#39;word_count_subset&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">test_data</span><span class="p">[</span><span class="s1">&#39;word_count&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dict_trim_by_keys</span><span class="p">(</span><span class="n">significant_words</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's see what the first example of the dataset looks like:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[37]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">train_data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;review&#39;</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[37]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&#39;it came early and was not disappointed. i love planet wise bags and now my wipe holder. it keps my osocozy wipes moist and does not leak. highly recommend it.&#39;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The <strong>word_count</strong> column had been working with before looks like the following:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[38]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="n">train_data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;word_count&#39;</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>{&#39;and&#39;: 3L, &#39;love&#39;: 1L, &#39;it&#39;: 3L, &#39;highly&#39;: 1L, &#39;osocozy&#39;: 1L, &#39;bags&#39;: 1L, &#39;leak&#39;: 1L, &#39;moist&#39;: 1L, &#39;does&#39;: 1L, &#39;recommend&#39;: 1L, &#39;was&#39;: 1L, &#39;wipes&#39;: 1L, &#39;disappointed&#39;: 1L, &#39;early&#39;: 1L, &#39;not&#39;: 2L, &#39;now&#39;: 1L, &#39;holder&#39;: 1L, &#39;wipe&#39;: 1L, &#39;keps&#39;: 1L, &#39;wise&#39;: 1L, &#39;i&#39;: 1L, &#39;planet&#39;: 1L, &#39;my&#39;: 2L, &#39;came&#39;: 1L}
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Since we are only working with a subset of these words, the column <strong>word_count_subset</strong> is a subset of the above dictionary. In this example, only 2 <code>significant words</code> are present in this review.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[39]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="n">train_data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;word_count_subset&#39;</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>{&#39;love&#39;: 1L, &#39;disappointed&#39;: 1L}
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Train-a-logistic-regression-model-on-a-subset-of-data">Train a logistic regression model on a subset of data<a class="anchor-link" href="#Train-a-logistic-regression-model-on-a-subset-of-data">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We will now build a classifier with <strong>word_count_subset</strong> as the feature and <strong>sentiment</strong> as the target.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[40]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">simple_model</span> <span class="o">=</span> <span class="n">graphlab</span><span class="o">.</span><span class="n">logistic_classifier</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span>
+                                                   <span class="n">target</span> <span class="o">=</span> <span class="s1">&#39;sentiment&#39;</span><span class="p">,</span>
+                                                   <span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;word_count_subset&#39;</span><span class="p">],</span>
+                                                   <span class="n">validation_set</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">simple_model</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>Logistic regression:</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>--------------------------------------------------------</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>Number of examples          : 133416</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>Number of classes           : 2</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>Number of feature columns   : 1</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>Number of unpacked features : 20</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>Number of coefficients    : 21</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>Starting Newton Method</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>--------------------------------------------------------</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>+-----------+----------+--------------+-------------------+</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>| Iteration | Passes   | Elapsed Time | Training-accuracy |</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>+-----------+----------+--------------+-------------------+</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>| 1         | 2        | 0.290366     | 0.862917          |</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>| 2         | 3        | 0.426287     | 0.865713          |</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>| 3         | 4        | 0.552216     | 0.866478          |</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>| 4         | 5        | 0.688713     | 0.866748          |</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>| 5         | 6        | 0.847620     | 0.866815          |</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>| 6         | 7        | 0.978545     | 0.866815          |</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>+-----------+----------+--------------+-------------------+</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre>SUCCESS: Optimal solution found.</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<pre></pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[40]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>Class                          : LogisticClassifier
+
+Schema
+------
+Number of coefficients         : 21
+Number of examples             : 133416
+Number of classes              : 2
+Number of feature columns      : 1
+Number of unpacked features    : 20
+
+Hyperparameters
+---------------
+L1 penalty                     : 0.0
+L2 penalty                     : 0.01
+
+Training Summary
+----------------
+Solver                         : newton
+Solver iterations              : 6
+Solver status                  : SUCCESS: Optimal solution found.
+Training time (sec)            : 1.012
+
+Settings
+--------
+Log-likelihood                 : 44323.7254
+
+Highest Positive Coefficients
+-----------------------------
+word_count_subset[loves]       : 1.6773
+word_count_subset[perfect]     : 1.5145
+word_count_subset[love]        : 1.3654
+(intercept)                    : 1.2995
+word_count_subset[easy]        : 1.1937
+
+Lowest Negative Coefficients
+----------------------------
+word_count_subset[disappointed] : -2.3551
+word_count_subset[return]      : -2.1173
+word_count_subset[waste]       : -2.0428
+word_count_subset[broke]       : -1.658
+word_count_subset[money]       : -0.8979</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can compute the classification accuracy using the <code>get_classification_accuracy</code> function you implemented earlier.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[41]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">simple_model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">test_data</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[41]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;accuracy&#39;: 0.8693004559635229,
+ &#39;auc&#39;: 0.828809641857926,
+ &#39;confusion_matrix&#39;: Columns:
+ 	target_label	int
+ 	predicted_label	int
+ 	count	int
+ 
+ Rows: 4
+ 
+ Data:
+ +--------------+-----------------+-------+
+ | target_label | predicted_label | count |
+ +--------------+-----------------+-------+
+ |      1       |        -1       |  469  |
+ |      -1      |        -1       |  1353 |
+ |      -1      |        1        |  3888 |
+ |      1       |        1        | 27626 |
+ +--------------+-----------------+-------+
+ [4 rows x 3 columns],
+ &#39;f1_score&#39;: 0.9269070106863058,
+ &#39;log_loss&#39;: 0.3296871005223945,
+ &#39;precision&#39;: 0.8766262613441645,
+ &#39;recall&#39;: 0.983306638191849,
+ &#39;roc_curve&#39;: Columns:
+ 	threshold	float
+ 	fpr	float
+ 	tpr	float
+ 	p	int
+ 	n	int
+ 
+ Rows: 100001
+ 
+ Data:
+ +-----------+----------------+----------------+-------+------+
+ | threshold |      fpr       |      tpr       |   p   |  n   |
+ +-----------+----------------+----------------+-------+------+
+ |    0.0    |      1.0       |      1.0       | 28095 | 5241 |
+ |   1e-05   | 0.999809196718 | 0.999964406478 | 28095 | 5241 |
+ |   2e-05   | 0.999809196718 | 0.999964406478 | 28095 | 5241 |
+ |   3e-05   | 0.999809196718 | 0.999928812956 | 28095 | 5241 |
+ |   4e-05   | 0.999809196718 | 0.999928812956 | 28095 | 5241 |
+ |   5e-05   | 0.999809196718 | 0.999928812956 | 28095 | 5241 |
+ |   6e-05   | 0.999809196718 | 0.999928812956 | 28095 | 5241 |
+ |   7e-05   | 0.999809196718 | 0.999928812956 | 28095 | 5241 |
+ |   8e-05   | 0.999809196718 | 0.999928812956 | 28095 | 5241 |
+ |   9e-05   | 0.999809196718 | 0.999928812956 | 28095 | 5241 |
+ +-----------+----------------+----------------+-------+------+
+ [100001 rows x 5 columns]
+ Note: Only the head of the SFrame is printed.
+ You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns.}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[42]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">get_classification_accuracy</span><span class="p">(</span><span class="n">simple_model</span><span class="p">,</span> <span class="n">test_data</span><span class="p">,</span> <span class="n">test_data</span><span class="p">[</span><span class="s1">&#39;sentiment&#39;</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[42]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0.8693004559635229</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now, we will inspect the weights (coefficients) of the <strong>simple_model</strong>:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[43]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="n">simple_model</span><span class="o">.</span><span class="n">coefficients</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>+-------------------+--------------+-------+-----------------+-----------------+
+|        name       |    index     | class |      value      |      stderr     |
++-------------------+--------------+-------+-----------------+-----------------+
+|    (intercept)    |     None     |   1   |   1.2995449552  | 0.0120888541331 |
+| word_count_subset | disappointed |   1   |  -2.35509250061 | 0.0504149888557 |
+| word_count_subset |     love     |   1   |  1.36543549368  | 0.0303546295109 |
+| word_count_subset |     well     |   1   |  0.504256746398 |  0.021381300631 |
+| word_count_subset |   product    |   1   | -0.320555492996 | 0.0154311321362 |
+| word_count_subset |    loves     |   1   |  1.67727145556  | 0.0482328275384 |
+| word_count_subset |    little    |   1   |  0.520628636025 | 0.0214691475665 |
+| word_count_subset |     work     |   1   | -0.621700012425 | 0.0230330597946 |
+| word_count_subset |     easy     |   1   |  1.19366189833  |  0.029288869202 |
+| word_count_subset |    great     |   1   |  0.94469126948  | 0.0209509926591 |
++-------------------+--------------+-------+-----------------+-----------------+
+[21 rows x 5 columns]
+Note: Only the head of the SFrame is printed.
+You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns.
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's sort the coefficients (in descending order) by the <strong>value</strong> to obtain the coefficients with the most positive effect on the sentiment.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[44]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">simple_model_weights</span> <span class="o">=</span> <span class="n">simple_model</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Quiz Question</strong>: Consider the coefficients of <strong>simple_model</strong>. There should be 21 of them, an intercept term + one for each word in <strong>significant_words</strong>. How many of the 20 coefficients (corresponding to the 20 <strong>significant_words</strong> and <em>excluding the intercept term</em>) are positive for the <code>simple_model</code>?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[45]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">simple_model_positive_words</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">simple_model_weights</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="n">simple_model_weights</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">simple_model_weights</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;(intercept)&#39;</span><span class="p">:</span>
+        <span class="c1">#print simple_model_weights[&#39;value&#39;][i], simple_model_weights[&#39;name&#39;][i], simple_model_weights[&#39;class&#39;][i], simple_model_weights[&#39;index&#39;][i]</span>
+        <span class="n">simple_model_positive_words</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">simple_model_weights</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+        
+<span class="k">print</span> <span class="n">count</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>10
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Quiz Question</strong>: Are the positive words in the <strong>simple_model</strong> (let us call them <code>positive_significant_words</code>) also positive words in the <strong>sentiment_model</strong>?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[50]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">sentiment_model_weights</span> <span class="o">=</span> <span class="n">sentiment_model</span><span class="o">.</span><span class="n">coefficients</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">sentiment_model_weights</span><span class="p">[</span><span class="s1">&#39;positive_negative_weights&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sentiment_model_weights</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;positive&#39;</span> <span class="k">if</span> <span class="n">x</span><span class="o">&gt;=</span><span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;negative&#39;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">sentiment_model_weights</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">key_columns</span><span class="o">=</span><span class="s1">&#39;positive_negative_weights&#39;</span><span class="p">,</span>
+                         <span class="n">operations</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;count&#39;</span><span class="p">:</span> <span class="n">graphlab</span><span class="o">.</span><span class="n">aggregate</span><span class="o">.</span><span class="n">COUNT</span><span class="p">()})</span>
+<span class="n">positive_name</span> <span class="o">=</span> <span class="n">sentiment_model_weights</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">][</span><span class="n">sentiment_model_weights</span><span class="p">[</span><span class="s1">&#39;positive_negative_weights&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;positive&#39;</span><span class="p">]</span>
+<span class="n">negative_name</span> <span class="o">=</span> <span class="n">sentiment_model_weights</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">][</span><span class="n">sentiment_model_weights</span><span class="p">[</span><span class="s1">&#39;positive_negative_weights&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;negative&#39;</span><span class="p">]</span>
+<span class="k">print</span> <span class="s1">&#39;lenght of sentiment_model_weights: &#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">sentiment_model_weights</span><span class="p">)</span>
+<span class="k">print</span> <span class="s1">&#39;lenght of positive_name: &#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">positive_name</span><span class="p">)</span>
+<span class="k">print</span> <span class="s1">&#39;lenght of negative_name: &#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">negative_name</span><span class="p">)</span>
+<span class="k">print</span> <span class="s1">&#39;lenght of positive_name plus lenght of negative_name: &#39;</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">positive_name</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">negative_name</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>+---------------------------+-------+
+| positive_negative_weights | count |
++---------------------------+-------+
+|          positive         | 68419 |
+|          negative         | 53294 |
++---------------------------+-------+
+[2 rows x 2 columns]
+
+lenght of sentiment_model_weights:  121713
+lenght of positive_name:  68419
+lenght of negative_name:  53294
+lenght of positive_name plus lenght of negative_name:  121713
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[51]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># for i in simple_model_positive_words:</span>
+<span class="c1">#     if i in list(positive_name):</span>
+<span class="c1">#         print &#39;True&#39;</span>
+<span class="c1">#     else:</span>
+<span class="c1">#         print &#39;False&#39;</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Comparing-models">Comparing models<a class="anchor-link" href="#Comparing-models">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We will now compare the accuracy of the <strong>sentiment_model</strong> and the <strong>simple_model</strong> using the <code>get_classification_accuracy</code> method you implemented above.</p>
+<p>First, compute the classification accuracy of the <strong>sentiment_model</strong> on the <strong>train_data</strong>:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[52]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">get_classification_accuracy</span><span class="p">(</span><span class="n">sentiment_model</span><span class="p">,</span><span class="n">train_data</span><span class="p">,</span><span class="n">train_data</span><span class="p">[</span><span class="s1">&#39;sentiment&#39;</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[52]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0.979440247046831</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now, compute the classification accuracy of the <strong>simple_model</strong> on the <strong>train_data</strong>:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[53]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">get_classification_accuracy</span><span class="p">(</span><span class="n">simple_model</span><span class="p">,</span><span class="n">train_data</span><span class="p">,</span><span class="n">train_data</span><span class="p">[</span><span class="s1">&#39;sentiment&#39;</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[53]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0.8668150746537147</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Quiz Question</strong>: Which model (<strong>sentiment_model</strong> or <strong>simple_model</strong>) has higher accuracy on the TRAINING set?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now, we will repeat this exercise on the <strong>test_data</strong>. Start by computing the classification accuracy of the <strong>sentiment_model</strong> on the <strong>test_data</strong>:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[54]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">get_classification_accuracy</span><span class="p">(</span><span class="n">sentiment_model</span><span class="p">,</span><span class="n">test_data</span><span class="p">,</span><span class="n">test_data</span><span class="p">[</span><span class="s1">&#39;sentiment&#39;</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[54]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0.9145368370530358</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Next, we will compute the classification accuracy of the <strong>simple_model</strong> on the <strong>test_data</strong>:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[55]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">get_classification_accuracy</span><span class="p">(</span><span class="n">simple_model</span><span class="p">,</span><span class="n">test_data</span><span class="p">,</span><span class="n">test_data</span><span class="p">[</span><span class="s1">&#39;sentiment&#39;</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[55]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0.8693004559635229</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Quiz Question</strong>: Which model (<strong>sentiment_model</strong> or <strong>simple_model</strong>) has higher accuracy on the TEST set?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Baseline:-Majority-class-prediction">Baseline: Majority class prediction<a class="anchor-link" href="#Baseline:-Majority-class-prediction">&#182;</a></h2><p>It is quite common to use the <strong>majority class classifier</strong> as the a baseline (or reference) model for comparison with your classifier model. The majority classifier model predicts the majority class for all data points. At the very least, you should healthily beat the majority class classifier, otherwise, the model is (usually) pointless.</p>
+<p>What is the majority class in the <strong>train_data</strong>?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[56]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">num_positive</span>  <span class="o">=</span> <span class="p">(</span><span class="n">train_data</span><span class="p">[</span><span class="s1">&#39;sentiment&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">num_negative</span> <span class="o">=</span> <span class="p">(</span><span class="n">train_data</span><span class="p">[</span><span class="s1">&#39;sentiment&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="k">print</span> <span class="n">num_positive</span>
+<span class="k">print</span> <span class="n">num_negative</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>112164
+21252
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now compute the accuracy of the majority class classifier on <strong>test_data</strong>.</p>
+<p><strong>Quiz Question</strong>: Enter the accuracy of the majority class classifier model on the <strong>test_data</strong>. Round your answer to two decimal places (e.g. 0.76).</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[57]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="p">(</span><span class="n">test_data</span><span class="p">[</span><span class="s1">&#39;sentiment&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">test_data</span><span class="p">[</span><span class="s1">&#39;sentiment&#39;</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>0.842782577394
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Quiz Question</strong>: Is the <strong>sentiment_model</strong> definitely better than the majority class classifier (the baseline)?</p>
+
+</div>
+</div>
+</div>
+ 
+
+
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: 'center'," +
+        "    displayIndent: '0em'," +
+        "    showMathMenu: true," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['$','$'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        " linebreaks: { automatic: true, width: '95% container' }, " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+        "    } " +
+        "}); ";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+
+          </section>
+      </div>
+      </article>
+  </main>
+      <!-- TODO : Body class -->
+    <div id="body-class" style="display: none;" class=""></div>
+  
+    <footer id="footer">
+      <div class="inner">
+        <section class="credits">
+          <span class="credits-theme">Theme <a href="https://github.com/arulrajnet/attila" rel="nofollow">Attila</a></span>
+          <span class="credits-software">Published with <a href="https://github.com/getpelican/pelican" rel="nofollow">Pelican</a></span>
+        </section>
+      </div>
+    </footer>
+  </section>
+
+  <script type="text/javascript" src="https://arslan-san.github.io/theme/js/script.js"></script>
+  
+<script type="text/javascript">
+    var disqus_shortname = 'arslanblog';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+</body>
+</html>
