@@ -1931,7 +1931,7 @@ You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns
 <h1 id="Identifying-topic-themes-by-top-words">Identifying topic themes by top words<a class="anchor-link" href="#Identifying-topic-themes-by-top-words">&#182;</a></h1><p>We'll start by trying to identify the topics learned by our model with some major themes. As a preliminary check on the results of applying this method, it is reasonable to hope that the model has been able to learn topics that correspond to recognizable categories. In order to do this, we must first recall what exactly a 'topic' is in the context of LDA.</p>
 <p>In the video lectures on LDA we learned that a topic is a probability distribution over words in the vocabulary; that is, each topic assigns a particular probability to every one of the unique words that appears in our data. Different topics will assign different probabilities to the same word: for instance, a topic that ends up describing science and technology articles might place more probability on the word 'university' than a topic that describes sports or politics. Looking at the highest probability words in each topic will thus give us a sense of its major themes. Ideally we would find that each topic is identifiable with some clear theme <em>and</em> that all the topics are relatively distinct.</p>
 <p>We can use the GraphLab Create function get_topics() to view the top words (along with their associated probabilities) from each topic.</p>
-<p><strong>Quiz Question:</strong> Identify the top 3 most probable words for the first topic.</p>
+<p><strong>Question:</strong> Identify the top 3 most probable words for the first topic.</p>
 
 </div>
 </div>
@@ -1978,7 +1978,7 @@ You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong> Quiz Question:</strong> What is the sum of the probabilities assigned to the top 50 words in the 3rd topic?</p>
+<p><strong>Question:</strong> What is the sum of the probabilities assigned to the top 50 words in the 3rd topic?</p>
 
 </div>
 </div>
@@ -2012,19 +2012,6 @@ You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns
 
 </div>
 
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span> 
-</pre></div>
-
-    </div>
 </div>
 </div>
 
@@ -2425,19 +2412,6 @@ You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns
 </div>
 
 </div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span> 
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -2515,7 +2489,7 @@ You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Quiz Question:</strong> What is the topic most closely associated with the article about former US President George W. Bush? Use the average results from 100 topic predictions.</p>
+<p><strong>Question:</strong> What is the topic most closely associated with the article about former US President George W. Bush? Use the average results from 100 topic predictions.</p>
 
 </div>
 </div>
@@ -2570,7 +2544,7 @@ You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Quiz Question:</strong> What are the top 3 topics corresponding to the article about English football (soccer) player Steven Gerrard? Use the average results from 100 topic predictions.</p>
+<p><strong>Question:</strong> What are the top 3 topics corresponding to the article about English football (soccer) player Steven Gerrard? Use the average results from 100 topic predictions.</p>
 
 </div>
 </div>
@@ -3027,8 +3001,8 @@ You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns
 <p>Notice that that there is no overlap between the two sets of top 10 nearest neighbors. This doesn't necessarily mean that one representation is better or worse than the other, but rather that they are picking out different features of the documents.</p>
 <p>With TF-IDF, documents are distinguished by the frequency of uncommon words. Since similarity is defined based on the specific words used in the document, documents that are "close" under TF-IDF tend to be similar in terms of specific details. This is what we see in the example: the top 10 nearest neighbors are all economists from the US, UK, or Canada.</p>
 <p>Our LDA representation, on the other hand, defines similarity between documents in terms of their topic distributions. This means that documents can be "close" if they share similar themes, even though they may not share many of the same keywords. For the article on Paul Krugman, we expect the most important topics to be 'American college and politics' and 'science and research'. As a result, we see that the top 10 nearest neighbors are academics from a wide variety of fields, including literature, anthropology, and religious studies.</p>
-<p><strong>Quiz Question:</strong> Using the TF-IDF representation, compute the 5000 nearest neighbors for American baseball player Alex Rodriguez. For what value of k is Mariano Rivera the k-th nearest neighbor to Alex Rodriguez? (Hint: Once you have a list of the nearest neighbors, you can use <code>mylist.index(value)</code> to find the index of the first instance of <code>value</code> in <code>mylist</code>.)</p>
-<p><strong>Quiz Question:</strong> Using the LDA representation, compute the 5000 nearest neighbors for American baseball player Alex Rodriguez. For what value of k is Mariano Rivera the k-th nearest neighbor to Alex Rodriguez? (Hint: Once you have a list of the nearest neighbors, you can use <code>mylist.index(value)</code> to find the index of the first instance of <code>value</code> in <code>mylist</code>.)</p>
+<p><strong>Question:</strong> Using the TF-IDF representation, compute the 5000 nearest neighbors for American baseball player Alex Rodriguez. For what value of k is Mariano Rivera the k-th nearest neighbor to Alex Rodriguez? (Hint: Once you have a list of the nearest neighbors, you can use <code>mylist.index(value)</code> to find the index of the first instance of <code>value</code> in <code>mylist</code>.)</p>
+<p><strong>Question:</strong> Using the LDA representation, compute the 5000 nearest neighbors for American baseball player Alex Rodriguez. For what value of k is Mariano Rivera the k-th nearest neighbor to Alex Rodriguez? (Hint: Once you have a list of the nearest neighbors, you can use <code>mylist.index(value)</code> to find the index of the first instance of <code>value</code> in <code>mylist</code>.)</p>
 
 </div>
 </div>
@@ -3273,7 +3247,7 @@ You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns
 <h1 id="Understanding-the-role-of-LDA-model-hyperparameters">Understanding the role of LDA model hyperparameters<a class="anchor-link" href="#Understanding-the-role-of-LDA-model-hyperparameters">&#182;</a></h1><p>Finally, we'll take a look at the effect of the LDA model hyperparameters alpha and gamma on the characteristics of our fitted model. Recall that alpha is a parameter of the prior distribution over topic weights in each document, while gamma is a parameter of the prior distribution over word weights in each topic.</p>
 <p>In the video lectures, we saw that alpha and gamma can be thought of as smoothing parameters when we compute how much each document "likes" a topic (in the case of alpha) or how much each topic "likes" a word (in the case of gamma). In both cases, these parameters serve to reduce the differences across topics or words in terms of these calculated preferences; alpha makes the document preferences "smoother" over topics, and gamma makes the topic preferences "smoother" over words.</p>
 <p>Our goal in this section will be to understand how changing these parameter values affects the characteristics of the resulting topic model.</p>
-<p><strong>Quiz Question:</strong> What was the value of alpha used to fit our original topic model?</p>
+<p><strong>Question:</strong> What was the value of alpha used to fit our original topic model?</p>
 
 </div>
 </div>
@@ -3314,7 +3288,7 @@ You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Quiz Question:</strong> What was the value of gamma used to fit our original topic model? Remember that GraphLab Create uses "beta" instead of "gamma" to refer to the hyperparameter that influences topic distributions over words.</p>
+<p><strong>Question:</strong> What was the value of gamma used to fit our original topic model? Remember that GraphLab Create uses "beta" instead of "gamma" to refer to the hyperparameter that influences topic distributions over words.</p>
 
 </div>
 </div>
@@ -3449,7 +3423,7 @@ You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Here we can clearly see the smoothing enforced by the alpha parameter - notice that when alpha is low most of the weight in the topic distribution for this article goes to a single topic, but when alpha is high the weight is much more evenly distributed across the topics.</p>
-<p><strong>Quiz Question:</strong> How many topics are assigned a weight greater than 0.3 or less than 0.05 for the article on Paul Krugman in the <strong>low alpha</strong> model?  Use the average results from 100 topic predictions.</p>
+<p><strong>Question:</strong> How many topics are assigned a weight greater than 0.3 or less than 0.05 for the article on Paul Krugman in the <strong>low alpha</strong> model?  Use the average results from 100 topic predictions.</p>
 
 </div>
 </div>
@@ -3510,7 +3484,7 @@ You can use sf.materialize() to force materialization.
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Quiz Question:</strong> How many topics are assigned a weight greater than 0.3 or less than 0.05 for the article on Paul Krugman in the <strong>high alpha</strong> model? Use the average results from 100 topic predictions.</p>
+<p><strong>Question:</strong> How many topics are assigned a weight greater than 0.3 or less than 0.05 for the article on Paul Krugman in the <strong>high alpha</strong> model? Use the average results from 100 topic predictions.</p>
 
 </div>
 </div>
@@ -3676,7 +3650,7 @@ You can use sf.materialize() to force materialization.
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Quiz Question:</strong> For each topic of the <strong>low gamma model</strong>, compute the number of words required to make a list with total probability 0.5. What is the average number of words required across all topics? (HINT: use the get_topics() function from GraphLab Create with the cdf_cutoff argument).</p>
+<p><strong>Question:</strong> For each topic of the <strong>low gamma model</strong>, compute the number of words required to make a list with total probability 0.5. What is the average number of words required across all topics? (HINT: use the get_topics() function from GraphLab Create with the cdf_cutoff argument).</p>
 
 </div>
 </div>
@@ -3735,7 +3709,7 @@ You can use sf.materialize() to force materialization.
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Quiz Question:</strong> For each topic of the <strong>high gamma model</strong>, compute the number of words required to make a list with total probability 0.5. What is the average number of words required across all topics? (HINT: use the get_topics() function from GraphLab Create with the cdf_cutoff argument).</p>
+<p><strong>Question:</strong> For each topic of the <strong>high gamma model</strong>, compute the number of words required to make a list with total probability 0.5. What is the average number of words required across all topics? (HINT: use the get_topics() function from GraphLab Create with the cdf_cutoff argument).</p>
 
 </div>
 </div>

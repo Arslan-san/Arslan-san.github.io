@@ -1455,19 +1455,6 @@ You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns
 </div>
 
 </div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span> 
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -1581,7 +1568,7 @@ feature_matrix_valid, sentiment_valid = arrays['feature_matrix_valid'], arrays['
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong> Quiz Question</strong>: In Module 3 assignment, there were 194 features (an intercept + one feature for each of the 193 important words). In this assignment, we will use stochastic gradient ascent to train the classifier using logistic regression. How does the changing the solver to stochastic gradient ascent affect the number of features?</p>
+<p><strong>Question</strong>: In Module 3 assignment, there were 194 features (an intercept + one feature for each of the 193 important words). In this assignment, we will use stochastic gradient ascent to train the classifier using logistic regression. How does the changing the solver to stochastic gradient ascent affect the number of features?</p>
 
 </div>
 </div>
@@ -1775,23 +1762,10 @@ and $y_i$ in the training data using <code>sentiment_train[i:i+1]</code>. We can
 </div>
 
 </div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span> 
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong> Quiz Question:</strong> The code block above computed $\partial\ell_{\color{red}{i}}(\mathbf{w})/{\partial w_j}$ for <code>j = 1</code> and <code>i = 10</code>.  Is $\partial\ell_{\color{red}{i}}(\mathbf{w})/{\partial w_j}$ a scalar or a 194-dimensional vector?</p>
+<p><strong>Question:</strong> The code block above computed $\partial\ell_{\color{red}{i}}(\mathbf{w})/{\partial w_j}$ for <code>j = 1</code> and <code>i = 10</code>.  Is $\partial\ell_{\color{red}{i}}(\mathbf{w})/{\partial w_j}$ a scalar or a 194-dimensional vector?</p>
 
 </div>
 </div>
@@ -1858,10 +1832,10 @@ and $y_i$ in the training data using <code>sentiment_train[i:i+B]</code>.</p>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong> Quiz Question:</strong> The code block above computed 
+<p><strong>Question:</strong> The code block above computed 
 $\color{red}{\sum_{s = i}^{i+B}}\partial\ell_{s}(\mathbf{w})/{\partial w_j}$ 
 for <code>j = 10</code>, <code>i = 10</code>, and <code>B = 10</code>. Is this a scalar or a 194-dimensional vector?</p>
-<p><strong> Quiz Question:</strong> For what value of <code>B</code> is the term
+<p><strong> Question:</strong> For what value of <code>B</code> is the term
 $\color{red}{\sum_{s = 1}^{B}}\partial\ell_{s}(\mathbf{w})/\partial w_j$
 the same as the full gradient
 $\partial\ell(\mathbf{w})/{\partial w_j}$? Hint: consider the training set we are using now.</p>
@@ -2057,39 +2031,6 @@ Test passed!
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[20]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="mf">5e-1</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[20]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>0.5</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 <div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
@@ -2213,7 +2154,7 @@ Iteration 199: Average log likelihood (of data points in batch [00000:47780]) = 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Quiz Question</strong>. When you set <code>batch_size = len(feature_matrix_train)</code>, as each iteration passes, how does the average log likelihood in the batch change?</p>
+<p><strong>Question</strong>. When you set <code>batch_size = len(feature_matrix_train)</code>, as each iteration passes, how does the average log likelihood in the batch change?</p>
 <ul>
 <li>Increases </li>
 <li>Decreases</li>
@@ -2244,7 +2185,7 @@ $$</p>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Quiz Question</strong> Suppose that we run stochastic gradient ascent with a batch size of 100. How many gradient updates are performed at the end of two passes over a dataset consisting of 50000 data points?</p>
+<p><strong>Question</strong> Suppose that we run stochastic gradient ascent with a batch size of 100. How many gradient updates are performed at the end of two passes over a dataset consisting of 50000 data points?</p>
 
 </div>
 </div>
@@ -2644,7 +2585,7 @@ Iteration 95399: Average log likelihood (of data points in batch [47600:47700]) 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Quiz Question</strong>: In the figure above, how many passes does batch gradient ascent need to achieve a similar log likelihood as stochastic gradient ascent?</p>
+<p><strong>Question</strong>: In the figure above, how many passes does batch gradient ascent need to achieve a similar log likelihood as stochastic gradient ascent?</p>
 <ol>
 <li>It's always better</li>
 <li>10 passes</li>
@@ -3079,7 +3020,7 @@ Iteration 4769: Average log likelihood (of data points in batch [47600:47700]) =
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Quiz Question</strong>: Which of the following is the worst step size? Pick the step size that results in the lowest log likelihood in the end.</p>
+<p><strong>Question</strong>: Which of the following is the worst step size? Pick the step size that results in the lowest log likelihood in the end.</p>
 <ol>
 <li>1e-2</li>
 <li>1e-1</li>
@@ -3094,7 +3035,7 @@ Iteration 4769: Average log likelihood (of data points in batch [47600:47700]) =
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Quiz Question</strong>: Which of the following is the best step size? Pick the step size that results in the highest log likelihood in the end.</p>
+<p><strong>Question</strong>: Which of the following is the best step size? Pick the step size that results in the highest log likelihood in the end.</p>
 <ol>
 <li>1e-4</li>
 <li>1e-2</li>
@@ -3105,19 +3046,6 @@ Iteration 4769: Average log likelihood (of data points in batch [47600:47700]) =
 
 </div>
 </div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span> 
-</pre></div>
-
-    </div>
-</div>
-</div>
-
 </div>
  
 

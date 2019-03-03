@@ -1689,20 +1689,6 @@ $$</p>
 </div>
 
 </div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[100]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># labels_in_node = graphlab.SArray([-1, -1, 1, 1, 1])</span>
-<span class="c1"># data_weights = graphlab.SArray([1., 2., .5, 1., 1.])</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -2502,7 +2488,7 @@ Rows: 37224
 <li>The points with higher weights are the ones that are more important during the training process of the weighted decision tree.</li>
 <li>The points with zero weights are basically ignored during training.</li>
 </ul>
-<p><strong>Quiz Question</strong>: Will you get the same model as <code>small_data_decision_tree_subset_20</code> if you trained a decision tree with only the 20 data points with non-zero weights from the set of points in <code>subset_20</code>?</p>
+<p><strong>Question</strong>: Will you get the same model as <code>small_data_decision_tree_subset_20</code> if you trained a decision tree with only the 20 data points with non-zero weights from the set of points in <code>subset_20</code>?</p>
 
 </div>
 </div>
@@ -2594,19 +2580,6 @@ Rows: 37224
         <span class="n">alpha</span> <span class="o">=</span> <span class="p">(</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">adjustment</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">alpha</span><span class="p">))</span>   
     
     <span class="k">return</span> <span class="n">weights</span><span class="p">,</span> <span class="n">tree_stumps</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span> 
 </pre></div>
 
     </div>
@@ -3157,7 +3130,7 @@ $$</p>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Quiz Question:</strong> Are the weights monotonically decreasing, monotonically increasing, or neither?</p>
+<p><strong>Question:</strong> Are the weights monotonically decreasing, monotonically increasing, or neither?</p>
 <p><strong>Reminder</strong>: Stump weights ($\mathbf{\hat{w}}$) tell you how important each stump is while making predictions with the entire boosted ensemble.</p>
 
 </div>
@@ -3702,7 +3675,7 @@ Iteration 30, training error = 0.378734150011
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Quiz Question</strong>: Which of the following best describes a <strong>general trend in accuracy</strong> as we add more and more components? Answer based on the 30 components learned so far.</p>
+<p><strong>Question</strong>: Which of the following best describes a <strong>general trend in accuracy</strong> as we add more and more components? Answer based on the 30 components learned so far.</p>
 <ol>
 <li>Training error goes down monotonically, i.e. the training error reduces with each iteration but never increases.</li>
 <li>Training error goes down in general, with some ups and downs in the middle.</li>
@@ -3835,23 +3808,10 @@ Iteration 30, test error = 0.376777251185
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong> Quiz Question:</strong> From this plot (with 30 trees), is there massive overfitting as the # of iterations increases?</p>
+<p><strong> Question:</strong> From this plot (with 30 trees), is there massive overfitting as the # of iterations increases?</p>
 
 </div>
 </div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span> 
-</pre></div>
-
-    </div>
-</div>
-</div>
-
 </div>
  
 

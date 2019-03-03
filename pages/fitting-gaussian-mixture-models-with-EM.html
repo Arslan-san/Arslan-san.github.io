@@ -2056,7 +2056,7 @@ Iteration 22
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Quiz Question</strong>: What is the weight that EM assigns to the first component after running the above codeblock?</p>
+<p><strong>Question</strong>: What is the weight that EM assigns to the first component after running the above codeblock?</p>
 
 </div>
 </div>
@@ -2098,7 +2098,7 @@ Iteration 22
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Quiz Question</strong>: Using the same set of results, obtain the mean that EM assigns the second component. What is the mean in the first dimension?</p>
+<p><strong>Question</strong>: Using the same set of results, obtain the mean that EM assigns the second component. What is the mean in the first dimension?</p>
 
 </div>
 </div>
@@ -2140,7 +2140,7 @@ Iteration 22
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Quiz Question</strong>: Using the same set of results, obtain the covariance that EM assigns the third component. What is the variance in the first dimension?</p>
+<p><strong>Question</strong>: Using the same set of results, obtain the covariance that EM assigns the third component. What is the variance in the first dimension?</p>
 
 </div>
 </div>
@@ -3022,23 +3022,10 @@ Iteration 19
 <p>If we want to examine some example images from each cluster, we first need to consider how we can determine cluster assignments of the images from our algorithm output. This was easy with k-means - every data point had a 'hard' assignment to a single cluster, and all we had to do was find the cluster center closest to the data point of interest. Here, our clusters are described by probability distributions (specifically, Gaussians) rather than single points, and our model maintains some uncertainty about the cluster assignment of each observation.</p>
 <p>One way to phrase the question of cluster assignment for mixture models is as follows: how do we calculate the distance of a point from a distribution? Note that simple Euclidean distance might not be appropriate since (non-scaled) Euclidean distance doesn't take direction into account.  For example, if a Gaussian mixture component is very stretched in one direction but narrow in another, then a data point one unit away along the 'stretched' dimension has much higher probability (and so would be thought of as closer) than a data point one unit away along the 'narrow' dimension.</p>
 <p>In fact, the correct distance metric to use in this case is known as <a href="https://en.wikipedia.org/wiki/Mahalanobis_distance">Mahalanobis distance</a>. For a Gaussian distribution, this distance is proportional to the square root of the negative log likelihood. This makes sense intuitively - reducing the Mahalanobis distance of an observation from a cluster is equivalent to increasing that observation's probability according to the Gaussian that is used to represent the cluster. This also means that we can find the cluster assignment of an observation by taking the Gaussian component for which that observation scores highest. We'll use this fact to find the top examples that are 'closest' to each cluster.</p>
-<p><strong>Quiz Question:</strong> Calculate the likelihood (score) of the first image in our data set (<code>images[0]</code>) under each Gaussian component through a call to <code>multivariate_normal.pdf</code>.  Given these values, what cluster assignment should we make for this image? Hint: don't forget to use the cluster weights.</p>
+<p><strong>Question</strong> Calculate the likelihood (score) of the first image in our data set (<code>images[0]</code>) under each Gaussian component through a call to <code>multivariate_normal.pdf</code>.  Given these values, what cluster assignment should we make for this image? Hint: don't forget to use the cluster weights.</p>
 
 </div>
 </div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span> 
-</pre></div>
-
-    </div>
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
@@ -3191,10 +3178,10 @@ You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns
 
 
 
-<div id="b23e817a-d753-4f78-a056-084b97cb29d8"></div>
+<div id="1187c703-9fa8-493c-b8f6-2d243b5d3868"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#b23e817a-d753-4f78-a056-084b97cb29d8');
+var element = $('#1187c703-9fa8-493c-b8f6-2d243b5d3868');
 $("head").append($("<link/>").attr({
   rel:  "stylesheet",
   type: "text/css",
@@ -3243,10 +3230,10 @@ $("head").append($("<link/>").attr({
 
 
 
-<div id="4e556808-2f2b-4756-bf30-6fa30cc02fbc"></div>
+<div id="6d1d1c98-c883-490f-8ce9-c8da5594b01d"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#4e556808-2f2b-4756-bf30-6fa30cc02fbc');
+var element = $('#6d1d1c98-c883-490f-8ce9-c8da5594b01d');
 $("head").append($("<link/>").attr({
   rel:  "stylesheet",
   type: "text/css",
@@ -3295,10 +3282,10 @@ $("head").append($("<link/>").attr({
 
 
 
-<div id="3a33fe71-f888-4cd0-87d1-a02d866c6712"></div>
+<div id="bce5762c-8059-4e8a-8b42-700b5b5e3923"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#3a33fe71-f888-4cd0-87d1-a02d866c6712');
+var element = $('#bce5762c-8059-4e8a-8b42-700b5b5e3923');
 $("head").append($("<link/>").attr({
   rel:  "stylesheet",
   type: "text/css",
@@ -3347,10 +3334,10 @@ $("head").append($("<link/>").attr({
 
 
 
-<div id="2fcc4a42-2c45-448f-b006-6a7c0b97502f"></div>
+<div id="a23a4252-f7df-4862-85e0-b2c1aadb5823"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#2fcc4a42-2c45-448f-b006-6a7c0b97502f');
+var element = $('#a23a4252-f7df-4862-85e0-b2c1aadb5823');
 $("head").append($("<link/>").attr({
   rel:  "stylesheet",
   type: "text/css",
@@ -3402,35 +3389,6 @@ $("head").append($("<link/>").attr({
 
 </div>
 </div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Quiz Question:</strong> Which of the following images are <em>not</em> in the list of top 5 images in the first cluster?</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="chosen_images.png" alt="Images"></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span> 
-</pre></div>
-
-    </div>
-</div>
-</div>
-
 </div>
  
 
