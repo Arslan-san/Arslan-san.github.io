@@ -1,0 +1,2840 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+      <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+
+  <title>Hierarchical Clustering</title>
+
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="referrer" content="origin" />
+  <meta name="generator" content="Pelican" />
+  <link href="https://arslan-san.github.io" rel="canonical" />
+
+  <!-- Feed -->
+
+  <link href="https://arslan-san.github.io/theme/css/style.css" type="text/css" rel="stylesheet" />
+
+  <!-- Code highlight color scheme -->
+      <link href="https://arslan-san.github.io/theme/css/code_blocks/github.css" rel="stylesheet">
+
+
+  <!-- Custom fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Montserrat:400,300' rel='stylesheet' type='text/css' />
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css" />
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+
+    <link href="https://arslan-san.github.io/hierarchical_clustering.html" rel="canonical" />
+
+        <meta name="description" content="Explore a Divisive clustering a.k.a top-down approach, recursively bipartitioning the data using k-means.">
+
+        <meta name="author" content="Arslan">
+
+        <meta name="tags" content="python clustering hierarchical-clustering divisive-clustering text">
+
+        <meta property="og:locale" content="" />
+    <meta property="og:site_name" content="Arslan's Blog" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Arslan's Blog" />
+    <meta property="og:description" content="View the blog." />
+    <meta property="og:url" content="https://arslan-san.github.io" />
+      <meta name="og:image" content="https://arslan-san.github.io/theme/images/post-bg.jpg">
+
+  <meta property="og:type" content="article">
+            <meta property="article:author" content="https://arslan-san.github.io/author/arslan.html">
+  <meta property="og:url" content="https://arslan-san.github.io/hierarchical_clustering.html">
+  <meta property="og:title" content="Hierarchical Clustering">
+  <meta property="article:published_time" content="2019-03-03 00:00:00-08:00">
+            <meta property="og:description" content="Explore a Divisive clustering a.k.a top-down approach, recursively bipartitioning the data using k-means.">
+
+            <meta property="og:image" content="https://arslan-san.github.io/theme/images/post-bg.jpg">
+</head>
+<!-- TODO : Body class -->
+<body class="home-template">
+
+<nav id="menu">
+  <a class="close-button">Close</a>
+  <div class="nav-wrapper">
+    <p class="nav-label">Menu</p>
+    <ul>
+          <li><a href="/pages/about.html" role="presentation">About</a></li>
+          <li><a href="/pages/useful-resources.html" role="presentation">Useful Resources</a></li>
+          <li><a href="/pages/completed-coursera-courses.html" role="presentation">Completed Coursera Courses</a></li>
+          <li><a href="/pages/useful-ipython-notebooks.html" role="presentation">Useful Ipython Notebooks</a></li>
+
+                  <li class="nav-posts active" role="presentation"><a href="https://arslan-san.github.io/category/posts.html">posts</a></li>
+
+    </ul>
+  </div>
+</nav>
+    <!-- Progressbar -->
+    <div class="progress-container">
+        <span class="progress-bar"></span>
+    </div>
+
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    <header id="post-header" class="has-cover">
+      <div class="inner">
+        <nav id="navigation">
+            <span id="home-button" class="nav-button">
+                <a class="home-button" href = "../" href="https://arslan-san.github.io" title="Home"><i class="ic ic-arrow-left"></i> Home</a>
+            </span>
+          <span id="menu-button" class="nav-button">
+            <a class="menu-button"><i class="ic ic-menu"></i> Menu</a>
+          </span>
+        </nav>
+        <h1 class="post-title">Hierarchical Clustering</h1>
+        <!-- TODO : Proper class for headline -->
+        <span class="post-meta">
+                <a href="https://arslan-san.github.io/author/arslan.html">Arslan</a>
+            | <time datetime="Sun 03 March 2019">Sun 03 March 2019</time>
+        </span>
+        <!-- TODO : Modified check -->
+        
+            <div class="post-cover cover" style="background-image: url('https://arslan-san.github.io/theme/images/post-bg.jpg')">
+        
+      </div>
+    </header>    
+
+  <section id="wrapper">
+    <a class="hidden-close"></a>
+
+    <!-- Post content -->
+    <main class="content" role="main">
+        <article class="post">
+        <div class="inner">
+            <section class="post-content">
+                <style type="text/css">/*!
+*
+* IPython notebook
+*
+*/
+/* CSS font colors for translated ANSI escape sequences */
+/* The color values are a mix of
+   http://www.xcolors.net/dl/baskerville-ivorylight and
+   http://www.xcolors.net/dl/euphrasia */
+.ansi-black-fg {
+  color: #3E424D;
+}
+.ansi-black-bg {
+  background-color: #3E424D;
+}
+.ansi-black-intense-fg {
+  color: #282C36;
+}
+.ansi-black-intense-bg {
+  background-color: #282C36;
+}
+.ansi-red-fg {
+  color: #E75C58;
+}
+.ansi-red-bg {
+  background-color: #E75C58;
+}
+.ansi-red-intense-fg {
+  color: #B22B31;
+}
+.ansi-red-intense-bg {
+  background-color: #B22B31;
+}
+.ansi-green-fg {
+  color: #00A250;
+}
+.ansi-green-bg {
+  background-color: #00A250;
+}
+.ansi-green-intense-fg {
+  color: #007427;
+}
+.ansi-green-intense-bg {
+  background-color: #007427;
+}
+.ansi-yellow-fg {
+  color: #DDB62B;
+}
+.ansi-yellow-bg {
+  background-color: #DDB62B;
+}
+.ansi-yellow-intense-fg {
+  color: #B27D12;
+}
+.ansi-yellow-intense-bg {
+  background-color: #B27D12;
+}
+.ansi-blue-fg {
+  color: #208FFB;
+}
+.ansi-blue-bg {
+  background-color: #208FFB;
+}
+.ansi-blue-intense-fg {
+  color: #0065CA;
+}
+.ansi-blue-intense-bg {
+  background-color: #0065CA;
+}
+.ansi-magenta-fg {
+  color: #D160C4;
+}
+.ansi-magenta-bg {
+  background-color: #D160C4;
+}
+.ansi-magenta-intense-fg {
+  color: #A03196;
+}
+.ansi-magenta-intense-bg {
+  background-color: #A03196;
+}
+.ansi-cyan-fg {
+  color: #60C6C8;
+}
+.ansi-cyan-bg {
+  background-color: #60C6C8;
+}
+.ansi-cyan-intense-fg {
+  color: #258F8F;
+}
+.ansi-cyan-intense-bg {
+  background-color: #258F8F;
+}
+.ansi-white-fg {
+  color: #C5C1B4;
+}
+.ansi-white-bg {
+  background-color: #C5C1B4;
+}
+.ansi-white-intense-fg {
+  color: #A1A6B2;
+}
+.ansi-white-intense-bg {
+  background-color: #A1A6B2;
+}
+.ansi-default-inverse-fg {
+  color: #FFFFFF;
+}
+.ansi-default-inverse-bg {
+  background-color: #000000;
+}
+.ansi-bold {
+  font-weight: bold;
+}
+.ansi-underline {
+  text-decoration: underline;
+}
+/* The following styles are deprecated an will be removed in a future version */
+.ansibold {
+  font-weight: bold;
+}
+.ansi-inverse {
+  outline: 0.5px dotted;
+}
+/* use dark versions for foreground, to improve visibility */
+.ansiblack {
+  color: black;
+}
+.ansired {
+  color: darkred;
+}
+.ansigreen {
+  color: darkgreen;
+}
+.ansiyellow {
+  color: #c4a000;
+}
+.ansiblue {
+  color: darkblue;
+}
+.ansipurple {
+  color: darkviolet;
+}
+.ansicyan {
+  color: steelblue;
+}
+.ansigray {
+  color: gray;
+}
+/* and light for background, for the same reason */
+.ansibgblack {
+  background-color: black;
+}
+.ansibgred {
+  background-color: red;
+}
+.ansibggreen {
+  background-color: green;
+}
+.ansibgyellow {
+  background-color: yellow;
+}
+.ansibgblue {
+  background-color: blue;
+}
+.ansibgpurple {
+  background-color: magenta;
+}
+.ansibgcyan {
+  background-color: cyan;
+}
+.ansibggray {
+  background-color: gray;
+}
+div.cell {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  border-radius: 2px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border-width: 1px;
+  border-style: solid;
+  border-color: transparent;
+  width: 100%;
+  padding: 5px;
+  /* This acts as a spacer between cells, that is outside the border */
+  margin: 0px;
+  outline: none;
+  position: relative;
+  overflow: visible;
+}
+div.cell:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: transparent;
+}
+div.cell.jupyter-soft-selected {
+  border-left-color: #E3F2FD;
+  border-left-width: 1px;
+  padding-left: 5px;
+  border-right-color: #E3F2FD;
+  border-right-width: 1px;
+  background: #E3F2FD;
+}
+@media print {
+  div.cell.jupyter-soft-selected {
+    border-color: transparent;
+  }
+}
+div.cell.selected,
+div.cell.selected.jupyter-soft-selected {
+  border-color: #ababab;
+}
+div.cell.selected:before,
+div.cell.selected.jupyter-soft-selected:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: #42A5F5;
+}
+@media print {
+  div.cell.selected,
+  div.cell.selected.jupyter-soft-selected {
+    border-color: transparent;
+  }
+}
+.edit_mode div.cell.selected {
+  border-color: #66BB6A;
+}
+.edit_mode div.cell.selected:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: #66BB6A;
+}
+@media print {
+  .edit_mode div.cell.selected {
+    border-color: transparent;
+  }
+}
+.prompt {
+  /* This needs to be wide enough for 3 digit prompt numbers: In[100]: */
+  min-width: 14ex;
+  /* This padding is tuned to match the padding on the CodeMirror editor. */
+  padding: 0.4em;
+  margin: 0px;
+  font-family: monospace;
+  text-align: right;
+  /* This has to match that of the the CodeMirror class line-height below */
+  line-height: 1.21429em;
+  /* Don't highlight prompt number selection */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  /* Use default cursor */
+  cursor: default;
+}
+@media (max-width: 540px) {
+  .prompt {
+    text-align: left;
+  }
+}
+div.inner_cell {
+  min-width: 0;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  /* Old browsers */
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  box-flex: 1;
+  /* Modern browsers */
+  flex: 1;
+}
+/* input_area and input_prompt must match in top border and margin for alignment */
+div.input_area {
+  border: 1px solid #cfcfcf;
+  border-radius: 2px;
+  background: #f7f7f7;
+  line-height: 1.21429em;
+}
+/* This is needed so that empty prompt areas can collapse to zero height when there
+   is no content in the output_subarea and the prompt. The main purpose of this is
+   to make sure that empty JavaScript output_subareas have no height. */
+div.prompt:empty {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+div.unrecognized_cell {
+  padding: 5px 5px 5px 0px;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+div.unrecognized_cell .inner_cell {
+  border-radius: 2px;
+  padding: 5px;
+  font-weight: bold;
+  color: red;
+  border: 1px solid #cfcfcf;
+  background: #eaeaea;
+}
+div.unrecognized_cell .inner_cell a {
+  color: inherit;
+  text-decoration: none;
+}
+div.unrecognized_cell .inner_cell a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+@media (max-width: 540px) {
+  div.unrecognized_cell > div.prompt {
+    display: none;
+  }
+}
+div.code_cell {
+  /* avoid page breaking on code cells when printing */
+}
+@media print {
+  div.code_cell {
+    page-break-inside: avoid;
+  }
+}
+/* any special styling for code cells that are currently running goes here */
+div.input {
+  page-break-inside: avoid;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.input {
+    /* Old browsers */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-box-align: stretch;
+    display: -moz-box;
+    -moz-box-orient: vertical;
+    -moz-box-align: stretch;
+    display: box;
+    box-orient: vertical;
+    box-align: stretch;
+    /* Modern browsers */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+/* input_area and input_prompt must match in top border and margin for alignment */
+div.input_prompt {
+  color: #303F9F;
+  border-top: 1px solid transparent;
+}
+div.input_area > div.highlight {
+  margin: 0.4em;
+  border: none;
+  padding: 0px;
+  background-color: transparent;
+}
+div.input_area > div.highlight > pre {
+  margin: 0px;
+  border: none;
+  padding: 0px;
+  background-color: transparent;
+}
+/* The following gets added to the <head> if it is detected that the user has a
+ * monospace font with inconsistent normal/bold/italic height.  See
+ * notebookmain.js.  Such fonts will have keywords vertically offset with
+ * respect to the rest of the text.  The user should select a better font.
+ * See: https://github.com/ipython/ipython/issues/1503
+ *
+ * .CodeMirror span {
+ *      vertical-align: bottom;
+ * }
+ */
+.CodeMirror {
+  line-height: 1.21429em;
+  /* Changed from 1em to our global default */
+  font-size: 14px;
+  height: auto;
+  /* Changed to auto to autogrow */
+  background: none;
+  /* Changed from white to allow our bg to show through */
+}
+.CodeMirror-scroll {
+  /*  The CodeMirror docs are a bit fuzzy on if overflow-y should be hidden or visible.*/
+  /*  We have found that if it is visible, vertical scrollbars appear with font size changes.*/
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+.CodeMirror-lines {
+  /* In CM2, this used to be 0.4em, but in CM3 it went to 4px. We need the em value because */
+  /* we have set a different line-height and want this to scale with that. */
+  /* Note that this should set vertical padding only, since CodeMirror assumes
+       that horizontal padding will be set on CodeMirror pre */
+  padding: 0.4em 0;
+}
+.CodeMirror-linenumber {
+  padding: 0 8px 0 4px;
+}
+.CodeMirror-gutters {
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+}
+.CodeMirror pre {
+  /* In CM3 this went to 4px from 0 in CM2. This sets horizontal padding only,
+    use .CodeMirror-lines for vertical */
+  padding: 0 0.4em;
+  border: 0;
+  border-radius: 0;
+}
+.CodeMirror-cursor {
+  border-left: 1.4px solid black;
+}
+@media screen and (min-width: 2138px) and (max-width: 4319px) {
+  .CodeMirror-cursor {
+    border-left: 2px solid black;
+  }
+}
+@media screen and (min-width: 4320px) {
+  .CodeMirror-cursor {
+    border-left: 4px solid black;
+  }
+}
+/*
+
+Original style from softwaremaniacs.org (c) Ivan Sagalaev <Maniac@SoftwareManiacs.Org>
+Adapted from GitHub theme
+
+*/
+.highlight-base {
+  color: #000;
+}
+.highlight-variable {
+  color: #000;
+}
+.highlight-variable-2 {
+  color: #1a1a1a;
+}
+.highlight-variable-3 {
+  color: #333333;
+}
+.highlight-string {
+  color: #BA2121;
+}
+.highlight-comment {
+  color: #408080;
+  font-style: italic;
+}
+.highlight-number {
+  color: #080;
+}
+.highlight-atom {
+  color: #88F;
+}
+.highlight-keyword {
+  color: #008000;
+  font-weight: bold;
+}
+.highlight-builtin {
+  color: #008000;
+}
+.highlight-error {
+  color: #f00;
+}
+.highlight-operator {
+  color: #AA22FF;
+  font-weight: bold;
+}
+.highlight-meta {
+  color: #AA22FF;
+}
+/* previously not defined, copying from default codemirror */
+.highlight-def {
+  color: #00f;
+}
+.highlight-string-2 {
+  color: #f50;
+}
+.highlight-qualifier {
+  color: #555;
+}
+.highlight-bracket {
+  color: #997;
+}
+.highlight-tag {
+  color: #170;
+}
+.highlight-attribute {
+  color: #00c;
+}
+.highlight-header {
+  color: blue;
+}
+.highlight-quote {
+  color: #090;
+}
+.highlight-link {
+  color: #00c;
+}
+/* apply the same style to codemirror */
+.cm-s-ipython span.cm-keyword {
+  color: #008000;
+  font-weight: bold;
+}
+.cm-s-ipython span.cm-atom {
+  color: #88F;
+}
+.cm-s-ipython span.cm-number {
+  color: #080;
+}
+.cm-s-ipython span.cm-def {
+  color: #00f;
+}
+.cm-s-ipython span.cm-variable {
+  color: #000;
+}
+.cm-s-ipython span.cm-operator {
+  color: #AA22FF;
+  font-weight: bold;
+}
+.cm-s-ipython span.cm-variable-2 {
+  color: #1a1a1a;
+}
+.cm-s-ipython span.cm-variable-3 {
+  color: #333333;
+}
+.cm-s-ipython span.cm-comment {
+  color: #408080;
+  font-style: italic;
+}
+.cm-s-ipython span.cm-string {
+  color: #BA2121;
+}
+.cm-s-ipython span.cm-string-2 {
+  color: #f50;
+}
+.cm-s-ipython span.cm-meta {
+  color: #AA22FF;
+}
+.cm-s-ipython span.cm-qualifier {
+  color: #555;
+}
+.cm-s-ipython span.cm-builtin {
+  color: #008000;
+}
+.cm-s-ipython span.cm-bracket {
+  color: #997;
+}
+.cm-s-ipython span.cm-tag {
+  color: #170;
+}
+.cm-s-ipython span.cm-attribute {
+  color: #00c;
+}
+.cm-s-ipython span.cm-header {
+  color: blue;
+}
+.cm-s-ipython span.cm-quote {
+  color: #090;
+}
+.cm-s-ipython span.cm-link {
+  color: #00c;
+}
+.cm-s-ipython span.cm-error {
+  color: #f00;
+}
+.cm-s-ipython span.cm-tab {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAMCAYAAAAkuj5RAAAAAXNSR0IArs4c6QAAAGFJREFUSMft1LsRQFAQheHPowAKoACx3IgEKtaEHujDjORSgWTH/ZOdnZOcM/sgk/kFFWY0qV8foQwS4MKBCS3qR6ixBJvElOobYAtivseIE120FaowJPN75GMu8j/LfMwNjh4HUpwg4LUAAAAASUVORK5CYII=);
+  background-position: right;
+  background-repeat: no-repeat;
+}
+div.output_wrapper {
+  /* this position must be relative to enable descendents to be absolute within it */
+  position: relative;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  z-index: 1;
+}
+/* class for the output area when it should be height-limited */
+div.output_scroll {
+  /* ideally, this would be max-height, but FF barfs all over that */
+  height: 24em;
+  /* FF needs this *and the wrapper* to specify full width, or it will shrinkwrap */
+  width: 100%;
+  overflow: auto;
+  border-radius: 2px;
+  -webkit-box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+  display: block;
+}
+/* output div while it is collapsed */
+div.output_collapsed {
+  margin: 0px;
+  padding: 0px;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+div.out_prompt_overlay {
+  height: 100%;
+  padding: 0px 0.4em;
+  position: absolute;
+  border-radius: 2px;
+}
+div.out_prompt_overlay:hover {
+  /* use inner shadow to get border that is computed the same on WebKit/FF */
+  -webkit-box-shadow: inset 0 0 1px #000;
+  box-shadow: inset 0 0 1px #000;
+  background: rgba(240, 240, 240, 0.5);
+}
+div.output_prompt {
+  color: #D84315;
+}
+/* This class is the outer container of all output sections. */
+div.output_area {
+  padding: 0px;
+  page-break-inside: avoid;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+div.output_area .MathJax_Display {
+  text-align: left !important;
+}
+div.output_area 
+div.output_area 
+div.output_area img,
+div.output_area svg {
+  max-width: 100%;
+  height: auto;
+}
+div.output_area img.unconfined,
+div.output_area svg.unconfined {
+  max-width: none;
+}
+div.output_area .mglyph > img {
+  max-width: none;
+}
+/* This is needed to protect the pre formating from global settings such
+   as that of bootstrap */
+.output {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.output_area {
+    /* Old browsers */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-box-align: stretch;
+    display: -moz-box;
+    -moz-box-orient: vertical;
+    -moz-box-align: stretch;
+    display: box;
+    box-orient: vertical;
+    box-align: stretch;
+    /* Modern browsers */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+div.output_area pre {
+  margin: 0;
+  padding: 1px 0 1px 0;
+  border: 0;
+  vertical-align: baseline;
+  color: black;
+  background-color: transparent;
+  border-radius: 0;
+}
+/* This class is for the output subarea inside the output_area and after
+   the prompt div. */
+div.output_subarea {
+  overflow-x: auto;
+  padding: 0.4em;
+  /* Old browsers */
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  box-flex: 1;
+  /* Modern browsers */
+  flex: 1;
+  max-width: calc(100% - 14ex);
+}
+div.output_scroll div.output_subarea {
+  overflow-x: visible;
+}
+/* The rest of the output_* classes are for special styling of the different
+   output types */
+/* all text output has this class: */
+div.output_text {
+  text-align: left;
+  color: #000;
+  /* This has to match that of the the CodeMirror class line-height below */
+  line-height: 1.21429em;
+}
+/* stdout/stderr are 'text' as well as 'stream', but execute_result/error are *not* streams */
+div.output_stderr {
+  background: #fdd;
+  /* very light red background for stderr */
+}
+div.output_latex {
+  text-align: left;
+}
+/* Empty output_javascript divs should have no height */
+div.output_javascript:empty {
+  padding: 0;
+}
+.js-error {
+  color: darkred;
+}
+/* raw_input styles */
+div.raw_input_container {
+  line-height: 1.21429em;
+  padding-top: 5px;
+}
+pre.raw_input_prompt {
+  /* nothing needed here. */
+}
+input.raw_input {
+  font-family: monospace;
+  font-size: inherit;
+  color: inherit;
+  width: auto;
+  /* make sure input baseline aligns with prompt */
+  vertical-align: baseline;
+  /* padding + margin = 0.5em between prompt and cursor */
+  padding: 0em 0.25em;
+  margin: 0em 0.25em;
+}
+input.raw_input:focus {
+  box-shadow: none;
+}
+p.p-space {
+  margin-bottom: 10px;
+}
+div.output_unrecognized {
+  padding: 5px;
+  font-weight: bold;
+  color: red;
+}
+div.output_unrecognized a {
+  color: inherit;
+  text-decoration: none;
+}
+div.output_unrecognized a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+.rendered_html {
+  color: #000;
+  /* any extras will just be numbers: */
+}
+
+
+
+.rendered_html :link {
+  text-decoration: underline;
+}
+.rendered_html :visited {
+  text-decoration: underline;
+}
+
+
+
+
+
+
+.rendered_html h1:first-child {
+  margin-top: 0.538em;
+}
+.rendered_html h2:first-child {
+  margin-top: 0.636em;
+}
+.rendered_html h3:first-child {
+  margin-top: 0.777em;
+}
+.rendered_html h4:first-child {
+  margin-top: 1em;
+}
+.rendered_html h5:first-child {
+  margin-top: 1em;
+}
+.rendered_html h6:first-child {
+  margin-top: 1em;
+}
+.rendered_html ul:not(.list-inline),
+.rendered_html ol:not(.list-inline) {
+  padding-left: 2em;
+}
+
+
+
+
+
+
+
+
+.rendered_html * + ul {
+  margin-top: 1em;
+}
+.rendered_html * + ol {
+  margin-top: 1em;
+}
+
+
+
+
+
+.rendered_html pre,
+
+
+
+
+.rendered_html tr,
+.rendered_html th,
+
+
+.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+.rendered_html * + table {
+  margin-top: 1em;
+}
+
+.rendered_html * + p {
+  margin-top: 1em;
+}
+
+.rendered_html * + img {
+  margin-top: 1em;
+}
+.rendered_html img,
+
+.rendered_html img.unconfined,
+
+
+.rendered_html * + .alert {
+  margin-top: 1em;
+}
+[dir="rtl"] 
+div.text_cell {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.text_cell > div.prompt {
+    display: none;
+  }
+}
+div.text_cell_render {
+  /*font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;*/
+  outline: none;
+  resize: none;
+  width: inherit;
+  border-style: none;
+  padding: 0.5em 0.5em 0.5em 0.4em;
+  color: #000;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+a.anchor-link:link {
+  text-decoration: none;
+  padding: 0px 20px;
+  visibility: hidden;
+}
+h1:hover .anchor-link,
+h2:hover .anchor-link,
+h3:hover .anchor-link,
+h4:hover .anchor-link,
+h5:hover .anchor-link,
+h6:hover .anchor-link {
+  visibility: visible;
+}
+.text_cell.rendered .input_area {
+  display: none;
+}
+.text_cell.rendered 
+.text_cell.rendered .rendered_html tr,
+.text_cell.rendered .rendered_html th,
+.text_cell.rendered 
+.text_cell.unrendered .text_cell_render {
+  display: none;
+}
+.text_cell .dropzone .input_area {
+  border: 2px dashed #bababa;
+  margin: -1px;
+}
+.cm-header-1,
+.cm-header-2,
+.cm-header-3,
+.cm-header-4,
+.cm-header-5,
+.cm-header-6 {
+  font-weight: bold;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.cm-header-1 {
+  font-size: 185.7%;
+}
+.cm-header-2 {
+  font-size: 157.1%;
+}
+.cm-header-3 {
+  font-size: 128.6%;
+}
+.cm-header-4 {
+  font-size: 110%;
+}
+.cm-header-5 {
+  font-size: 100%;
+  font-style: italic;
+}
+.cm-header-6 {
+  font-size: 100%;
+  font-style: italic;
+}
+</style>
+<style type="text/css">.highlight .hll { background-color: #ffffcc }
+.highlight  { background: #f8f8f8; }
+.highlight .c { color: #408080; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #FF0000 } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666666 } /* Operator */
+.highlight .ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #BC7A00 } /* Comment.Preproc */
+.highlight .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #408080; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #408080; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #FF0000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00A000 } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #0044DD } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666666 } /* Literal.Number */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #7D9029 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.highlight .no { color: #880000 } /* Name.Constant */
+.highlight .nd { color: #AA22FF } /* Name.Decorator */
+.highlight .ni { color: #999999; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0000FF } /* Name.Function */
+.highlight .nl { color: #A0A000 } /* Name.Label */
+.highlight .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #666666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666666 } /* Literal.Number.Float */
+.highlight .mh { color: #666666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
+.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #BB6688 } /* Literal.String.Regex */
+.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0000FF } /* Name.Function.Magic */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
+.highlight .il { color: #666666 } /* Literal.Number.Integer.Long */</style>
+<style type="text/css">
+/* Temporary definitions which will become obsolete with Notebook release 5.0 */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-bold { font-weight: bold; }
+</style>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Hierarchical-Clustering">Hierarchical Clustering<a class="anchor-link" href="#Hierarchical-Clustering">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Hierarchical clustering</strong> refers to a class of clustering methods that seek to build a <strong>hierarchy</strong> of clusters, in which some clusters contain others. In this assignment, we will explore a top-down approach, recursively bipartitioning the data using k-means.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Note to Amazon EC2 users</strong>: To conserve memory, make sure to stop all the other notebooks before running this notebook.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Import-packages">Import packages<a class="anchor-link" href="#Import-packages">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The following code block will check if you have the correct version of GraphLab Create. Any version later than 1.8.5 will do. To upgrade, read <a href="https://turi.com/download/upgrade-graphlab-create.html">this page</a>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">graphlab</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csr_matrix</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">KMeans</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">pairwise_distances</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+
+<span class="sd">&#39;&#39;&#39;Check GraphLab Create version&#39;&#39;&#39;</span>
+<span class="kn">from</span> <span class="nn">distutils.version</span> <span class="kn">import</span> <span class="n">StrictVersion</span>
+<span class="k">assert</span> <span class="p">(</span><span class="n">StrictVersion</span><span class="p">(</span><span class="n">graphlab</span><span class="o">.</span><span class="n">version</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">StrictVersion</span><span class="p">(</span><span class="s1">&#39;1.8.5&#39;</span><span class="p">)),</span> <span class="s1">&#39;GraphLab Create must be version 1.8.5 or later.&#39;</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Load-the-Wikipedia-dataset">Load the Wikipedia dataset<a class="anchor-link" href="#Load-the-Wikipedia-dataset">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">wiki</span> <span class="o">=</span> <span class="n">graphlab</span><span class="o">.</span><span class="n">SFrame</span><span class="p">(</span><span class="s1">&#39;people_wiki.gl/&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>This non-commercial license of GraphLab Create for academic use is assigned to arslanahmadid@gmail.com and will expire on October 28, 2019.
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>[INFO] graphlab.cython.cy_server: GraphLab Create v2.0.1 started. Logging: C:\Users\arslan\AppData\Local\Temp\graphlab_server_1551383052.log.0
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As we did in previous assignments, let's extract the TF-IDF features:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">wiki</span><span class="p">[</span><span class="s1">&#39;tf_idf&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">graphlab</span><span class="o">.</span><span class="n">text_analytics</span><span class="o">.</span><span class="n">tf_idf</span><span class="p">(</span><span class="n">wiki</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>To run k-means on this dataset, we should convert the data matrix into a sparse matrix.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">em_utilities</span> <span class="kn">import</span> <span class="n">sframe_to_scipy</span> <span class="c1"># converter</span>
+
+<span class="c1"># This will take about a minute or two.</span>
+<span class="n">tf_idf</span><span class="p">,</span> <span class="n">map_index_to_word</span> <span class="o">=</span> <span class="n">sframe_to_scipy</span><span class="p">(</span><span class="n">wiki</span><span class="p">,</span> <span class="s1">&#39;tf_idf&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>To be consistent with the k-means assignment, let's normalize all vectors to have unit norm.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">normalize</span>
+<span class="n">tf_idf</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">tf_idf</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Bipartition-the-Wikipedia-dataset-using-k-means">Bipartition the Wikipedia dataset using k-means<a class="anchor-link" href="#Bipartition-the-Wikipedia-dataset-using-k-means">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Recall our workflow for clustering text data with k-means:</p>
+<ol>
+<li>Load the dataframe containing a dataset, such as the Wikipedia text dataset.</li>
+<li>Extract the data matrix from the dataframe.</li>
+<li>Run k-means on the data matrix with some value of k.</li>
+<li>Visualize the clustering results using the centroids, cluster assignments, and the original dataframe. We keep the original dataframe around because the data matrix does not keep auxiliary information (in the case of the text dataset, the title of each article).</li>
+</ol>
+<p>Let us modify the workflow to perform bipartitioning:</p>
+<ol>
+<li>Load the dataframe containing a dataset, such as the Wikipedia text dataset.</li>
+<li>Extract the data matrix from the dataframe.</li>
+<li>Run k-means on the data matrix with k=2.</li>
+<li>Divide the data matrix into two parts using the cluster assignments.</li>
+<li>Divide the dataframe into two parts, again using the cluster assignments. This step is necessary to allow for visualization.</li>
+<li>Visualize the bipartition of data.</li>
+</ol>
+<p>We'd like to be able to repeat Steps 3-6 multiple times to produce a <strong>hierarchy</strong> of clusters such as the following:</p>
+
+<pre><code>                      (root)
+                         |
+            +------------+-------------+
+            |                          |
+         Cluster                    Cluster
+     +------+-----+             +------+-----+
+     |            |             |            |
+   Cluster     Cluster       Cluster      Cluster</code></pre>
+<p>Each <strong>parent cluster</strong> is bipartitioned to produce two <strong>child clusters</strong>. At the very top is the <strong>root cluster</strong>, which consists of the entire dataset.</p>
+<p>Now we write a wrapper function to bipartition a given cluster using k-means. There are three variables that together comprise the cluster:</p>
+<ul>
+<li><code>dataframe</code>: a subset of the original dataframe that correspond to member rows of the cluster</li>
+<li><code>matrix</code>: same set of rows, stored in sparse matrix format</li>
+<li><code>centroid</code>: the centroid of the cluster (not applicable for the root cluster)</li>
+</ul>
+<p>Rather than passing around the three variables separately, we package them into a Python dictionary. The wrapper function takes a single dictionary (representing a parent cluster) and returns two dictionaries (representing the child clusters).</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">bipartition</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">num_runs</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;cluster: should be a dictionary containing the following keys</span>
+<span class="sd">                * dataframe: original dataframe</span>
+<span class="sd">                * matrix:    same data, in matrix format</span>
+<span class="sd">                * centroid:  centroid for this particular cluster&#39;&#39;&#39;</span>
+    
+    <span class="n">data_matrix</span> <span class="o">=</span> <span class="n">cluster</span><span class="p">[</span><span class="s1">&#39;matrix&#39;</span><span class="p">]</span>
+    <span class="n">dataframe</span>   <span class="o">=</span> <span class="n">cluster</span><span class="p">[</span><span class="s1">&#39;dataframe&#39;</span><span class="p">]</span>
+    
+    <span class="c1"># Run k-means on the data matrix with k=2. We use scikit-learn here to simplify workflow.</span>
+    <span class="n">kmeans_model</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="n">maxiter</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="n">num_runs</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">kmeans_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data_matrix</span><span class="p">)</span>
+    <span class="n">centroids</span><span class="p">,</span> <span class="n">cluster_assignment</span> <span class="o">=</span> <span class="n">kmeans_model</span><span class="o">.</span><span class="n">cluster_centers_</span><span class="p">,</span> <span class="n">kmeans_model</span><span class="o">.</span><span class="n">labels_</span>
+    
+    <span class="c1"># Divide the data matrix into two parts using the cluster assignments.</span>
+    <span class="n">data_matrix_left_child</span><span class="p">,</span> <span class="n">data_matrix_right_child</span> <span class="o">=</span> <span class="n">data_matrix</span><span class="p">[</span><span class="n">cluster_assignment</span><span class="o">==</span><span class="mi">0</span><span class="p">],</span> \
+                                                      <span class="n">data_matrix</span><span class="p">[</span><span class="n">cluster_assignment</span><span class="o">==</span><span class="mi">1</span><span class="p">]</span>
+    
+    <span class="c1"># Divide the dataframe into two parts, again using the cluster assignments.</span>
+    <span class="n">cluster_assignment_sa</span> <span class="o">=</span> <span class="n">graphlab</span><span class="o">.</span><span class="n">SArray</span><span class="p">(</span><span class="n">cluster_assignment</span><span class="p">)</span> <span class="c1"># minor format conversion</span>
+    <span class="n">dataframe_left_child</span><span class="p">,</span> <span class="n">dataframe_right_child</span>     <span class="o">=</span> <span class="n">dataframe</span><span class="p">[</span><span class="n">cluster_assignment_sa</span><span class="o">==</span><span class="mi">0</span><span class="p">],</span> \
+                                                      <span class="n">dataframe</span><span class="p">[</span><span class="n">cluster_assignment_sa</span><span class="o">==</span><span class="mi">1</span><span class="p">]</span>
+        
+    
+    <span class="c1"># Package relevant variables for the child clusters</span>
+    <span class="n">cluster_left_child</span>  <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;matrix&#39;</span><span class="p">:</span> <span class="n">data_matrix_left_child</span><span class="p">,</span>
+                           <span class="s1">&#39;dataframe&#39;</span><span class="p">:</span> <span class="n">dataframe_left_child</span><span class="p">,</span>
+                           <span class="s1">&#39;centroid&#39;</span><span class="p">:</span> <span class="n">centroids</span><span class="p">[</span><span class="mi">0</span><span class="p">]}</span>
+    <span class="n">cluster_right_child</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;matrix&#39;</span><span class="p">:</span> <span class="n">data_matrix_right_child</span><span class="p">,</span>
+                           <span class="s1">&#39;dataframe&#39;</span><span class="p">:</span> <span class="n">dataframe_right_child</span><span class="p">,</span>
+                           <span class="s1">&#39;centroid&#39;</span><span class="p">:</span> <span class="n">centroids</span><span class="p">[</span><span class="mi">1</span><span class="p">]}</span>
+    
+    <span class="k">return</span> <span class="p">(</span><span class="n">cluster_left_child</span><span class="p">,</span> <span class="n">cluster_right_child</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The following cell performs bipartitioning of the Wikipedia dataset. Allow 20-60 seconds to finish.</p>
+<p>Note. For the purpose of the assignment, we set an explicit seed (<code>seed=1</code>) to produce identical outputs for every run. In pratical applications, you might want to use different random seeds for all runs.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">wiki_data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;matrix&#39;</span><span class="p">:</span> <span class="n">tf_idf</span><span class="p">,</span> <span class="s1">&#39;dataframe&#39;</span><span class="p">:</span> <span class="n">wiki</span><span class="p">}</span> <span class="c1"># no &#39;centroid&#39; for the root cluster</span>
+<span class="n">left_child</span><span class="p">,</span> <span class="n">right_child</span> <span class="o">=</span> <span class="n">bipartition</span><span class="p">(</span><span class="n">wiki_data</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">num_runs</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's examine the contents of one of the two clusters, which we call the <code>left_child</code>, referring to the tree visualization above.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">left_child</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[8]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;centroid&#39;: array([0.00000000e+00, 8.57526623e-06, 0.00000000e+00, ...,
+        1.38560691e-04, 6.46049863e-05, 2.26551103e-05]), &#39;dataframe&#39;: Columns:
+ 	URI	str
+ 	name	str
+ 	text	str
+ 	tf_idf	dict
+ 
+ Rows: Unknown
+ 
+ Data:
+ +-------------------------------+-------------------------------+
+ |              URI              |              name             |
+ +-------------------------------+-------------------------------+
+ | &lt;http://dbpedia.org/resour... |         Digby Morrell         |
+ | &lt;http://dbpedia.org/resour... | Paddy Dunne (Gaelic footba... |
+ | &lt;http://dbpedia.org/resour... |         Ceiron Thomas         |
+ | &lt;http://dbpedia.org/resour... |          Adel Sellimi         |
+ | &lt;http://dbpedia.org/resour... |          Vic Stasiuk          |
+ | &lt;http://dbpedia.org/resour... |          Leon Hapgood         |
+ | &lt;http://dbpedia.org/resour... |           Dom Flora           |
+ | &lt;http://dbpedia.org/resour... |           Bob Reece           |
+ | &lt;http://dbpedia.org/resour... | Bob Adams (American football) |
+ | &lt;http://dbpedia.org/resour... |           Marc Logan          |
+ +-------------------------------+-------------------------------+
+ +-------------------------------+-------------------------------+
+ |              text             |             tf_idf            |
+ +-------------------------------+-------------------------------+
+ | digby morrell born 10 octo... | {&#39;since&#39;: 1.45537671730804... |
+ | paddy dunne was a gaelic f... | {&#39;all&#39;: 3.2862224869824943... |
+ | ceiron thomas born 23 octo... | {&#39;thomas&#39;: 19.921640781374... |
+ | adel sellimi arabic was bo... | {&#39;coach&#39;: 5.44426411898705... |
+ | victor john stasiuk born m... | {&#39;leagues&#39;: 3.892260543300... |
+ | leon duane hapgood born 7 ... | {&#39;albion&#39;: 5.6732894101834... |
+ | dominick a dom flora born ... | {&#39;all&#39;: 1.6431112434912472... |
+ | robert scott reece born ja... | {&#39;leagues&#39;: 3.892260543300... |
+ | robert bruce bob adams bor... | {&#39;coach&#39;: 8.16639617848058... |
+ | marc anthony logan born ma... | {&#39;cincinnati&#39;: 4.392081929... |
+ +-------------------------------+-------------------------------+
+ [? rows x 4 columns]
+ Note: Only the head of the SFrame is printed. This SFrame is lazily evaluated.
+ You can use sf.materialize() to force materialization., &#39;matrix&#39;: &lt;11510x547979 sparse matrix of type &#39;&lt;type &#39;numpy.float64&#39;&gt;&#39;
+ 	with 1885831 stored elements in Compressed Sparse Row format&gt;}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>And here is the content of the other cluster we named <code>right_child</code>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">right_child</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[9]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;centroid&#39;: array([3.00882137e-06, 0.00000000e+00, 2.88868244e-06, ...,
+        1.10291526e-04, 9.00609890e-05, 2.03703564e-05]), &#39;dataframe&#39;: Columns:
+ 	URI	str
+ 	name	str
+ 	text	str
+ 	tf_idf	dict
+ 
+ Rows: Unknown
+ 
+ Data:
+ +-------------------------------+---------------------+
+ |              URI              |         name        |
+ +-------------------------------+---------------------+
+ | &lt;http://dbpedia.org/resour... |    Alfred J. Lewy   |
+ | &lt;http://dbpedia.org/resour... |    Harpdog Brown    |
+ | &lt;http://dbpedia.org/resour... | Franz Rottensteiner |
+ | &lt;http://dbpedia.org/resour... |        G-Enka       |
+ | &lt;http://dbpedia.org/resour... |    Sam Henderson    |
+ | &lt;http://dbpedia.org/resour... |    Aaron LaCrate    |
+ | &lt;http://dbpedia.org/resour... |   Trevor Ferguson   |
+ | &lt;http://dbpedia.org/resour... |     Grant Nelson    |
+ | &lt;http://dbpedia.org/resour... |     Cathy Caruth    |
+ | &lt;http://dbpedia.org/resour... |     Sophie Crumb    |
+ +-------------------------------+---------------------+
+ +-------------------------------+-------------------------------+
+ |              text             |             tf_idf            |
+ +-------------------------------+-------------------------------+
+ | alfred j lewy aka sandy le... | {&#39;precise&#39;: 6.443200606955... |
+ | harpdog brown is a singer ... | {&#39;just&#39;: 2.700729968710864... |
+ | franz rottensteiner born i... | {&#39;all&#39;: 1.6431112434912472... |
+ | henry krvits born 30 decem... | {&#39;legendary&#39;: 4.2808562943... |
+ | sam henderson born october... | {&#39;now&#39;: 1.96695239252401, ... |
+ | aaron lacrate is an americ... | {&#39;exclusive&#39;: 10.455187230... |
+ | trevor ferguson aka john f... | {&#39;taxi&#39;: 6.052021456094502... |
+ | grant nelson born 27 april... | {&#39;houston&#39;: 3.935505942157... |
+ | cathy caruth born 1955 is ... | {&#39;phenomenon&#39;: 5.750053426... |
+ | sophia violet sophie crumb... | {&#39;zwigoff&#39;: 20.58669641733... |
+ +-------------------------------+-------------------------------+
+ [? rows x 4 columns]
+ Note: Only the head of the SFrame is printed. This SFrame is lazily evaluated.
+ You can use sf.materialize() to force materialization., &#39;matrix&#39;: &lt;47561x547979 sparse matrix of type &#39;&lt;type &#39;numpy.float64&#39;&gt;&#39;
+ 	with 8493452 stored elements in Compressed Sparse Row format&gt;}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Visualize-the-bipartition">Visualize the bipartition<a class="anchor-link" href="#Visualize-the-bipartition">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We provide you with a modified version of the visualization function from the k-means assignment. For each cluster, we print the top 5 words with highest TF-IDF weights in the centroid and display excerpts for the 8 nearest neighbors of the centroid.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">def</span> <span class="nf">display_single_tf_idf_cluster</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span> <span class="n">map_index_to_word</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;map_index_to_word: SFrame specifying the mapping betweeen words and column indices&#39;&#39;&#39;</span>
+    
+    <span class="n">wiki_subset</span>   <span class="o">=</span> <span class="n">cluster</span><span class="p">[</span><span class="s1">&#39;dataframe&#39;</span><span class="p">]</span>
+    <span class="n">tf_idf_subset</span> <span class="o">=</span> <span class="n">cluster</span><span class="p">[</span><span class="s1">&#39;matrix&#39;</span><span class="p">]</span>
+    <span class="n">centroid</span>      <span class="o">=</span> <span class="n">cluster</span><span class="p">[</span><span class="s1">&#39;centroid&#39;</span><span class="p">]</span>
+    
+    <span class="c1"># Print top 5 words with largest TF-IDF weights in the cluster</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">centroid</span><span class="o">.</span><span class="n">argsort</span><span class="p">()[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;{0:s}:{1:.3f}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">map_index_to_word</span><span class="p">[</span><span class="s1">&#39;category&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="n">centroid</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="n">i</span><span class="p">]])),</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    
+    <span class="c1"># Compute distances from the centroid to all data points in the cluster.</span>
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">pairwise_distances</span><span class="p">(</span><span class="n">tf_idf_subset</span><span class="p">,</span> <span class="p">[</span><span class="n">centroid</span><span class="p">],</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="c1"># compute nearest neighbors of the centroid within the cluster.</span>
+    <span class="n">nearest_neighbors</span> <span class="o">=</span> <span class="n">distances</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
+    <span class="c1"># For 8 nearest neighbors, print the title as well as first 180 characters of text.</span>
+    <span class="c1"># Wrap the text at 80-character mark.</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">wiki_subset</span><span class="p">[</span><span class="n">nearest_neighbors</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="s1">&#39;text&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="mi">25</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">25</span><span class="p">])</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;* {0:50s} {1:.5f}</span><span class="se">\n</span><span class="s1">  {2:s}</span><span class="se">\n</span><span class="s1">  {3:s}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">wiki_subset</span><span class="p">[</span><span class="n">nearest_neighbors</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
+              <span class="n">distances</span><span class="p">[</span><span class="n">nearest_neighbors</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="n">text</span><span class="p">[:</span><span class="mi">90</span><span class="p">],</span> <span class="n">text</span><span class="p">[</span><span class="mi">90</span><span class="p">:</span><span class="mi">180</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">90</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's visualize the two child clusters:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">display_single_tf_idf_cluster</span><span class="p">(</span><span class="n">left_child</span><span class="p">,</span> <span class="n">map_index_to_word</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>league:0.040 season:0.036 team:0.029 football:0.029 played:0.028 
+* Todd Williams                                      0.95468
+  todd michael williams born february 13 1971 in syracuse new york is a former major league 
+  baseball relief pitcher he attended east syracuseminoa high school
+* Gord Sherven                                       0.95622
+  gordon r sherven born august 21 1963 in gravelbourg saskatchewan and raised in mankota sas
+  katchewan is a retired canadian professional ice hockey forward who played
+* Justin Knoedler                                    0.95639
+  justin joseph knoedler born july 17 1980 in springfield illinois is a former major league 
+  baseball catcherknoedler was originally drafted by the st louis cardinals
+* Chris Day                                          0.95648
+  christopher nicholas chris day born 28 july 1975 is an english professional footballer who
+   plays as a goalkeeper for stevenageday started his career at tottenham
+* Tony Smith (footballer, born 1957)                 0.95653
+  anthony tony smith born 20 february 1957 is a former footballer who played as a central de
+  fender in the football league in the 1970s and
+* Ashley Prescott                                    0.95761
+  ashley prescott born 11 september 1972 is a former australian rules footballer he played w
+  ith the richmond and fremantle football clubs in the afl between
+* Leslie Lea                                         0.95802
+  leslie lea born 5 october 1942 in manchester is an english former professional footballer 
+  he played as a midfielderlea began his professional career with blackpool
+* Tommy Anderson (footballer)                        0.95818
+  thomas cowan tommy anderson born 24 september 1934 in haddington is a scottish former prof
+  essional footballer he played as a forward and was noted for
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">display_single_tf_idf_cluster</span><span class="p">(</span><span class="n">right_child</span><span class="p">,</span> <span class="n">map_index_to_word</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>she:0.025 her:0.017 music:0.012 he:0.011 university:0.011 
+* Anita Kunz                                         0.97401
+  anita e kunz oc born 1956 is a canadianborn artist and illustratorkunz has lived in london
+   new york and toronto contributing to magazines and working
+* Janet Jackson                                      0.97472
+  janet damita jo jackson born may 16 1966 is an american singer songwriter and actress know
+  n for a series of sonically innovative socially conscious and
+* Madonna (entertainer)                              0.97475
+  madonna louise ciccone tkoni born august 16 1958 is an american singer songwriter actress 
+  and businesswoman she achieved popularity by pushing the boundaries of lyrical
+* %C3%81ine Hyland                                   0.97536
+  ine hyland ne donlon is emeritus professor of education and former vicepresident of univer
+  sity college cork ireland she was born in 1942 in athboy co
+* Jane Fonda                                         0.97621
+  jane fonda born lady jayne seymour fonda december 21 1937 is an american actress writer po
+  litical activist former fashion model and fitness guru she is
+* Christine Robertson                                0.97643
+  christine mary robertson born 5 october 1948 is an australian politician and former austra
+  lian labor party member of the new south wales legislative council serving
+* Pat Studdy-Clift                                   0.97643
+  pat studdyclift is an australian author specialising in historical fiction and nonfictionb
+  orn in 1925 she lived in gunnedah until she was sent to a boarding
+* Alexandra Potter                                   0.97646
+  alexandra potter born 1970 is a british author of romantic comediesborn in bradford yorksh
+  ire england and educated at liverpool university gaining an honors degree in
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The left cluster consists of athletes, whereas the right cluster consists of non-athletes. So far, we have a single-level hierarchy consisting of two clusters, as follows:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+<pre><code>                                           Wikipedia
+                                               +
+                                               |
+                    +--------------------------+--------------------+
+                    |                                               |
+                    +                                               +
+                 Athletes                                      Non-athletes</code></pre>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Is this hierarchy good enough? <strong>When building a hierarchy of clusters, we must keep our particular application in mind.</strong> For instance, we might want to build a <strong>directory</strong> for Wikipedia articles. A good directory would let you quickly narrow down your search to a small set of related articles. The categories of athletes and non-athletes are too general to facilitate efficient search. For this reason, we decide to build another level into our hierarchy of clusters with the goal of getting more specific cluster structure at the lower level. To that end, we subdivide both the <code>athletes</code> and <code>non-athletes</code> clusters.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Perform-recursive-bipartitioning">Perform recursive bipartitioning<a class="anchor-link" href="#Perform-recursive-bipartitioning">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Cluster-of-athletes">Cluster of athletes<a class="anchor-link" href="#Cluster-of-athletes">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>To help identify the clusters we've built so far, let's give them easy-to-read aliases:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">athletes</span> <span class="o">=</span> <span class="n">left_child</span>
+<span class="n">non_athletes</span> <span class="o">=</span> <span class="n">right_child</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Using the bipartition function, we produce two child clusters of the athlete cluster:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Bipartition the cluster of athletes</span>
+<span class="n">left_child_athletes</span><span class="p">,</span> <span class="n">right_child_athletes</span> <span class="o">=</span> <span class="n">bipartition</span><span class="p">(</span><span class="n">athletes</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">num_runs</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The left child cluster mainly consists of baseball players:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">display_single_tf_idf_cluster</span><span class="p">(</span><span class="n">left_child_athletes</span><span class="p">,</span> <span class="n">map_index_to_word</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>baseball:0.111 league:0.103 major:0.051 games:0.046 season:0.045 
+* Steve Springer                                     0.89344
+  steven michael springer born february 11 1961 is an american former professional baseball 
+  player who appeared in major league baseball as a third baseman and
+* Dave Ford                                          0.89598
+  david alan ford born december 29 1956 is a former major league baseball pitcher for the ba
+  ltimore orioles born in cleveland ohio ford attended lincolnwest
+* Todd Williams                                      0.89823
+  todd michael williams born february 13 1971 in syracuse new york is a former major league 
+  baseball relief pitcher he attended east syracuseminoa high school
+* Justin Knoedler                                    0.90097
+  justin joseph knoedler born july 17 1980 in springfield illinois is a former major league 
+  baseball catcherknoedler was originally drafted by the st louis cardinals
+* Kevin Nicholson (baseball)                         0.90607
+  kevin ronald nicholson born march 29 1976 is a canadian baseball shortstop he played part 
+  of the 2000 season for the san diego padres of
+* Joe Strong                                         0.90638
+  joseph benjamin strong born september 9 1962 in fairfield california is a former major lea
+  gue baseball pitcher who played for the florida marlins from 2000
+* James Baldwin (baseball)                           0.90674
+  james j baldwin jr born july 15 1971 is a former major league baseball pitcher he batted a
+  nd threw righthanded in his 11season career he
+* James Garcia                                       0.90729
+  james robert garcia born february 3 1980 is an american former professional baseball pitch
+  er who played in the san francisco giants minor league system as
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>On the other hand, the right child cluster is a mix of players in association football, Austrailian rules football and ice hockey:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">display_single_tf_idf_cluster</span><span class="p">(</span><span class="n">right_child_athletes</span><span class="p">,</span> <span class="n">map_index_to_word</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>season:0.034 football:0.033 team:0.031 league:0.029 played:0.027 
+* Gord Sherven                                       0.95562
+  gordon r sherven born august 21 1963 in gravelbourg saskatchewan and raised in mankota sas
+  katchewan is a retired canadian professional ice hockey forward who played
+* Ashley Prescott                                    0.95656
+  ashley prescott born 11 september 1972 is a former australian rules footballer he played w
+  ith the richmond and fremantle football clubs in the afl between
+* Chris Day                                          0.95656
+  christopher nicholas chris day born 28 july 1975 is an english professional footballer who
+   plays as a goalkeeper for stevenageday started his career at tottenham
+* Jason Roberts (footballer)                         0.95658
+  jason andre davis roberts mbe born 25 january 1978 is a former professional footballer and
+   now a football punditborn in park royal london roberts was
+* Todd Curley                                        0.95743
+  todd curley born 14 january 1973 is a former australian rules footballer who played for co
+  llingwood and the western bulldogs in the australian football league
+* Tony Smith (footballer, born 1957)                 0.95801
+  anthony tony smith born 20 february 1957 is a former footballer who played as a central de
+  fender in the football league in the 1970s and
+* Sol Campbell                                       0.95802
+  sulzeer jeremiah sol campbell born 18 september 1974 is a former england international foo
+  tballer a central defender he had a 19year career playing in the
+* Richard Ambrose                                    0.95924
+  richard ambrose born 10 june 1972 is a former australian rules footballer who played with 
+  the sydney swans in the australian football league afl he
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Our hierarchy of clusters now looks like this:</p>
+
+<pre><code>                                           Wikipedia
+                                               +
+                                               |
+                    +--------------------------+--------------------+
+                    |                                               |
+                    +                                               +
+                 Athletes                                      Non-athletes
+                    +
+                    |
+        +-----------+--------+
+        |                    |
+        |            association football/
+        +          Austrailian rules football/
+     baseball             ice hockey</code></pre>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Should we keep subdividing the clusters? If so, which cluster should we subdivide? To answer this question, we again think about our application. Since we organize our directory by topics, it would be nice to have topics that are about as coarse as each other. For instance, if one cluster is about baseball, we expect some other clusters about football, basketball, volleyball, and so forth. That is, <strong>we would like to achieve similar level of granularity for all clusters.</strong></p>
+<p>Notice that the right child cluster is more coarse than the left child cluster. The right cluster posseses a greater variety of topics than the left (ice hockey/association football/Austrialian football vs. baseball). So the right child cluster should be subdivided further to produce finer child clusters.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's give the clusters aliases as well:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">baseball</span>            <span class="o">=</span> <span class="n">left_child_athletes</span>
+<span class="n">ice_hockey_football</span> <span class="o">=</span> <span class="n">right_child_athletes</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Cluster-of-ice-hockey-players-and-football-players">Cluster of ice hockey players and football players<a class="anchor-link" href="#Cluster-of-ice-hockey-players-and-football-players">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In answering the following quiz question, take a look at the topics represented in the top documents (those closest to the centroid), as well as the list of words with highest TF-IDF weights.</p>
+<p>Let us bipartition the cluster of ice hockey and football players.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">left_child_ihs</span><span class="p">,</span> <span class="n">right_child_ihs</span> <span class="o">=</span> <span class="n">bipartition</span><span class="p">(</span><span class="n">ice_hockey_football</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">num_runs</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">display_single_tf_idf_cluster</span><span class="p">(</span><span class="n">left_child_ihs</span><span class="p">,</span> <span class="n">map_index_to_word</span><span class="p">)</span>
+<span class="n">display_single_tf_idf_cluster</span><span class="p">(</span><span class="n">right_child_ihs</span><span class="p">,</span> <span class="n">map_index_to_word</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>football:0.048 season:0.043 league:0.041 played:0.036 coach:0.034 
+* Todd Curley                                        0.94578
+  todd curley born 14 january 1973 is a former australian rules footballer who played for co
+  llingwood and the western bulldogs in the australian football league
+* Tony Smith (footballer, born 1957)                 0.94606
+  anthony tony smith born 20 february 1957 is a former footballer who played as a central de
+  fender in the football league in the 1970s and
+* Chris Day                                          0.94623
+  christopher nicholas chris day born 28 july 1975 is an english professional footballer who
+   plays as a goalkeeper for stevenageday started his career at tottenham
+* Ashley Prescott                                    0.94632
+  ashley prescott born 11 september 1972 is a former australian rules footballer he played w
+  ith the richmond and fremantle football clubs in the afl between
+* Jason Roberts (footballer)                         0.94633
+  jason andre davis roberts mbe born 25 january 1978 is a former professional footballer and
+   now a football punditborn in park royal london roberts was
+* David Hamilton (footballer)                        0.94925
+  david hamilton born 7 november 1960 is an english former professional association football
+   player who played as a midfielder he won caps for the england
+* Richard Ambrose                                    0.94941
+  richard ambrose born 10 june 1972 is a former australian rules footballer who played with 
+  the sydney swans in the australian football league afl he
+* Neil Grayson                                       0.94958
+  neil grayson born 1 november 1964 in york is an english footballer who last played as a st
+  riker for sutton towngraysons first club was local
+
+championships:0.045 tour:0.043 championship:0.035 world:0.031 won:0.031 
+* Alessandra Aguilar                                 0.93856
+  alessandra aguilar born 1 july 1978 in lugo is a spanish longdistance runner who specialis
+  es in marathon running she represented her country in the event
+* Heather Samuel                                     0.93973
+  heather barbara samuel born 6 july 1970 is a retired sprinter from antigua and barbuda who
+   specialized in the 100 and 200 metres in 1990
+* Viola Kibiwot                                      0.94015
+  viola jelagat kibiwot born december 22 1983 in keiyo district is a runner from kenya who s
+  pecialises in the 1500 metres kibiwot won her first
+* Ayelech Worku                                      0.94031
+  ayelech worku born june 12 1979 is an ethiopian longdistance runner most known for winning
+   two world championships bronze medals on the 5000 metres she
+* Krisztina Papp                                     0.94077
+  krisztina papp born 17 december 1982 in eger is a hungarian long distance runner she is th
+  e national indoor record holder over 5000 mpapp began
+* Petra Lammert                                      0.94215
+  petra lammert born 3 march 1984 in freudenstadt badenwrttemberg is a former german shot pu
+  tter and current bobsledder she was the 2009 european indoor champion
+* Morhad Amdouni                                     0.94217
+  morhad amdouni born 21 january 1988 in portovecchio is a french middle and longdistance ru
+  nner he was european junior champion in track and cross country
+* Brian Davis (golfer)                               0.94369
+  brian lester davis born 2 august 1974 is an english professional golferdavis was born in l
+  ondon he turned professional in 1994 and became a member
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Quiz Question</strong>. Which diagram best describes the hierarchy right after splitting the <code>ice_hockey_football</code> cluster? Refer to the quiz form for the diagrams.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Caution</strong>. The granularity criteria is an imperfect heuristic and must be taken with a grain of salt. It takes a lot of manual intervention to obtain a good hierarchy of clusters.</p>
+<ul>
+<li><strong>If a cluster is highly mixed, the top articles and words may not convey the full picture of the cluster.</strong> Thus, we may be misled if we judge the purity of clusters solely by their top documents and words. </li>
+<li><strong>Many interesting topics are hidden somewhere inside the clusters but do not appear in the visualization.</strong> We may need to subdivide further to discover new topics. For instance, subdividing the <code>ice_hockey_football</code> cluster led to the appearance of runners and golfers.</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Cluster-of-non-athletes">Cluster of non-athletes<a class="anchor-link" href="#Cluster-of-non-athletes">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now let us subdivide the cluster of non-athletes.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Bipartition the cluster of non-athletes</span>
+<span class="n">left_child_non_athletes</span><span class="p">,</span> <span class="n">right_child_non_athletes</span> <span class="o">=</span> <span class="n">bipartition</span><span class="p">(</span><span class="n">non_athletes</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">num_runs</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">display_single_tf_idf_cluster</span><span class="p">(</span><span class="n">left_child_non_athletes</span><span class="p">,</span> <span class="n">map_index_to_word</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>he:0.013 music:0.012 university:0.011 film:0.010 his:0.009 
+* Wilson McLean                                      0.97870
+  wilson mclean born 1937 is a scottish illustrator and artist he has illustrated primarily 
+  in the field of advertising but has also provided cover art
+* Julian Knowles                                     0.97938
+  julian knowles is an australian composer and performer specialising in new and emerging te
+  chnologies his creative work spans the fields of composition for theatre dance
+* James A. Joseph                                    0.98042
+  james a joseph born 1935 is an american former diplomatjoseph is professor of the practice
+   of public policy studies at duke university and founder of
+* Barry Sullivan (lawyer)                            0.98054
+  barry sullivan is a chicago lawyer and as of july 1 2009 the cooney conway chair in advoca
+  cy at loyola university chicago school of law
+* Archie Brown                                       0.98081
+  archibald haworth brown cmg fba commonly known as archie brown born 10 may 1938 is a briti
+  sh political scientist and historian in 2005 he became
+* Michael Joseph Smith                               0.98124
+  michael joseph smith is an american jazz and american classical composer and pianist born 
+  in tiline kentucky he has worked extensively in europe and asia
+* Craig Pruess                                       0.98125
+  craig pruess born 1950 is an american composer musician arranger and gold platinum record 
+  producer who has been living in britain since 1973 his career
+* David J. Elliott                                   0.98128
+  david elliott is professor of music and music education at new york universityelliott was 
+  educated at the university of toronto bmus m mus and bed
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">display_single_tf_idf_cluster</span><span class="p">(</span><span class="n">right_child_non_athletes</span><span class="p">,</span> <span class="n">map_index_to_word</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>she:0.126 her:0.082 film:0.013 actress:0.012 music:0.012 
+* Janet Jackson                                      0.93808
+  janet damita jo jackson born may 16 1966 is an american singer songwriter and actress know
+  n for a series of sonically innovative socially conscious and
+* Lauren Royal                                       0.93867
+  lauren royal born march 3 circa 1965 is a book writer from california royal has written bo
+  th historic and novelistic booksa selfproclaimed angels baseball fan
+* Barbara Hershey                                    0.93941
+  barbara hershey born barbara lynn herzstein february 5 1948 once known as barbara seagull 
+  is an american actress in a career spanning nearly 50 years
+* Jane Fonda                                         0.94102
+  jane fonda born lady jayne seymour fonda december 21 1937 is an american actress writer po
+  litical activist former fashion model and fitness guru she is
+* Alexandra Potter                                   0.94190
+  alexandra potter born 1970 is a british author of romantic comediesborn in bradford yorksh
+  ire england and educated at liverpool university gaining an honors degree in
+* Janine Shepherd                                    0.94219
+  janine lee shepherd am born 1962 is an australian pilot and former crosscountry skier shep
+  herds career as an athlete ended when she suffered major injuries
+* Cher                                               0.94231
+  cher r born cherilyn sarkisian may 20 1946 is an american singer actress and television ho
+  st described as embodying female autonomy in a maledominated industry
+* Ellina Graypel                                     0.94233
+  ellina graypel born july 19 1972 is an awardwinning russian singersongwriter she was born 
+  near the volga river in the heart of russia she spent
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Neither of the clusters show clear topics, apart from the genders. Let us divide them further.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[27]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">male_non_athletes</span> <span class="o">=</span> <span class="n">left_child_non_athletes</span>
+<span class="n">female_non_athletes</span> <span class="o">=</span> <span class="n">right_child_non_athletes</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Quiz Question</strong>. Let us bipartition the clusters <code>male_non_athletes</code> and <code>female_non_athletes</code>. Which diagram best describes the resulting hierarchy of clusters for the non-athletes? Refer to the quiz for the diagrams.</p>
+<p><strong>Note</strong>. Use <code>maxiter=100, num_runs=6, seed=1</code> for consistency of output.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">left_male_child_non_athletes</span><span class="p">,</span> <span class="n">right_male_child_non_athletes</span> <span class="o">=</span> <span class="n">bipartition</span><span class="p">(</span><span class="n">male_non_athletes</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">num_runs</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[37]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">display_single_tf_idf_cluster</span><span class="p">(</span><span class="n">left_male_child_non_athletes</span><span class="p">,</span> <span class="n">map_index_to_word</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>university:0.017 he:0.015 law:0.013 served:0.013 research:0.013 
+* Barry Sullivan (lawyer)                            0.97075
+  barry sullivan is a chicago lawyer and as of july 1 2009 the cooney conway chair in advoca
+  cy at loyola university chicago school of law
+* James A. Joseph                                    0.97344
+  james a joseph born 1935 is an american former diplomatjoseph is professor of the practice
+   of public policy studies at duke university and founder of
+* David Anderson (British Columbia politician)       0.97383
+  david a anderson pc oc born august 16 1937 in victoria british columbia is a former canadi
+  an cabinet minister educated at victoria college in victoria
+* Sven Erik Holmes                                   0.97469
+  sven erik holmes is a former federal judge and currently the vice chairman legal risk and 
+  regulatory and chief legal officer for kpmg llp a
+* Andrew Fois                                        0.97558
+  andrew fois is an attorney living and working in washington dc as of april 9 2012 he will 
+  be serving as the deputy attorney general
+* William Robert Graham                              0.97564
+  william robert graham born june 15 1937 was chairman of president reagans general advisory
+   committee on arms control from 1982 to 1985 a deputy administrator
+* John C. Eastman                                    0.97585
+  john c eastman born april 21 1960 is a conservative american law professor and constitutio
+  nal law scholar he is the henry salvatori professor of law
+* M. Cherif Bassiouni                                0.97587
+  mahmoud cherif bassiouni was born in cairo egypt in 1937 and immigrated to the united stat
+  es in 1962 he is emeritus professor of law at
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[36]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">display_single_tf_idf_cluster</span><span class="p">(</span><span class="n">right_male_child_non_athletes</span><span class="p">,</span> <span class="n">map_index_to_word</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>music:0.023 film:0.020 album:0.014 band:0.014 art:0.013 
+* Julian Knowles                                     0.97192
+  julian knowles is an australian composer and performer specialising in new and emerging te
+  chnologies his creative work spans the fields of composition for theatre dance
+* Peter Combe                                        0.97292
+  peter combe born 20 october 1948 is an australian childrens entertainer and musicianmusica
+  l genre childrens musiche has had 22 releases including seven gold albums two
+* Craig Pruess                                       0.97346
+  craig pruess born 1950 is an american composer musician arranger and gold platinum record 
+  producer who has been living in britain since 1973 his career
+* Ceiri Torjussen                                    0.97420
+  ceiri torjussen born 1976 is a composer who has contributed music to dozens of film and te
+  levision productions in the ushis music was described by
+* Wilson McLean                                      0.97455
+  wilson mclean born 1937 is a scottish illustrator and artist he has illustrated primarily 
+  in the field of advertising but has also provided cover art
+* Brenton Broadstock                                 0.97471
+  brenton broadstock ao born 1952 is an australian composerbroadstock was born in melbourne 
+  he studied history politics and music at monash university and later composition
+* Michael Peter Smith                                0.97499
+  michael peter smith born september 7 1941 is a chicagobased singersongwriter rolling stone
+   magazine once called him the greatest songwriter in the english language he
+* Third Hawkins                                      0.97553
+  born maurice hawkins third hawkins is a recognized music producer in and out of the dmv ar
+  ea including his hometown of baltimore maryland he has
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[31]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">left_female_non_athletes</span><span class="p">,</span> <span class="n">right_female_child_non_athletes</span> <span class="o">=</span> <span class="n">bipartition</span><span class="p">(</span><span class="n">female_non_athletes</span><span class="p">,</span> <span class="n">maxiter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">num_runs</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[35]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">display_single_tf_idf_cluster</span><span class="p">(</span><span class="n">left_female_non_athletes</span><span class="p">,</span> <span class="n">map_index_to_word</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>she:0.121 her:0.100 actress:0.031 film:0.030 music:0.028 
+* Janet Jackson                                      0.92374
+  janet damita jo jackson born may 16 1966 is an american singer songwriter and actress know
+  n for a series of sonically innovative socially conscious and
+* Barbara Hershey                                    0.92524
+  barbara hershey born barbara lynn herzstein february 5 1948 once known as barbara seagull 
+  is an american actress in a career spanning nearly 50 years
+* Madonna (entertainer)                              0.92753
+  madonna louise ciccone tkoni born august 16 1958 is an american singer songwriter actress 
+  and businesswoman she achieved popularity by pushing the boundaries of lyrical
+* Cher                                               0.92909
+  cher r born cherilyn sarkisian may 20 1946 is an american singer actress and television ho
+  st described as embodying female autonomy in a maledominated industry
+* Candice Bergen                                     0.93266
+  candice patricia bergen born may 9 1946 is an american actress and former fashion model fo
+  r her role as the title character on the cbs
+* Glenn Close                                        0.93426
+  glenn close born march 19 1947 is an american film television and stage actress throughout
+   her long and varied career she has been consistently acclaimed
+* Jane Fonda                                         0.93515
+  jane fonda born lady jayne seymour fonda december 21 1937 is an american actress writer po
+  litical activist former fashion model and fitness guru she is
+* Judi Dench                                         0.93624
+  dame judith olivia dench ch dbe frsa born 9 december 1934 is an english actress and author
+   dench made her professional debut in 1957 with
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[34]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">display_single_tf_idf_cluster</span><span class="p">(</span><span class="n">right_female_child_non_athletes</span><span class="p">,</span> <span class="n">map_index_to_word</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>she:0.130 her:0.072 women:0.014 miss:0.014 university:0.013 
+* Lauren Royal                                       0.93939
+  lauren royal born march 3 circa 1965 is a book writer from california royal has written bo
+  th historic and novelistic booksa selfproclaimed angels baseball fan
+* %C3%81ine Hyland                                   0.93940
+  ine hyland ne donlon is emeritus professor of education and former vicepresident of univer
+  sity college cork ireland she was born in 1942 in athboy co
+* Dorothy E. Smith                                   0.94113
+  dorothy edith smithborn july 6 1926 is a canadian sociologist with research interests besi
+  des in sociology in many disciplines including womens studies psychology and educational
+* Kayee Griffin                                      0.94162
+  kayee frances griffin born 6 february 1950 is an australian politician and former australi
+  an labor party member of the new south wales legislative council serving
+* Janine Shepherd                                    0.94252
+  janine lee shepherd am born 1962 is an australian pilot and former crosscountry skier shep
+  herds career as an athlete ended when she suffered major injuries
+* Bhama Srinivasan                                   0.94281
+  bhama srinivasan april 22 1935 is a mathematician known for her work in the representation
+   theory of finite groups her contributions were honored with the
+* Ellen Christine Christiansen                       0.94395
+  ellen christine christiansen born 10 december 1964 is a norwegian politician representing 
+  the conservative party and formerly the progress partyborn in oslo she finished her
+* Elvira Vinogradova                                 0.94420
+  elvira vinogradova russian born june 16 1934 is a russian tv editorelvira belenina russian
+   was born in 1934 in fergana ussr she went to school
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+ 
+
+
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: 'center'," +
+        "    displayIndent: '0em'," +
+        "    showMathMenu: true," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['$','$'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        " linebreaks: { automatic: true, width: '95% container' }, " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+        "    } " +
+        "}); ";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+
+            </section>
+
+            <section class="post-info">
+                <div class="post-share">
+                    <a class="twitter" href="https://twitter.com/share?text=Hierarchical Clustering&amp;url=https://arslan-san.github.io/hierarchical_clustering.html" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <i class="ic ic-twitter"></i><span class="hidden">Twitter</span>
+                    </a>
+                    <a class="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https://arslan-san.github.io/hierarchical_clustering.html" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <i class="ic ic-facebook"></i><span class="hidden">Facebook</span>
+                    </a>
+                    <a class="googleplus" href="https://plus.google.com/share?url=https://arslan-san.github.io/hierarchical_clustering.html" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <i class="ic ic-googleplus"></i><span class="hidden">Google+</span>
+                    </a>
+                    <div class="clear"></div>
+                </div>
+
+                <aside class="post-tags">
+<a href="https://arslan-san.github.io/tag/python-clustering-hierarchical-clustering-divisive-clustering-text.html">python clustering hierarchical-clustering divisive-clustering text</a>                </aside>
+
+                <div class="clear"></div>
+
+ 
+
+                </section>
+
+                <script type="text/javascript">
+                    var disqus = 'arslanblog';
+                    var disqus_shortname = 'arslanblog';
+                    var disqus_identifier = '/hierarchical_clustering.html';
+                    var disqus_url = 'https://arslan-san.github.io/hierarchical_clustering.html';
+                </script>
+                <noscript>Please enable JavaScript to view the comments.</noscript>                  
+                <section class="post-comments">
+                        <a id="show-disqus" class="post-comments-activate" data-disqus-identifier="/hierarchical_clustering.html" >Show Comments</a>
+                    <div id="disqus_thread"></div>                  
+                </section>
+
+                <aside class="post-nav">
+                    <div class="clear"></div>
+                </aside>
+
+            </div>
+        </article>
+    </main>
+      <!-- TODO : Body class -->
+    <div id="body-class" style="display: none;" class=""></div>
+  
+    <footer id="footer">
+      <div class="inner">
+        <section class="credits">
+          <span class="credits-theme">Theme <a href="https://github.com/arulrajnet/attila" rel="nofollow">Attila</a></span>
+          <span class="credits-software">Published with <a href="https://github.com/getpelican/pelican" rel="nofollow">Pelican</a></span>
+        </section>
+      </div>
+    </footer>
+  </section>
+
+  <script type="text/javascript" src="https://arslan-san.github.io/theme/js/script.js"></script>
+  
+<script type="text/javascript">
+    var disqus_shortname = 'arslanblog';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+</body>
+</html>

@@ -1,0 +1,2496 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+
+  <title>Fitting Gaussian mixture model to text data</title>
+
+
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="referrer" content="origin" />
+  <meta name="generator" content="Pelican" />
+  <link href="https://arslan-san.github.io" rel="canonical" />
+
+  <!-- Feed -->
+
+  <link href="https://arslan-san.github.io/theme/css/style.css" type="text/css" rel="stylesheet" />
+
+  <!-- Code highlight color scheme -->
+      <link href="https://arslan-san.github.io/theme/css/code_blocks/github.css" rel="stylesheet">
+
+
+  <!-- Custom fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Montserrat:400,300' rel='stylesheet' type='text/css' />
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css" />
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+      <meta property="og:locale" content="" />
+    <meta property="og:site_name" content="Arslan's Blog" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Arslan's Blog" />
+    <meta property="og:description" content="View the blog." />
+    <meta property="og:url" content="https://arslan-san.github.io" />
+      <meta name="og:image" content="https://arslan-san.github.io/theme/images/post-bg.jpg">
+</head>
+<!-- TODO : Body class -->
+<body class="home-template">
+
+<nav id="menu">
+  <a class="close-button">Close</a>
+  <div class="nav-wrapper">
+    <p class="nav-label">Menu</p>
+    <ul>
+          <li><a href="/pages/about.html" role="presentation">About</a></li>
+          <li><a href="/pages/useful-resources.html" role="presentation">Useful Resources</a></li>
+          <li><a href="/pages/completed-coursera-courses.html" role="presentation">Completed Coursera Courses</a></li>
+          <li><a href="/pages/useful-ipython-notebooks.html" role="presentation">Useful Ipython Notebooks</a></li>
+
+                  <li role="presentation"><a href="https://arslan-san.github.io/category/posts.html">posts</a></li>
+
+    </ul>
+  </div>
+</nav>
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    <header id="post-header" class="has-cover">
+      <div class="inner">
+        <nav id="navigation">
+            <span id="home-button" class="nav-button">
+                <a class="home-button" href = "../" href="https://arslan-san.github.io" title="Home"><i class="ic ic-arrow-left"></i> Home</a>
+            </span>
+          <span id="menu-button" class="nav-button">
+            <a class="menu-button"><i class="ic ic-menu"></i> Menu</a>
+          </span>
+        </nav>
+        <h1 class="post-title">Fitting Gaussian mixture model to text data</h1>      
+            <div class="post-cover cover" style="background-image: url('https://arslan-san.github.io/theme/images/post-bg.jpg')">
+        
+      </div>
+    </header>    
+
+  <section id="wrapper">
+    <a class="hidden-close"></a>
+  <!-- Post content -->
+  <main class="content" role="main">
+      <article class="post">
+      <div class="inner">
+          <section class="post-content">
+              <style type="text/css">/*!
+*
+* IPython notebook
+*
+*/
+/* CSS font colors for translated ANSI escape sequences */
+/* The color values are a mix of
+   http://www.xcolors.net/dl/baskerville-ivorylight and
+   http://www.xcolors.net/dl/euphrasia */
+.ansi-black-fg {
+  color: #3E424D;
+}
+.ansi-black-bg {
+  background-color: #3E424D;
+}
+.ansi-black-intense-fg {
+  color: #282C36;
+}
+.ansi-black-intense-bg {
+  background-color: #282C36;
+}
+.ansi-red-fg {
+  color: #E75C58;
+}
+.ansi-red-bg {
+  background-color: #E75C58;
+}
+.ansi-red-intense-fg {
+  color: #B22B31;
+}
+.ansi-red-intense-bg {
+  background-color: #B22B31;
+}
+.ansi-green-fg {
+  color: #00A250;
+}
+.ansi-green-bg {
+  background-color: #00A250;
+}
+.ansi-green-intense-fg {
+  color: #007427;
+}
+.ansi-green-intense-bg {
+  background-color: #007427;
+}
+.ansi-yellow-fg {
+  color: #DDB62B;
+}
+.ansi-yellow-bg {
+  background-color: #DDB62B;
+}
+.ansi-yellow-intense-fg {
+  color: #B27D12;
+}
+.ansi-yellow-intense-bg {
+  background-color: #B27D12;
+}
+.ansi-blue-fg {
+  color: #208FFB;
+}
+.ansi-blue-bg {
+  background-color: #208FFB;
+}
+.ansi-blue-intense-fg {
+  color: #0065CA;
+}
+.ansi-blue-intense-bg {
+  background-color: #0065CA;
+}
+.ansi-magenta-fg {
+  color: #D160C4;
+}
+.ansi-magenta-bg {
+  background-color: #D160C4;
+}
+.ansi-magenta-intense-fg {
+  color: #A03196;
+}
+.ansi-magenta-intense-bg {
+  background-color: #A03196;
+}
+.ansi-cyan-fg {
+  color: #60C6C8;
+}
+.ansi-cyan-bg {
+  background-color: #60C6C8;
+}
+.ansi-cyan-intense-fg {
+  color: #258F8F;
+}
+.ansi-cyan-intense-bg {
+  background-color: #258F8F;
+}
+.ansi-white-fg {
+  color: #C5C1B4;
+}
+.ansi-white-bg {
+  background-color: #C5C1B4;
+}
+.ansi-white-intense-fg {
+  color: #A1A6B2;
+}
+.ansi-white-intense-bg {
+  background-color: #A1A6B2;
+}
+.ansi-default-inverse-fg {
+  color: #FFFFFF;
+}
+.ansi-default-inverse-bg {
+  background-color: #000000;
+}
+.ansi-bold {
+  font-weight: bold;
+}
+.ansi-underline {
+  text-decoration: underline;
+}
+/* The following styles are deprecated an will be removed in a future version */
+.ansibold {
+  font-weight: bold;
+}
+.ansi-inverse {
+  outline: 0.5px dotted;
+}
+/* use dark versions for foreground, to improve visibility */
+.ansiblack {
+  color: black;
+}
+.ansired {
+  color: darkred;
+}
+.ansigreen {
+  color: darkgreen;
+}
+.ansiyellow {
+  color: #c4a000;
+}
+.ansiblue {
+  color: darkblue;
+}
+.ansipurple {
+  color: darkviolet;
+}
+.ansicyan {
+  color: steelblue;
+}
+.ansigray {
+  color: gray;
+}
+/* and light for background, for the same reason */
+.ansibgblack {
+  background-color: black;
+}
+.ansibgred {
+  background-color: red;
+}
+.ansibggreen {
+  background-color: green;
+}
+.ansibgyellow {
+  background-color: yellow;
+}
+.ansibgblue {
+  background-color: blue;
+}
+.ansibgpurple {
+  background-color: magenta;
+}
+.ansibgcyan {
+  background-color: cyan;
+}
+.ansibggray {
+  background-color: gray;
+}
+div.cell {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  border-radius: 2px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border-width: 1px;
+  border-style: solid;
+  border-color: transparent;
+  width: 100%;
+  padding: 5px;
+  /* This acts as a spacer between cells, that is outside the border */
+  margin: 0px;
+  outline: none;
+  position: relative;
+  overflow: visible;
+}
+div.cell:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: transparent;
+}
+div.cell.jupyter-soft-selected {
+  border-left-color: #E3F2FD;
+  border-left-width: 1px;
+  padding-left: 5px;
+  border-right-color: #E3F2FD;
+  border-right-width: 1px;
+  background: #E3F2FD;
+}
+@media print {
+  div.cell.jupyter-soft-selected {
+    border-color: transparent;
+  }
+}
+div.cell.selected,
+div.cell.selected.jupyter-soft-selected {
+  border-color: #ababab;
+}
+div.cell.selected:before,
+div.cell.selected.jupyter-soft-selected:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: #42A5F5;
+}
+@media print {
+  div.cell.selected,
+  div.cell.selected.jupyter-soft-selected {
+    border-color: transparent;
+  }
+}
+.edit_mode div.cell.selected {
+  border-color: #66BB6A;
+}
+.edit_mode div.cell.selected:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: #66BB6A;
+}
+@media print {
+  .edit_mode div.cell.selected {
+    border-color: transparent;
+  }
+}
+.prompt {
+  /* This needs to be wide enough for 3 digit prompt numbers: In[100]: */
+  min-width: 14ex;
+  /* This padding is tuned to match the padding on the CodeMirror editor. */
+  padding: 0.4em;
+  margin: 0px;
+  font-family: monospace;
+  text-align: right;
+  /* This has to match that of the the CodeMirror class line-height below */
+  line-height: 1.21429em;
+  /* Don't highlight prompt number selection */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  /* Use default cursor */
+  cursor: default;
+}
+@media (max-width: 540px) {
+  .prompt {
+    text-align: left;
+  }
+}
+div.inner_cell {
+  min-width: 0;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  /* Old browsers */
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  box-flex: 1;
+  /* Modern browsers */
+  flex: 1;
+}
+/* input_area and input_prompt must match in top border and margin for alignment */
+div.input_area {
+  border: 1px solid #cfcfcf;
+  border-radius: 2px;
+  background: #f7f7f7;
+  line-height: 1.21429em;
+}
+/* This is needed so that empty prompt areas can collapse to zero height when there
+   is no content in the output_subarea and the prompt. The main purpose of this is
+   to make sure that empty JavaScript output_subareas have no height. */
+div.prompt:empty {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+div.unrecognized_cell {
+  padding: 5px 5px 5px 0px;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+div.unrecognized_cell .inner_cell {
+  border-radius: 2px;
+  padding: 5px;
+  font-weight: bold;
+  color: red;
+  border: 1px solid #cfcfcf;
+  background: #eaeaea;
+}
+div.unrecognized_cell .inner_cell a {
+  color: inherit;
+  text-decoration: none;
+}
+div.unrecognized_cell .inner_cell a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+@media (max-width: 540px) {
+  div.unrecognized_cell > div.prompt {
+    display: none;
+  }
+}
+div.code_cell {
+  /* avoid page breaking on code cells when printing */
+}
+@media print {
+  div.code_cell {
+    page-break-inside: avoid;
+  }
+}
+/* any special styling for code cells that are currently running goes here */
+div.input {
+  page-break-inside: avoid;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.input {
+    /* Old browsers */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-box-align: stretch;
+    display: -moz-box;
+    -moz-box-orient: vertical;
+    -moz-box-align: stretch;
+    display: box;
+    box-orient: vertical;
+    box-align: stretch;
+    /* Modern browsers */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+/* input_area and input_prompt must match in top border and margin for alignment */
+div.input_prompt {
+  color: #303F9F;
+  border-top: 1px solid transparent;
+}
+div.input_area > div.highlight {
+  margin: 0.4em;
+  border: none;
+  padding: 0px;
+  background-color: transparent;
+}
+div.input_area > div.highlight > pre {
+  margin: 0px;
+  border: none;
+  padding: 0px;
+  background-color: transparent;
+}
+/* The following gets added to the <head> if it is detected that the user has a
+ * monospace font with inconsistent normal/bold/italic height.  See
+ * notebookmain.js.  Such fonts will have keywords vertically offset with
+ * respect to the rest of the text.  The user should select a better font.
+ * See: https://github.com/ipython/ipython/issues/1503
+ *
+ * .CodeMirror span {
+ *      vertical-align: bottom;
+ * }
+ */
+.CodeMirror {
+  line-height: 1.21429em;
+  /* Changed from 1em to our global default */
+  font-size: 14px;
+  height: auto;
+  /* Changed to auto to autogrow */
+  background: none;
+  /* Changed from white to allow our bg to show through */
+}
+.CodeMirror-scroll {
+  /*  The CodeMirror docs are a bit fuzzy on if overflow-y should be hidden or visible.*/
+  /*  We have found that if it is visible, vertical scrollbars appear with font size changes.*/
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+.CodeMirror-lines {
+  /* In CM2, this used to be 0.4em, but in CM3 it went to 4px. We need the em value because */
+  /* we have set a different line-height and want this to scale with that. */
+  /* Note that this should set vertical padding only, since CodeMirror assumes
+       that horizontal padding will be set on CodeMirror pre */
+  padding: 0.4em 0;
+}
+.CodeMirror-linenumber {
+  padding: 0 8px 0 4px;
+}
+.CodeMirror-gutters {
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+}
+.CodeMirror pre {
+  /* In CM3 this went to 4px from 0 in CM2. This sets horizontal padding only,
+    use .CodeMirror-lines for vertical */
+  padding: 0 0.4em;
+  border: 0;
+  border-radius: 0;
+}
+.CodeMirror-cursor {
+  border-left: 1.4px solid black;
+}
+@media screen and (min-width: 2138px) and (max-width: 4319px) {
+  .CodeMirror-cursor {
+    border-left: 2px solid black;
+  }
+}
+@media screen and (min-width: 4320px) {
+  .CodeMirror-cursor {
+    border-left: 4px solid black;
+  }
+}
+/*
+
+Original style from softwaremaniacs.org (c) Ivan Sagalaev <Maniac@SoftwareManiacs.Org>
+Adapted from GitHub theme
+
+*/
+.highlight-base {
+  color: #000;
+}
+.highlight-variable {
+  color: #000;
+}
+.highlight-variable-2 {
+  color: #1a1a1a;
+}
+.highlight-variable-3 {
+  color: #333333;
+}
+.highlight-string {
+  color: #BA2121;
+}
+.highlight-comment {
+  color: #408080;
+  font-style: italic;
+}
+.highlight-number {
+  color: #080;
+}
+.highlight-atom {
+  color: #88F;
+}
+.highlight-keyword {
+  color: #008000;
+  font-weight: bold;
+}
+.highlight-builtin {
+  color: #008000;
+}
+.highlight-error {
+  color: #f00;
+}
+.highlight-operator {
+  color: #AA22FF;
+  font-weight: bold;
+}
+.highlight-meta {
+  color: #AA22FF;
+}
+/* previously not defined, copying from default codemirror */
+.highlight-def {
+  color: #00f;
+}
+.highlight-string-2 {
+  color: #f50;
+}
+.highlight-qualifier {
+  color: #555;
+}
+.highlight-bracket {
+  color: #997;
+}
+.highlight-tag {
+  color: #170;
+}
+.highlight-attribute {
+  color: #00c;
+}
+.highlight-header {
+  color: blue;
+}
+.highlight-quote {
+  color: #090;
+}
+.highlight-link {
+  color: #00c;
+}
+/* apply the same style to codemirror */
+.cm-s-ipython span.cm-keyword {
+  color: #008000;
+  font-weight: bold;
+}
+.cm-s-ipython span.cm-atom {
+  color: #88F;
+}
+.cm-s-ipython span.cm-number {
+  color: #080;
+}
+.cm-s-ipython span.cm-def {
+  color: #00f;
+}
+.cm-s-ipython span.cm-variable {
+  color: #000;
+}
+.cm-s-ipython span.cm-operator {
+  color: #AA22FF;
+  font-weight: bold;
+}
+.cm-s-ipython span.cm-variable-2 {
+  color: #1a1a1a;
+}
+.cm-s-ipython span.cm-variable-3 {
+  color: #333333;
+}
+.cm-s-ipython span.cm-comment {
+  color: #408080;
+  font-style: italic;
+}
+.cm-s-ipython span.cm-string {
+  color: #BA2121;
+}
+.cm-s-ipython span.cm-string-2 {
+  color: #f50;
+}
+.cm-s-ipython span.cm-meta {
+  color: #AA22FF;
+}
+.cm-s-ipython span.cm-qualifier {
+  color: #555;
+}
+.cm-s-ipython span.cm-builtin {
+  color: #008000;
+}
+.cm-s-ipython span.cm-bracket {
+  color: #997;
+}
+.cm-s-ipython span.cm-tag {
+  color: #170;
+}
+.cm-s-ipython span.cm-attribute {
+  color: #00c;
+}
+.cm-s-ipython span.cm-header {
+  color: blue;
+}
+.cm-s-ipython span.cm-quote {
+  color: #090;
+}
+.cm-s-ipython span.cm-link {
+  color: #00c;
+}
+.cm-s-ipython span.cm-error {
+  color: #f00;
+}
+.cm-s-ipython span.cm-tab {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAMCAYAAAAkuj5RAAAAAXNSR0IArs4c6QAAAGFJREFUSMft1LsRQFAQheHPowAKoACx3IgEKtaEHujDjORSgWTH/ZOdnZOcM/sgk/kFFWY0qV8foQwS4MKBCS3qR6ixBJvElOobYAtivseIE120FaowJPN75GMu8j/LfMwNjh4HUpwg4LUAAAAASUVORK5CYII=);
+  background-position: right;
+  background-repeat: no-repeat;
+}
+div.output_wrapper {
+  /* this position must be relative to enable descendents to be absolute within it */
+  position: relative;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  z-index: 1;
+}
+/* class for the output area when it should be height-limited */
+div.output_scroll {
+  /* ideally, this would be max-height, but FF barfs all over that */
+  height: 24em;
+  /* FF needs this *and the wrapper* to specify full width, or it will shrinkwrap */
+  width: 100%;
+  overflow: auto;
+  border-radius: 2px;
+  -webkit-box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+  display: block;
+}
+/* output div while it is collapsed */
+div.output_collapsed {
+  margin: 0px;
+  padding: 0px;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+div.out_prompt_overlay {
+  height: 100%;
+  padding: 0px 0.4em;
+  position: absolute;
+  border-radius: 2px;
+}
+div.out_prompt_overlay:hover {
+  /* use inner shadow to get border that is computed the same on WebKit/FF */
+  -webkit-box-shadow: inset 0 0 1px #000;
+  box-shadow: inset 0 0 1px #000;
+  background: rgba(240, 240, 240, 0.5);
+}
+div.output_prompt {
+  color: #D84315;
+}
+/* This class is the outer container of all output sections. */
+div.output_area {
+  padding: 0px;
+  page-break-inside: avoid;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+div.output_area .MathJax_Display {
+  text-align: left !important;
+}
+div.output_area 
+div.output_area 
+div.output_area img,
+div.output_area svg {
+  max-width: 100%;
+  height: auto;
+}
+div.output_area img.unconfined,
+div.output_area svg.unconfined {
+  max-width: none;
+}
+div.output_area .mglyph > img {
+  max-width: none;
+}
+/* This is needed to protect the pre formating from global settings such
+   as that of bootstrap */
+.output {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.output_area {
+    /* Old browsers */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-box-align: stretch;
+    display: -moz-box;
+    -moz-box-orient: vertical;
+    -moz-box-align: stretch;
+    display: box;
+    box-orient: vertical;
+    box-align: stretch;
+    /* Modern browsers */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+div.output_area pre {
+  margin: 0;
+  padding: 1px 0 1px 0;
+  border: 0;
+  vertical-align: baseline;
+  color: black;
+  background-color: transparent;
+  border-radius: 0;
+}
+/* This class is for the output subarea inside the output_area and after
+   the prompt div. */
+div.output_subarea {
+  overflow-x: auto;
+  padding: 0.4em;
+  /* Old browsers */
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  box-flex: 1;
+  /* Modern browsers */
+  flex: 1;
+  max-width: calc(100% - 14ex);
+}
+div.output_scroll div.output_subarea {
+  overflow-x: visible;
+}
+/* The rest of the output_* classes are for special styling of the different
+   output types */
+/* all text output has this class: */
+div.output_text {
+  text-align: left;
+  color: #000;
+  /* This has to match that of the the CodeMirror class line-height below */
+  line-height: 1.21429em;
+}
+/* stdout/stderr are 'text' as well as 'stream', but execute_result/error are *not* streams */
+div.output_stderr {
+  background: #fdd;
+  /* very light red background for stderr */
+}
+div.output_latex {
+  text-align: left;
+}
+/* Empty output_javascript divs should have no height */
+div.output_javascript:empty {
+  padding: 0;
+}
+.js-error {
+  color: darkred;
+}
+/* raw_input styles */
+div.raw_input_container {
+  line-height: 1.21429em;
+  padding-top: 5px;
+}
+pre.raw_input_prompt {
+  /* nothing needed here. */
+}
+input.raw_input {
+  font-family: monospace;
+  font-size: inherit;
+  color: inherit;
+  width: auto;
+  /* make sure input baseline aligns with prompt */
+  vertical-align: baseline;
+  /* padding + margin = 0.5em between prompt and cursor */
+  padding: 0em 0.25em;
+  margin: 0em 0.25em;
+}
+input.raw_input:focus {
+  box-shadow: none;
+}
+p.p-space {
+  margin-bottom: 10px;
+}
+div.output_unrecognized {
+  padding: 5px;
+  font-weight: bold;
+  color: red;
+}
+div.output_unrecognized a {
+  color: inherit;
+  text-decoration: none;
+}
+div.output_unrecognized a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+.rendered_html {
+  color: #000;
+  /* any extras will just be numbers: */
+}
+
+
+
+.rendered_html :link {
+  text-decoration: underline;
+}
+.rendered_html :visited {
+  text-decoration: underline;
+}
+
+
+
+
+
+
+.rendered_html h1:first-child {
+  margin-top: 0.538em;
+}
+.rendered_html h2:first-child {
+  margin-top: 0.636em;
+}
+.rendered_html h3:first-child {
+  margin-top: 0.777em;
+}
+.rendered_html h4:first-child {
+  margin-top: 1em;
+}
+.rendered_html h5:first-child {
+  margin-top: 1em;
+}
+.rendered_html h6:first-child {
+  margin-top: 1em;
+}
+.rendered_html ul:not(.list-inline),
+.rendered_html ol:not(.list-inline) {
+  padding-left: 2em;
+}
+
+
+
+
+
+
+
+
+.rendered_html * + ul {
+  margin-top: 1em;
+}
+.rendered_html * + ol {
+  margin-top: 1em;
+}
+
+
+
+
+
+.rendered_html pre,
+
+
+
+
+.rendered_html tr,
+.rendered_html th,
+
+
+.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+.rendered_html * + table {
+  margin-top: 1em;
+}
+
+.rendered_html * + p {
+  margin-top: 1em;
+}
+
+.rendered_html * + img {
+  margin-top: 1em;
+}
+.rendered_html img,
+
+.rendered_html img.unconfined,
+
+
+.rendered_html * + .alert {
+  margin-top: 1em;
+}
+[dir="rtl"] 
+div.text_cell {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.text_cell > div.prompt {
+    display: none;
+  }
+}
+div.text_cell_render {
+  /*font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;*/
+  outline: none;
+  resize: none;
+  width: inherit;
+  border-style: none;
+  padding: 0.5em 0.5em 0.5em 0.4em;
+  color: #000;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+a.anchor-link:link {
+  text-decoration: none;
+  padding: 0px 20px;
+  visibility: hidden;
+}
+h1:hover .anchor-link,
+h2:hover .anchor-link,
+h3:hover .anchor-link,
+h4:hover .anchor-link,
+h5:hover .anchor-link,
+h6:hover .anchor-link {
+  visibility: visible;
+}
+.text_cell.rendered .input_area {
+  display: none;
+}
+.text_cell.rendered 
+.text_cell.rendered .rendered_html tr,
+.text_cell.rendered .rendered_html th,
+.text_cell.rendered 
+.text_cell.unrendered .text_cell_render {
+  display: none;
+}
+.text_cell .dropzone .input_area {
+  border: 2px dashed #bababa;
+  margin: -1px;
+}
+.cm-header-1,
+.cm-header-2,
+.cm-header-3,
+.cm-header-4,
+.cm-header-5,
+.cm-header-6 {
+  font-weight: bold;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.cm-header-1 {
+  font-size: 185.7%;
+}
+.cm-header-2 {
+  font-size: 157.1%;
+}
+.cm-header-3 {
+  font-size: 128.6%;
+}
+.cm-header-4 {
+  font-size: 110%;
+}
+.cm-header-5 {
+  font-size: 100%;
+  font-style: italic;
+}
+.cm-header-6 {
+  font-size: 100%;
+  font-style: italic;
+}
+</style>
+<style type="text/css">.highlight .hll { background-color: #ffffcc }
+.highlight  { background: #f8f8f8; }
+.highlight .c { color: #408080; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #FF0000 } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666666 } /* Operator */
+.highlight .ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #BC7A00 } /* Comment.Preproc */
+.highlight .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #408080; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #408080; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #FF0000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00A000 } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #0044DD } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666666 } /* Literal.Number */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #7D9029 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.highlight .no { color: #880000 } /* Name.Constant */
+.highlight .nd { color: #AA22FF } /* Name.Decorator */
+.highlight .ni { color: #999999; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0000FF } /* Name.Function */
+.highlight .nl { color: #A0A000 } /* Name.Label */
+.highlight .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #666666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666666 } /* Literal.Number.Float */
+.highlight .mh { color: #666666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
+.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #BB6688 } /* Literal.String.Regex */
+.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0000FF } /* Name.Function.Magic */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
+.highlight .il { color: #666666 } /* Literal.Number.Integer.Long */</style>
+<style type="text/css">
+/* Temporary definitions which will become obsolete with Notebook release 5.0 */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-bold { font-weight: bold; }
+</style>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Fitting-a-diagonal-covariance-Gaussian-mixture-model-to-text-data">Fitting a diagonal covariance Gaussian mixture model to text data<a class="anchor-link" href="#Fitting-a-diagonal-covariance-Gaussian-mixture-model-to-text-data">&#182;</a></h2><p>In a previous assignment, we explored k-means clustering for a high-dimensional Wikipedia dataset. We can also model this data with a mixture of Gaussians, though with increasing dimension we run into two important issues associated with using a full covariance matrix for each component.</p>
+<ul>
+<li>Computational cost becomes prohibitive in high dimensions: score calculations have complexity cubic in the number of dimensions M if the Gaussian has a full covariance matrix.</li>
+<li>A model with many parameters require more data: observe that a full covariance matrix for an M-dimensional Gaussian will have M(M+1)/2 parameters to fit. With the number of parameters growing roughly as the square of the dimension, it may quickly become impossible to find a sufficient amount of data to make good inferences.</li>
+</ul>
+<p>Both of these issues are avoided if we require the covariance matrix of each component to be diagonal, as then it has only M parameters to fit and the score computation decomposes into M univariate score calculations. Recall from the lecture that the M-step for the full covariance is:</p>
+\begin{align*}
+\hat{\Sigma}_k &amp;= \frac{1}{N_k^{soft}} \sum_{i=1}^N r_{ik} (x_i-\hat{\mu}_k)(x_i - \hat{\mu}_k)^T
+\end{align*}<p>Note that this is a square matrix with M rows and M columns, and the above equation implies that the (v, w) element is computed by</p>
+\begin{align*}
+\hat{\Sigma}_{k, v, w} &amp;= \frac{1}{N_k^{soft}} \sum_{i=1}^N r_{ik} (x_{iv}-\hat{\mu}_{kv})(x_{iw} - \hat{\mu}_{kw})
+\end{align*}<p>When we assume that this is a diagonal matrix, then non-diagonal elements are assumed to be zero and we only need to compute each of the M elements along the diagonal independently using the following equation.</p>
+\begin{align*}
+\hat{\sigma}^2_{k, v} &amp;= \hat{\Sigma}_{k, v, v}  \\
+&amp;= \frac{1}{N_k^{soft}} \sum_{i=1}^N r_{ik} (x_{iv}-\hat{\mu}_{kv})^2
+\end{align*}<p>In this section, we will use an EM implementation to fit a Gaussian mixture model with <strong>diagonal</strong> covariances to a subset of the Wikipedia dataset. The implementation uses the above equation to compute each variance term.</p>
+<p>We'll begin by importing the dataset and coming up with a useful representation for each article. After running our algorithm on the data, we will explore the output to see whether we can give a meaningful interpretation to the fitted parameters in our model.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Note to Amazon EC2 users</strong>: To conserve memory, make sure to stop all the other notebooks before running this notebook.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Import-necessary-packages">Import necessary packages<a class="anchor-link" href="#Import-necessary-packages">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The following code block will check if you have the correct version of GraphLab Create. Any version later than 1.8.5 will do. To upgrade, read <a href="https://turi.com/download/upgrade-graphlab-create.html">this page</a>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">graphlab</span>
+
+<span class="sd">&#39;&#39;&#39;Check GraphLab Create version&#39;&#39;&#39;</span>
+<span class="kn">from</span> <span class="nn">distutils.version</span> <span class="kn">import</span> <span class="n">StrictVersion</span>
+<span class="k">assert</span> <span class="p">(</span><span class="n">StrictVersion</span><span class="p">(</span><span class="n">graphlab</span><span class="o">.</span><span class="n">version</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">StrictVersion</span><span class="p">(</span><span class="s1">&#39;1.8.5&#39;</span><span class="p">)),</span> <span class="s1">&#39;GraphLab Create must be version 1.8.5 or later.&#39;</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We also have a Python file containing implementations for several functions that will be used during the course of this assignment.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">em_utilities</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Load-Wikipedia-data-and-extract-TF-IDF-features">Load Wikipedia data and extract TF-IDF features<a class="anchor-link" href="#Load-Wikipedia-data-and-extract-TF-IDF-features">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Load Wikipedia data and transform each of the first 5000 document into a TF-IDF representation.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">wiki</span> <span class="o">=</span> <span class="n">graphlab</span><span class="o">.</span><span class="n">SFrame</span><span class="p">(</span><span class="s1">&#39;people_wiki.gl/&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5000</span><span class="p">)</span>
+<span class="n">wiki</span><span class="p">[</span><span class="s1">&#39;tf_idf&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">graphlab</span><span class="o">.</span><span class="n">text_analytics</span><span class="o">.</span><span class="n">tf_idf</span><span class="p">(</span><span class="n">wiki</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Using a utility we provide, we will create a sparse matrix representation of the documents. This is the same utility function you used during the previous assignment on k-means with text data.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">tf_idf</span><span class="p">,</span> <span class="n">map_index_to_word</span> <span class="o">=</span> <span class="n">sframe_to_scipy</span><span class="p">(</span><span class="n">wiki</span><span class="p">,</span> <span class="s1">&#39;tf_idf&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As in the previous assignment, we will normalize each document's TF-IDF vector to be a unit vector.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">tf_idf</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">tf_idf</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We can check that the length (Euclidean norm) of each row is now 1.0, as expected.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="n">doc</span> <span class="o">=</span> <span class="n">tf_idf</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">todense</span><span class="p">()))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>0.9999999999999999
+0.9999999999999997
+1.0
+1.0000000000000004
+0.9999999999999994
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="EM-in-high-dimensions">EM in high dimensions<a class="anchor-link" href="#EM-in-high-dimensions">&#182;</a></h2><p>EM for high-dimensional data requires some special treatment:</p>
+<ul>
+<li>E step and M step must be vectorized as much as possible, as explicit loops are dreadfully slow in Python.</li>
+<li>All operations must be cast in terms of sparse matrix operations, to take advantage of computational savings enabled by sparsity of data.</li>
+<li>Initially, some words may be entirely absent from a cluster, causing the M step to produce zero mean and variance for those words.  This means any data point with one of those words will have 0 probability of being assigned to that cluster since the cluster allows for no variability (0 variance) around that count being 0 (0 mean). Since there is a small chance for those words to later appear in the cluster, we instead assign a small positive variance (~1e-10). Doing so also prevents numerical overflow.</li>
+</ul>
+<p>We provide the complete implementation for you in the file <code>em_utilities.py</code>. For those who are interested, you can read through the code to see how the sparse matrix implementation differs from the previous assignment.</p>
+<p>You are expected to answer some quiz questions using the results of clustering.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Initializing mean parameters using k-means</strong></p>
+<p>Recall from the lectures that EM for Gaussian mixtures is very sensitive to the choice of initial means. With a bad initial set of means, EM may produce clusters that span a large area and are mostly overlapping. To eliminate such bad outcomes, we first produce a suitable set of initial means by using the cluster centers from running k-means.  That is, we first run k-means and then take the final set of means from the converged solution as the initial means in our EM algorithm.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[27]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">KMeans</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">num_clusters</span> <span class="o">=</span> <span class="mi">25</span>
+
+<span class="c1"># Use scikit-learn&#39;s k-means to simplify workflow</span>
+<span class="c1">#kmeans_model = KMeans(n_clusters=num_clusters, n_init=5, max_iter=400, random_state=1, n_jobs=-1) # uncomment to use parallelism -- may break on your installation</span>
+<span class="n">kmeans_model</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="n">num_clusters</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">kmeans_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">tf_idf</span><span class="p">)</span>
+<span class="n">centroids</span><span class="p">,</span> <span class="n">cluster_assignment</span> <span class="o">=</span> <span class="n">kmeans_model</span><span class="o">.</span><span class="n">cluster_centers_</span><span class="p">,</span> <span class="n">kmeans_model</span><span class="o">.</span><span class="n">labels_</span>
+
+<span class="n">means</span> <span class="o">=</span> <span class="p">[</span><span class="n">centroid</span> <span class="k">for</span> <span class="n">centroid</span> <span class="ow">in</span> <span class="n">centroids</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Initializing cluster weights</strong></p>
+<p>We will initialize each cluster weight to be the proportion of documents assigned to that cluster by k-means above.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">num_docs</span> <span class="o">=</span> <span class="n">tf_idf</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">weights</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">num_clusters</span><span class="p">):</span>
+    <span class="c1"># Compute the number of data points assigned to cluster i:</span>
+    <span class="n">num_assigned</span> <span class="o">=</span> <span class="n">cluster_assignment</span><span class="p">[</span><span class="n">cluster_assignment</span> <span class="o">==</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># YOUR CODE HERE</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">num_assigned</span><span class="p">)</span> <span class="o">/</span> <span class="n">num_docs</span>
+    <span class="n">weights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Initializing covariances</strong></p>
+<p>To initialize our covariance parameters, we compute $\hat{\sigma}_{k, j}^2 = \sum_{i=1}^{N}(x_{i,j} - \hat{\mu}_{k, j})^2$ for each feature $j$.  For features with really tiny variances, we assign 1e-8 instead to prevent numerical instability. We do this computation in a vectorized fashion in the following code block.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[29]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">covs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">num_clusters</span><span class="p">):</span>
+    <span class="n">member_rows</span> <span class="o">=</span> <span class="n">tf_idf</span><span class="p">[</span><span class="n">cluster_assignment</span><span class="o">==</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">cov</span> <span class="o">=</span> <span class="p">(</span><span class="n">member_rows</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">member_rows</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">member_rows</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">diag</span><span class="p">(</span><span class="n">means</span><span class="p">[</span><span class="n">i</span><span class="p">])))</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">A1</span> <span class="o">/</span> <span class="n">member_rows</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> \
+          <span class="o">+</span> <span class="n">means</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">cov</span><span class="p">[</span><span class="n">cov</span> <span class="o">&lt;</span> <span class="mf">1e-8</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e-8</span>
+    <span class="n">covs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cov</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Running EM</strong></p>
+<p>Now that we have initialized all of our parameters, run EM.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">out</span> <span class="o">=</span> <span class="n">EM_for_high_dimension</span><span class="p">(</span><span class="n">tf_idf</span><span class="p">,</span> <span class="n">means</span><span class="p">,</span> <span class="n">covs</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">cov_smoothing</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;loglik&#39;</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[12]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[3879297479.366981, 4883345753.533131, 4883345753.533131]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Interpret-clustering-results">Interpret clustering results<a class="anchor-link" href="#Interpret-clustering-results">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In contrast to k-means, EM is able to explicitly model clusters of varying sizes and proportions. The relative magnitude of variances in the word dimensions tell us much about the nature of the clusters.</p>
+<p>Write yourself a cluster visualizer as follows.  Examining each cluster's mean vector, list the 5 words with the largest mean values (5 most common words in the cluster). For each word, also include the associated variance parameter (diagonal element of the covariance matrix).</p>
+<p>A sample output may be:</p>
+
+<pre><code>==========================================================
+Cluster 0: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+football    1.08e-01    8.64e-03
+season      5.80e-02    2.93e-03
+club        4.48e-02    1.99e-03
+league      3.94e-02    1.08e-03
+played      3.83e-02    8.45e-04
+...</code></pre>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Fill in the blanks</span>
+<span class="k">def</span> <span class="nf">visualize_EM_clusters</span><span class="p">(</span><span class="n">tf_idf</span><span class="p">,</span> <span class="n">means</span><span class="p">,</span> <span class="n">covs</span><span class="p">,</span> <span class="n">map_index_to_word</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;==========================================================&#39;</span><span class="p">)</span>
+
+    <span class="n">num_clusters</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">means</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">num_clusters</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Cluster {0:d}: Largest mean parameters in cluster &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">{0: &lt;12}{1: &lt;12}{2: &lt;12}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;Word&#39;</span><span class="p">,</span> <span class="s1">&#39;Mean&#39;</span><span class="p">,</span> <span class="s1">&#39;Variance&#39;</span><span class="p">))</span>
+        
+        <span class="c1"># The k&#39;th element of sorted_word_ids should be the index of the word </span>
+        <span class="c1"># that has the k&#39;th-largest value in the cluster mean. Hint: Use np.argsort().</span>
+        <span class="n">sorted_word_ids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="o">-</span><span class="n">means</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>  <span class="c1"># YOUR CODE HERE</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sorted_word_ids</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>
+            <span class="k">print</span> <span class="s1">&#39;{0: &lt;12}{1:&lt;10.2e}{2:10.2e}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">map_index_to_word</span><span class="p">[</span><span class="s1">&#39;category&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> 
+                                                       <span class="n">means</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="n">i</span><span class="p">],</span>
+                                                       <span class="n">covs</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">print</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">==========================================================&#39;</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="sd">&#39;&#39;&#39;By EM&#39;&#39;&#39;</span>
+<span class="n">visualize_EM_clusters</span><span class="p">(</span><span class="n">tf_idf</span><span class="p">,</span> <span class="n">out</span><span class="p">[</span><span class="s1">&#39;means&#39;</span><span class="p">],</span> <span class="n">out</span><span class="p">[</span><span class="s1">&#39;covs&#39;</span><span class="p">],</span> <span class="n">map_index_to_word</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+==========================================================
+Cluster 0: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+poetry      1.51e-01    1.90e-02
+poems       6.33e-02    6.45e-03
+poet        5.91e-02    6.36e-03
+de          4.77e-02    8.72e-03
+literary    4.68e-02    3.29e-03
+
+==========================================================
+Cluster 1: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+she         1.60e-01    4.59e-03
+her         1.04e-01    3.20e-03
+music       1.53e-02    1.04e-03
+actress     1.52e-02    1.14e-03
+show        1.27e-02    7.33e-04
+
+==========================================================
+Cluster 2: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+football    7.45e-02    4.57e-03
+club        5.84e-02    2.55e-03
+league      5.72e-02    2.83e-03
+season      5.06e-02    2.35e-03
+played      3.79e-02    9.46e-04
+
+==========================================================
+Cluster 3: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+district    5.56e-02    4.00e-03
+republican  5.47e-02    4.55e-03
+senate      5.04e-02    5.21e-03
+democratic  3.72e-02    2.46e-03
+house       3.65e-02    2.07e-03
+
+==========================================================
+Cluster 4: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+novel       5.26e-02    5.50e-03
+book        4.30e-02    2.38e-03
+published   3.87e-02    1.51e-03
+books       3.19e-02    1.57e-03
+fiction     3.06e-02    3.10e-03
+
+==========================================================
+Cluster 5: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+rugby       1.59e-01    1.14e-02
+against     5.11e-02    1.99e-03
+wales       4.96e-02    6.96e-03
+played      4.90e-02    1.42e-03
+cup         4.81e-02    2.30e-03
+
+==========================================================
+Cluster 6: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+tour        5.18e-02    1.08e-02
+pga         4.42e-02    1.36e-02
+championship4.31e-02    3.78e-03
+racing      3.53e-02    4.77e-03
+won         3.11e-02    6.93e-04
+
+==========================================================
+Cluster 7: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+film        1.78e-01    6.05e-03
+films       6.60e-02    3.33e-03
+festival    4.46e-02    3.60e-03
+feature     3.41e-02    1.61e-03
+directed    2.83e-02    1.95e-03
+
+==========================================================
+Cluster 8: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+jazz        1.62e-01    1.65e-02
+chess       1.09e-01    3.10e-02
+grandmaster 3.78e-02    8.97e-03
+music       3.39e-02    1.15e-03
+pianist     2.69e-02    2.30e-03
+
+==========================================================
+Cluster 9: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+engineering 2.15e-02    2.76e-03
+business    2.08e-02    1.55e-03
+technology  1.90e-02    1.46e-03
+company     1.80e-02    9.69e-04
+chairman    1.69e-02    1.51e-03
+
+==========================================================
+Cluster 10: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+art         1.37e-01    6.78e-03
+museum      6.21e-02    7.84e-03
+artist      4.17e-02    1.74e-03
+gallery     3.91e-02    3.67e-03
+work        3.23e-02    7.92e-04
+
+==========================================================
+Cluster 11: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+research    4.17e-02    2.15e-03
+university  3.85e-02    7.99e-04
+professor   3.30e-02    1.27e-03
+science     2.31e-02    2.08e-03
+studies     2.11e-02    1.76e-03
+
+==========================================================
+Cluster 12: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+law         1.13e-01    8.91e-03
+court       6.40e-02    5.53e-03
+judge       4.00e-02    4.70e-03
+justice     3.63e-02    3.37e-03
+rights      3.47e-02    5.19e-03
+
+==========================================================
+Cluster 13: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+coach       9.60e-02    9.97e-03
+hockey      9.28e-02    2.04e-02
+soccer      8.30e-02    2.46e-02
+nhl         6.11e-02    1.22e-02
+season      4.47e-02    1.93e-03
+
+==========================================================
+Cluster 14: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+baseball    1.15e-01    5.53e-03
+league      1.03e-01    3.64e-03
+major       5.10e-02    1.16e-03
+games       4.71e-02    1.94e-03
+sox         4.57e-02    6.25e-03
+
+==========================================================
+Cluster 15: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+basketball  9.90e-02    1.32e-02
+football    5.98e-02    5.74e-03
+yards       5.32e-02    1.39e-02
+nba         5.21e-02    8.68e-03
+nfl         4.69e-02    7.80e-03
+
+==========================================================
+Cluster 16: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+church      1.20e-01    9.69e-03
+bishop      8.51e-02    1.06e-02
+archbishop  4.87e-02    7.44e-03
+diocese     4.70e-02    5.52e-03
+lds         4.13e-02    9.88e-03
+
+==========================================================
+Cluster 17: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+that        1.30e-02    1.97e-04
+i           1.19e-02    1.58e-03
+were        1.07e-02    2.83e-04
+he          1.03e-02    5.77e-05
+had         1.01e-02    2.24e-04
+
+==========================================================
+Cluster 18: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+music       1.12e-01    5.23e-03
+orchestra   8.40e-02    9.74e-03
+symphony    5.39e-02    8.05e-03
+conductor   4.97e-02    7.52e-03
+opera       4.84e-02    1.30e-02
+
+==========================================================
+Cluster 19: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+she         9.29e-02    8.21e-03
+championships8.06e-02    6.81e-03
+miss        7.95e-02    2.83e-02
+marathon    6.87e-02    2.49e-02
+metres      5.87e-02    1.08e-02
+
+==========================================================
+Cluster 20: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+minister    1.28e-01    7.34e-03
+prime       4.89e-02    4.79e-03
+government  3.65e-02    2.00e-03
+party       3.32e-02    1.33e-03
+cabinet     3.25e-02    3.34e-03
+
+==========================================================
+Cluster 21: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+news        5.64e-02    6.42e-03
+radio       4.04e-02    3.61e-03
+show        3.08e-02    2.28e-03
+television  2.40e-02    1.07e-03
+reporter    2.38e-02    1.88e-03
+
+==========================================================
+Cluster 22: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+theatre     5.66e-02    7.14e-03
+film        4.28e-02    1.66e-03
+actor       3.92e-02    3.01e-03
+television  3.67e-02    1.74e-03
+comedy      3.52e-02    4.57e-03
+
+==========================================================
+Cluster 23: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+party       6.80e-02    3.06e-03
+election    6.29e-02    3.42e-03
+elected     3.82e-02    1.24e-03
+liberal     3.56e-02    5.48e-03
+council     3.18e-02    2.33e-03
+
+==========================================================
+Cluster 24: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+album       7.41e-02    4.96e-03
+band        5.63e-02    4.27e-03
+music       4.36e-02    2.12e-03
+released    3.28e-02    1.14e-03
+records     2.34e-02    1.21e-03
+
+==========================================================
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Quiz Question</strong>. Select all the topics that have a cluster in the model created above. [multiple choice]</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Comparing-to-random-initialization">Comparing to random initialization<a class="anchor-link" href="#Comparing-to-random-initialization">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Create variables for randomly initializing the EM algorithm. Complete the following code block.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="c1"># See the note below to see why we set seed=5.</span>
+<span class="n">num_clusters</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">means</span><span class="p">)</span>
+<span class="n">num_docs</span><span class="p">,</span> <span class="n">num_words</span> <span class="o">=</span> <span class="n">tf_idf</span><span class="o">.</span><span class="n">shape</span>
+
+<span class="n">random_means</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">random_covs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">random_weights</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_clusters</span><span class="p">):</span>
+    
+    <span class="c1"># Create a numpy array of length num_words with random normally distributed values.</span>
+    <span class="c1"># Use the standard univariate normal distribution (mean 0, variance 1).</span>
+    <span class="c1"># YOUR CODE HERE</span>
+    <span class="n">mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_words</span><span class="p">)</span>
+    
+    <span class="c1"># Create a numpy array of length num_words with random values uniformly distributed between 1 and 5.</span>
+    <span class="c1"># YOUR CODE HERE</span>
+    <span class="n">cov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="n">num_words</span><span class="p">)</span>
+
+    <span class="c1"># Initially give each cluster equal weight.</span>
+    <span class="c1"># YOUR CODE HERE</span>
+    <span class="n">weight</span> <span class="o">=</span> <span class="mi">1</span>
+    
+    <span class="n">random_means</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean</span><span class="p">)</span>
+    <span class="n">random_covs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cov</span><span class="p">)</span>
+    <span class="n">random_weights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">weight</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Quiz Question</strong>: Try fitting EM with the random initial parameters you created above. (Use <code>cov_smoothing=1e-5</code>.) Store the result to <code>out_random_init</code>. What is the final loglikelihood that the algorithm converges to?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">out_random_init</span> <span class="o">=</span> <span class="n">EM_for_high_dimension</span><span class="p">(</span><span class="n">tf_idf</span><span class="p">,</span> <span class="n">random_means</span><span class="p">,</span> <span class="n">random_covs</span><span class="p">,</span> <span class="n">random_weights</span><span class="p">,</span> <span class="n">cov_smoothing</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">out_random_init</span><span class="p">[</span><span class="s1">&#39;loglik&#39;</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[17]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[-793165403.6892343,
+ 2282407852.9796767,
+ 2362262754.3453236,
+ 2362514453.9992857,
+ 2362514453.9995394,
+ 2362514453.9995394]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Quiz Question:</strong> Is the final loglikelihood larger or smaller than the final loglikelihood we obtained above when initializing EM with the results from running k-means?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Quiz Question</strong>: For the above model, <code>out_random_init</code>, use the <code>visualize_EM_clusters</code> method you created above. Are the clusters more or less interpretable than the ones found after initializing using k-means?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># YOUR CODE HERE. Use visualize_EM_clusters, which will require you to pass in tf_idf and map_index_to_word.</span>
+<span class="n">visualize_EM_clusters</span><span class="p">(</span><span class="n">tf_idf</span><span class="p">,</span> <span class="n">out_random_init</span><span class="p">[</span><span class="s1">&#39;means&#39;</span><span class="p">],</span> <span class="n">out_random_init</span><span class="p">[</span><span class="s1">&#39;covs&#39;</span><span class="p">],</span> <span class="n">map_index_to_word</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+==========================================================
+Cluster 0: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+she         3.90e-02    5.42e-03
+her         2.54e-02    2.14e-03
+music       2.12e-02    2.34e-03
+singapore   1.77e-02    5.52e-03
+bbc         1.17e-02    1.83e-03
+
+==========================================================
+Cluster 1: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+she         1.63e-02    2.46e-03
+he          1.35e-02    1.09e-04
+music       1.16e-02    1.12e-03
+university  1.06e-02    3.07e-04
+her         1.03e-02    8.35e-04
+
+==========================================================
+Cluster 2: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+she         3.12e-02    3.56e-03
+her         2.41e-02    2.52e-03
+music       1.51e-02    1.44e-03
+he          1.10e-02    1.16e-04
+festival    1.07e-02    2.03e-03
+
+==========================================================
+Cluster 3: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+she         2.70e-02    3.39e-03
+her         1.81e-02    1.56e-03
+film        1.48e-02    2.16e-03
+series      1.06e-02    5.52e-04
+physics     1.05e-02    4.08e-03
+
+==========================================================
+Cluster 4: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+she         2.48e-02    3.28e-03
+music       1.56e-02    1.55e-03
+her         1.37e-02    1.17e-03
+he          1.23e-02    1.11e-04
+university  1.07e-02    3.15e-04
+
+==========================================================
+Cluster 5: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+she         2.83e-02    3.86e-03
+her         2.17e-02    2.27e-03
+league      2.02e-02    2.25e-03
+baseball    1.67e-02    2.07e-03
+season      1.45e-02    8.68e-04
+
+==========================================================
+Cluster 6: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+she         3.20e-02    3.80e-03
+her         2.85e-02    2.77e-03
+art         1.92e-02    4.02e-03
+museum      1.27e-02    3.25e-03
+miss        1.15e-02    4.07e-03
+
+==========================================================
+Cluster 7: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+she         2.41e-02    3.09e-03
+her         1.57e-02    1.38e-03
+university  1.28e-02    5.09e-04
+poker       1.16e-02    6.46e-03
+he          1.14e-02    1.08e-04
+
+==========================================================
+Cluster 8: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+league      2.66e-02    2.73e-03
+season      1.89e-02    1.31e-03
+hockey      1.69e-02    6.42e-03
+team        1.68e-02    9.65e-04
+she         1.62e-02    2.19e-03
+
+==========================================================
+Cluster 9: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+she         2.06e-02    2.57e-03
+her         1.44e-02    1.50e-03
+he          1.43e-02    1.31e-04
+university  1.29e-02    3.99e-04
+minister    1.11e-02    1.85e-03
+
+==========================================================
+Cluster 10: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+she         2.72e-02    3.26e-03
+her         2.04e-02    1.94e-03
+chess       1.84e-02    7.59e-03
+district    1.38e-02    1.77e-03
+senate      1.35e-02    2.25e-03
+
+==========================================================
+Cluster 11: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+she         1.88e-02    2.36e-03
+her         1.57e-02    1.92e-03
+album       1.54e-02    2.14e-03
+music       1.31e-02    9.88e-04
+he          1.30e-02    1.08e-04
+
+==========================================================
+Cluster 12: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+she         3.65e-02    4.97e-03
+her         2.24e-02    2.15e-03
+film        1.49e-02    2.07e-03
+he          1.16e-02    1.13e-04
+university  1.11e-02    3.66e-04
+
+==========================================================
+Cluster 13: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+she         2.16e-02    3.60e-03
+he          1.32e-02    9.18e-05
+university  1.16e-02    5.17e-04
+her         1.05e-02    9.54e-04
+president   9.96e-03    4.44e-04
+
+==========================================================
+Cluster 14: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+law         2.67e-02    5.77e-03
+hong        2.30e-02    7.09e-03
+kong        2.22e-02    6.38e-03
+band        1.55e-02    2.17e-03
+she         1.41e-02    2.04e-03
+
+==========================================================
+Cluster 15: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+league      1.60e-02    1.71e-03
+she         1.50e-02    1.89e-03
+he          1.33e-02    1.08e-04
+music       1.25e-02    9.96e-04
+university  1.17e-02    3.98e-04
+
+==========================================================
+Cluster 16: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+film        1.90e-02    3.37e-03
+science     1.40e-02    2.27e-03
+research    1.30e-02    1.37e-03
+music       1.24e-02    1.28e-03
+university  1.16e-02    3.15e-04
+
+==========================================================
+Cluster 17: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+she         3.03e-02    4.25e-03
+orchestra   1.74e-02    4.03e-03
+symphony    1.73e-02    5.01e-03
+music       1.65e-02    1.27e-03
+her         1.58e-02    1.11e-03
+
+==========================================================
+Cluster 18: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+she         2.18e-02    3.49e-03
+music       2.16e-02    2.67e-03
+he          1.45e-02    1.30e-04
+championship1.41e-02    2.39e-03
+her         1.29e-02    1.13e-03
+
+==========================================================
+Cluster 19: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+she         2.55e-02    3.81e-03
+he          1.28e-02    1.23e-04
+her         1.19e-02    1.05e-03
+served      1.14e-02    4.36e-04
+taylor      1.12e-02    3.89e-03
+
+==========================================================
+Cluster 20: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+she         2.17e-02    3.30e-03
+health      1.41e-02    3.91e-03
+her         1.22e-02    1.03e-03
+he          1.20e-02    9.60e-05
+member      1.02e-02    2.95e-04
+
+==========================================================
+Cluster 21: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+he          1.34e-02    9.34e-05
+she         1.30e-02    1.94e-03
+university  1.12e-02    3.16e-04
+football    1.04e-02    1.35e-03
+american    9.68e-03    4.35e-04
+
+==========================================================
+Cluster 22: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+church      1.74e-02    3.41e-03
+she         1.41e-02    2.07e-03
+he          1.36e-02    1.01e-04
+her         1.18e-02    1.41e-03
+music       1.07e-02    1.27e-03
+
+==========================================================
+Cluster 23: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+she         3.66e-02    6.23e-03
+her         1.96e-02    1.81e-03
+music       1.35e-02    1.28e-03
+album       1.25e-02    2.13e-03
+he          1.18e-02    1.18e-04
+
+==========================================================
+Cluster 24: Largest mean parameters in cluster 
+
+Word        Mean        Variance    
+she         1.74e-02    2.68e-03
+played      1.37e-02    6.68e-04
+football    1.32e-02    2.35e-03
+he          1.21e-02    8.89e-05
+season      1.11e-02    7.14e-04
+
+==========================================================
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Note</strong>: Random initialization may sometimes produce a superior fit than k-means initialization. We do not claim that random initialization is always worse. However, this section does illustrate that random initialization often produces much worse clustering than k-means counterpart. This is the reason why we provide the particular random seed (<code>np.random.seed(5)</code>).</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Takeaway">Takeaway<a class="anchor-link" href="#Takeaway">&#182;</a></h2><p>In this assignment we were able to apply the EM algorithm to a mixture of Gaussians model of text data. This was made possible by modifying the model to assume a diagonal covariance for each cluster, and by modifying the implementation to use a sparse matrix representation. In the second part you explored the role of k-means initialization on the convergence of the model as well as the interpretability of the clusters.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now we calculate cluster assignments for the entire wiki dataset using the result of running EM for 20 iterations above:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+ 
+
+
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: 'center'," +
+        "    displayIndent: '0em'," +
+        "    showMathMenu: true," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['$','$'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        " linebreaks: { automatic: true, width: '95% container' }, " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+        "    } " +
+        "}); ";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+
+          </section>
+      </div>
+      </article>
+  </main>
+      <!-- TODO : Body class -->
+    <div id="body-class" style="display: none;" class=""></div>
+  
+    <footer id="footer">
+      <div class="inner">
+        <section class="credits">
+          <span class="credits-theme">Theme <a href="https://github.com/arulrajnet/attila" rel="nofollow">Attila</a></span>
+          <span class="credits-software">Published with <a href="https://github.com/getpelican/pelican" rel="nofollow">Pelican</a></span>
+        </section>
+      </div>
+    </footer>
+  </section>
+
+  <script type="text/javascript" src="https://arslan-san.github.io/theme/js/script.js"></script>
+  
+<script type="text/javascript">
+    var disqus_shortname = 'arslanblog';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+</body>
+</html>
