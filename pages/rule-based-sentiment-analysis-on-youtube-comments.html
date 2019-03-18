@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
 
-  <title>Arslan's Blog - Tag python clustering gaussian-mixture-model expectation–maximization EM images</title>
+  <title> Rule Based Sentiment Analysis On Youtube Comments</title>
 
 
   <meta name="HandheldFriendly" content="True" />
@@ -64,7 +64,7 @@
 </nav>
     <!-- Page Header -->
     <!-- Set your background image for this header on the line below. -->
-    <header id="blog-header" class="has-cover">
+    <header id="post-header" class="has-cover">
       <div class="inner">
         <nav id="navigation">
             <span id="home-button" class="nav-button">
@@ -74,60 +74,81 @@
             <a class="menu-button"><i class="ic ic-menu"></i> Menu</a>
           </span>
         </nav>
-        <h1 class="post-title">Tag python clustering gaussian-mixture-model expectation–maximization EM images</h1>
-        <span class="blog-description">Posts: 1</span>
+        <h1 class="post-title"> Rule Based Sentiment Analysis On Youtube Comments</h1>      
             <div class="post-cover cover" style="background-image: url('https://arslan-san.github.io/theme/images/post-bg.jpg')">
+        
       </div>
-    </header>
+    </header>    
 
   <section id="wrapper">
     <a class="hidden-close"></a>
-
-
-
-
-<div id="index" class="container">
+  <!-- Post content -->
   <main class="content" role="main">
-    <div class="extra-pagination">
-<nav class="pagination" role="pagination">
-  <div class="inner">
-    <span class="pagination-info">Page 1 / 1</span>
-    <div class="clear"></div>
-  </div>
-</nav>
-    </div>
+      <article class="post">
+      <div class="inner">
+          <section class="post-content">
+              
 
-        <article class="post">
-        <div class="inner">
-            <header class="post-header">         
-                <h2 class="post-title"><a href="https://arslan-san.github.io/fitting-gaussian-mixture-models-with-EM.html" rel="bookmark" title="Permalink to Fitting Gaussian Mixture Models with expectation–maximization (EM)">Fitting Gaussian Mixture Models with expectation–maximization (EM)</a>
-                </h2>
-                <span class="post-meta">
-                        <a href="https://arslan-san.github.io/author/arslan.html">Arslan</a>
-                     | <time datetime="Sun 03 March 2019">Sun 03 March 2019</time>
-                </span>
-                <div class="clear"></div>
-            </header>
-                <section class="post-excerpt">
-                    <p>
-                        Implement the expectation–maximization (EM) algorithm for a Gaussian mixture model and apply this implementation to cluster images.
-                    </p>
-                </section>
-<p>
-  <a data-disqus-identifier="/fitting-gaussian-mixture-models-with-EM.html" href="https://arslan-san.github.io/fitting-gaussian-mixture-models-with-EM.html#disqus_thread">comments</a>
+
+
+<p align="justify">
+
+
+Today youtube is a big source of data especially when you want to do some type of text analysis. So, what I can do with this huge data sets.
+After thinking many hours, I got  one idea/problem. Problem is if I want to learn any topic, lots 
+of videos are available on that topic. Some are good videos and some are bad(bad in the sense that people do not like that video too much). 
+For example if I want to watch video based on <strong>"intro to deep learning"</strong> topic tons of videos are availble but I want to watch that video on which 
+people have written most postive comments. So, the question is how can I do this? Unfortunately, youtube community provides the way to download the
+comment section of the video. To download a large set of YouTube comments, I used a Python script that uses the official YouTube API,which (fortunately) 
+offers generous API limits, allowing us to gather hundreds of thousands of individual comments. Then I have used the vader lexixcon library for sentiment 
+analysis written in python. Following are the steps that I did in order to find best video on given topic.
+
+
 </p>
-            </div>
-        </article>
 
-<nav class="pagination" role="pagination">
-  <div class="inner">
-    <span class="pagination-info">Page 1 / 1</span>
-    <div class="clear"></div>
-  </div>
-</nav>
 
+
+
+<ul style="list-style-type:disc;">
+
+
+<li> At first step I got 500 videos by providing the topic(<strong>intro to deep learning</strong>) to youtube API </li>
+<li> Of the 500, I just keep 100 because too many videos were present in my dataset which are not related to my topic </li>
+<li> Next I dowloaded all the comments by providing ids of the 100 videos to youtube API </li>
+<li> Furthermore I have find the positivity of single comment by using vader_lexicon library </li>
+<li>Then I found the total number of positve, neagetive and neutral comments of a single video </li>
+<li> Fianlly I gave the final tag(positive, negative, neutral) to all videos </li>
+
+</ul>
+
+<h4> Results </h4>
+
+<p align="justify">
+
+Finally on the basis of number of positive comments in a single video I sort all the videos and fetch top five videos 
+on which people have written most positive comments. Of the 5 videos, 4 are refer to <strong>Siraj raval</strong> one of the famous American Data Scientist, AI Educator, 
+Youtube Personality, and author.So, user just go to watch first top video out of many videos. Below is the pie chart showing the final result.
+
+</p>
+
+<img src="../images/pie_chart.png" alt="Italian Trulli">
+
+
+<p> Visit this 
+
+<a href="https://github.com/Arslan-san/My-personal-projects/tree/master/rule%20based%20sentiment%20analysis%20on%20youtube%20comments"> <strong> link  </strong> </a>
+
+
+
+so that you can look at the source code </p>
+
+
+
+
+          </section>
+      </div>
+      </article>
   </main>
-</div>
       <!-- TODO : Body class -->
     <div id="body-class" style="display: none;" class=""></div>
   
